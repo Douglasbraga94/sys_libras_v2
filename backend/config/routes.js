@@ -1,3 +1,4 @@
+const admin = require('./admin')
 module.exports = app =>{
 //API's Publicas
     app.post('/signin', app.api.auth.signin)
@@ -8,14 +9,14 @@ module.exports = app =>{
 
     app.route('/usuario')
         .all(app.config.passport.authenticate())
-        .post(app.api.user.save)
-        .get(app.api.user.get)
+        .post(admin(app.api.user.save))
+        .get(admin(app.api.user.get))
     
     app.route('/usuario/:id')
         .all(app.config.passport.authenticate())
-        .put(app.api.user.save)
-        .delete(app.api.user.remove)
-        .get(app.api.user.getById)
+        .put(admin(app.api.user.save))
+        .delete(admin(app.api.user.remove))
+        .get(admin(app.api.user.getById))
     
     app.route('/regional')
         .all(app.config.passport.authenticate())

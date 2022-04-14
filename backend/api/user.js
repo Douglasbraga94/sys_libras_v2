@@ -69,10 +69,11 @@ module.exports = app => {
     const remove = async (req, res) => {
         try {
 
-            const rowsDeleted = await app.db('usuarios')
+            const rowsUpdated = await app.db('usuarios')
+                .update({deletado_em: new Date()})
                 .where({ id: req.params.id }).del()
             try{
-                existsOrError(rowsDeleted, 'Usuário não foi encontrado.')
+                existsOrError(rowsUpdated, 'Usuário não foi encontrado.')
             }catch(msg) {
                 return res.status(400).send(msg)  
             }
