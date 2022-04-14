@@ -3,7 +3,7 @@ const jwt = require('jwt-simple')
 const bcrypt = require( 'bcrypt-nodejs')
 
 module.exports = app =>{
-
+//Modulo responsavel pela autenticação do usuario
     const signin = async (req, res) => {
         if (!req.body.email || !req.body.senha) {
             return res.status(400).send('Informe usuário e senha!')
@@ -22,11 +22,11 @@ module.exports = app =>{
 
         const payload = {
             id: user.id,
-            name: user.name,
+            name: user.nome,
             email: user.email,
             admin: user.admin,
             iat: now,
-            exp: now + (60 * 60 * 24 * 3)
+            exp: now + (60 * 60 * 24 )
         }
 
         res.json({
@@ -34,6 +34,24 @@ module.exports = app =>{
             token: jwt.encode(payload, authSecret)
         })
     }
+
+    const validateToken = async (req, res) => {
+        const userData = req.body || null
+        try {
+            if(userData) {
+                const token = jwt.decode(userData.token, authSecret)
+                if(new Date(token.exp * 1000) > new Date()) {
+                    return res.send(true)
+                }
+            }
+        } catch(e) {
+            // problema com o token
+        }
+
+        res.send(false)
+    }
+
+    return { signin, validateToken }
 
 
 }
