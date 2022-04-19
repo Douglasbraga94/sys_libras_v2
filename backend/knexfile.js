@@ -1,13 +1,9 @@
 // Update with your config settings.
-
+const { db } = require('./.env')
 module.exports = {
 
     client: 'postgresql',
-    connection: {
-      database: 'sys_libras',
-      user:     'postgres',
-      password: '0198'
-    },
+    connection: db,
     pool: {
       min: 2,
       max: 10

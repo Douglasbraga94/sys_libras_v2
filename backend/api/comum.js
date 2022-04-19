@@ -40,9 +40,8 @@ module.exports = app => {
     const getById = (req, res) => {
         app.db('comuns')
             .select('id', 'nome', 'idadministracao')
-            .where({ id: req.params.id })
+            .where({ idadministracao: req.params.id })
             //.whereNull('deletedAt')
-            .first()
             .then(comum => res.json(comum))
             .catch(err => res.status(500).send(err))
     }

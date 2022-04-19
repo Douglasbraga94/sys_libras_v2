@@ -5,12 +5,13 @@ exports.up = function(knex, Promise) {
       table.string('nome').notNull()
       table.string('codigo').notNull()
       table.string('status').notNull()
-      table.integer('telefone1').notNull()
-      table.integer('telefone2').notNull()
+      table.bigint('telefone1').notNull()
+      table.bigint('telefone2')
       table.string('email').notNull()
       table.date('oficializacao').notNull()
       table.string('statusJustificativa')
       table.integer('idcomum').references('id').inTable('comuns')
+      table.integer('idadministracao').references('id').inTable('administracoes')
     })
   };
   

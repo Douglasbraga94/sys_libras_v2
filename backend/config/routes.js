@@ -30,7 +30,6 @@ module.exports = app =>{
         .get(app.api.regional.getById)
 
     app.route('/interprete')
-        .all(app.config.passport.authenticate())
         .post(app.api.interprete.save)
         .get(app.api.interprete.get)
 
