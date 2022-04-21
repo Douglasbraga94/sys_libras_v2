@@ -10,10 +10,14 @@
   "dependencies": {
     "axios": "0.18.0",
     "bootstrap-vue": "2.0.0-rc.11",
+    "docx": "^7.3.0",
+    "file-saver": "^2.0.5",
     "font-awesome": "4.7.0",
     "highlightjs": "9.10.0",
+    "html-to-image": "^1.9.0",
     "liquor-tree": "0.2.32",
     "moment": "^2.29.3",
+    "rxjs": "^7.5.5",
     "vue": "2.5.17",
     "vue-good-table": "^2.21.11",
     "vue-gravatar": "1.2.1",
@@ -40,7 +44,10 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {},
+    "rules": {
+      "no-unused-vars": "off",
+      "no-console": "off"
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }

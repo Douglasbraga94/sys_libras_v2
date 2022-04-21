@@ -31,7 +31,7 @@ module.exports = app => {
 
      const get = (req, res) => {
         app.db('comuns')
-            .select('id', 'nome', 'idadministracao', 'idregional')
+            .select('id', 'nome', 'idadministracao')
             //.whereNull('deletedAt')
             .then(comum => res.json(comum))
             .catch(err => res.status(500).send(err))
