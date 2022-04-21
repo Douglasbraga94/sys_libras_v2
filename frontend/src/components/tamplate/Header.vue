@@ -4,7 +4,9 @@
             <i class="fa fa-lg" :class="icon"></i>
         </a>
         <div class="title">
-            <img src="../../assets/logo_ccb.png" style="width:7%">
+            <a href="https://congregacaocristanobrasil.org.br/" target="_blank">
+                <img src="../../assets/logo_ccb.png" style="width:7%">
+            </a>
         </div>
         <UserDropdown v-if="!hideUserDropdown" />
     </header>

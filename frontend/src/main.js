@@ -7,7 +7,7 @@ import './config/bootstrap'
 import router from './config/router'
 import './config/msgs'
 
-require('axios').defaults.headers.common['Authorization'] = 'bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwibmFtZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBhcHAuY29tIiwiYWRtaW4iOnRydWUsImlhdCI6MTY1MDI4MjczMiwiZXhwIjoxNjUwMzY5MTMyfQ.71WGFu8BBLbum1n7McX4Bj5JmSBun6AbSvpYy0m-OdQ'
+require('axios').defaults.headers.common['Authorization'] = 'bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwibmFtZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBhcHAuY29tIiwiYWRtaW4iOnRydWUsImlhdCI6MTY1MDQ5OTY4NywiZXhwIjoxNjUwNTg2MDg3fQ.zR6GkR-FHjtw39TJIsjXHlCFtjqIW4AnzdAmiWnIMPM'
 //Vue.use(BootstrapVue);
 Vue.config.productionTip = false;
 

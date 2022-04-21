@@ -31,7 +31,7 @@ module.exports = app => {
 
      const get = (req, res) => {
         app.db('comuns')
-            .select('id', 'nome', 'idadministracao')
+            .select('id', 'nome', 'idadministracao', 'idregional')
             //.whereNull('deletedAt')
             .then(comum => res.json(comum))
             .catch(err => res.status(500).send(err))
@@ -39,7 +39,7 @@ module.exports = app => {
 
     const getById = (req, res) => {
         app.db('comuns')
-            .select('id', 'nome', 'idadministracao')
+            .select('id', 'nome', 'idadministracao', 'idregional')
             .where({ idadministracao: req.params.id })
             //.whereNull('deletedAt')
             .then(comum => res.json(comum))

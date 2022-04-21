@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import Home from '../components/home/Home'
 import Admin from '../components/admin/Admin'
 import Interpretes from '../components/interpretes/Interpretes'
+import Regionais from '../components/regionais/Regionais'
 
 // import { userKey } from '@/global'
 
@@ -21,6 +22,11 @@ const routes = [{
     name: 'interpretes',
     path: '/interpretes',
     component: Interpretes
+},
+{
+    name: 'regionais',
+    path: '/regionais',
+    component: Regionais
 }]
 
 export default new VueRouter({

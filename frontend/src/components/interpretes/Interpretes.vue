@@ -32,7 +32,7 @@
                 </b-col>
             </b-row>
             
-            <b-row v-show="mode === 'save'">
+            <b-row align-h="start" v-show="mode === 'save'">
                 <b-col md="4" sm="12">
                     <b-form-group label="Telefone Principal:" label-for="telefone1">
                         <b-form-input id="telefone1" type="number"
@@ -55,16 +55,16 @@
                 </b-col>
             </b-row>
 
-            <b-row v-show="mode === 'save'">
+            <b-row align-h="start" v-show="mode === 'save'">
                 <b-col md="4" sm="12">
                     <label>Administração:</label>
-                    <b-form-select id="interprete-status" v-show="mode === 'save'" 
+                    <b-form-select id="interprete-administracao" v-show="mode === 'save'" 
                     v-model="interprete.idadministracao" :options="administracoes" ><!--@change="setComum(administracao,$event)"--> 
                     </b-form-select>
                 </b-col>
                 <b-col md="4" sm="12">
                     <label>Comum:</label>
-                    <b-form-select id="interprete-status" v-show="mode === 'save'" 
+                    <b-form-select id="interprete-comum" v-show="mode === 'save'" 
                     v-model="interprete.idcomum" :options="FilteredComuns"> 
                     </b-form-select>
                 </b-col>
@@ -77,7 +77,7 @@
                 </b-col>
             </b-row>
 
-            <b-row v-show="mode === 'save'">
+            <b-row align-h="start" v-show="mode === 'save'">
                 <b-col md="4" sm="12">
                     <b-form-group label="Oficialização:" label-for="oficializacao">
                         <b-form-input id="oficializacao" type="date"
@@ -100,11 +100,11 @@
         <hr>
         <div v-show="!isEdit">
             <div class="card-header">
-                <h3>Intérpretes Regional Brasilia 
+                <h3>Intérpretes Regional Brasília 
                     <button type="button" @click="isEdit = true" class="btn btn-outline-info btn-lg">
                         <i class="fa fa-plus-circle"></i>
                     </button>
-                    <span>&nbsp</span>
+                    <span>&nbsp;</span>
                     <button type="button" @click="print" class="btn btn-outline-info btn-lg">
                         <i class="fa fa-print"></i>
                     </button>
@@ -205,7 +205,7 @@ export default {
              * A variavel 'this.$refs['interpretes'].selectedRows'
              * Contém as linhas selecionadas na tabela
              */
-            console.log(this.$refs['interpretes'].selectedRows)
+            alert(JSON.stringify(this.$refs['interpretes'].selectedRows))
         },
         onRowSelected(items) {
             this.selected = items
@@ -267,7 +267,6 @@ export default {
             this.loadinterpretes()
         },
         save() {
-            console.log(this.interprete)
             delete this.interprete.vgt_id
             delete this.interprete.originalIndex
             typeof this.interprete.telefone1 == 'string' ? this.interprete.telefone1 = parseInt(this.interprete.telefone1) : this.interprete.telefone1
@@ -293,7 +292,6 @@ export default {
                 .catch(showError)
         },
         loadinterprete(interprete, mode = 'save') {
-            console.log(this.$refs['interpretes'].selectedRows)
             this.mode = mode
             this.interprete = { ...interprete }
             this.isEdit = true

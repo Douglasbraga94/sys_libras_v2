@@ -4,7 +4,7 @@
         <div> <img src="../../assets/libras2.png" alt="" style="height: 150px; margin:25px" v-show="!isMenuVisible"></div>
         <div style="height: 150px; margin:25px" v-show="isMenuVisible"></div>
         <div class="links"><span style="width:100%; display:inline-flex" :class="{'toEnd': isMenuVisible}"> <router-link to="/"><i class="fa fa-bar-chart" ></i>  <span v-show="!isMenuVisible"> <b> Dashboard</b></span><hr></router-link></span></div>
-        <div class="links"><span style="width:100%; display:inline-flex" :class="{'toEnd': isMenuVisible}"> <router-link to="/container"><i class="fa fa-university"></i>  <span v-show="!isMenuVisible"> <b> Regionais</b></span><hr></router-link></span></div>
+        <div class="links"><span style="width:100%; display:inline-flex" :class="{'toEnd': isMenuVisible}"> <router-link to="/regionais"><i class="fa fa-university"></i>  <span v-show="!isMenuVisible"> <b> Regionais</b></span><hr></router-link></span></div>
         <div class="links"><span style="width:100%; display:inline-flex" :class="{'toEnd': isMenuVisible}"> <router-link to="/interpretes"><i class="fa fa-users"></i>  <span v-show="!isMenuVisible"> <b> Intérpretes</b></span><hr></router-link></span></div>
     </aside>
 </template>
@@ -50,6 +50,12 @@ export default {
     }
 
     .links span a:hover{
+        cursor: pointer;
+        color: rgb(87, 77, 231);
+        text-decoration: none;
+    }
+
+    .links span a:active{
         cursor: pointer;
         color: rgb(87, 77, 231);
         text-decoration: none;
