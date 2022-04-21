@@ -1,7 +1,7 @@
 <template>
 <div class="interpretes">
     <PageTitle icon="fa fa-users" main="Intérpretes de Libras - CCB"
-            sub="Controle de intérpretes de libras" />
+            sub="Controle de intérpretes de LIBRAS" />
     <div class="interprete-admin" >
         <b-form v-if="isEdit">
             <input id="interprete-id" type="hidden" v-model="interprete.id" />
@@ -111,7 +111,7 @@
                 </h3>
             </div>
             <div >
-            <Cracha ref="cracha"></Cracha>
+            <Cracha ref="cracha" v-on:complete="onCompleteExport"></Cracha>
             <vue-good-table
                 ref="interpretes"
                 @on-selected-rows-change="selectionChanged"
@@ -303,6 +303,8 @@ export default {
         },
 
         exportID(item, event) {
+          this.$loadingService.start();
+
           event.stopPropagation();
           this.$refs['cracha'].setItens([{
               nome: item.nome,
@@ -314,6 +316,8 @@ export default {
         },
 
         exportIDSelected() {
+          this.$loadingService.start();
+
             this.$refs['cracha'].setItens(this.$refs['interpretes'].selectedRows.map(item => {
                 return {
                     nome: item.nome,
@@ -322,6 +326,10 @@ export default {
                     tipo: "interprete"
                 };
             }));
+        },
+
+        onCompleteExport() {
+          this.$loadingService.stop();
         }
     },
     watch:{

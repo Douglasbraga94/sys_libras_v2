@@ -53,7 +53,10 @@ export default {
           }]
       });
 
-      Packer.toBlob(doc).then(file => saveAs(file, `crachas_${moment().format("YYYYMMDD-HHmm")}.docx`));
+      Packer.toBlob(doc).then(file => {
+        saveAs(file, `crachas_${moment().format("YYYYMMDD-HHmm")}.docx`)
+        this.$emit("complete")
+      });
     }
   },
 
@@ -61,15 +64,16 @@ export default {
     paragraphItems() {
       return new Promise( (resolve) => {
         const listaCrachas = [];
-        this.loadImages().subscribe(([i, image]) => {
-          if (i > 1 && i % 2 === 0)
-            listaCrachas.push(new TextRun("\t\t\t"));
+        let count = 0;
+        this.loadImages().subscribe((image) => {
+          if (++count > 1 && count % 2 === 0)
+            listaCrachas.push(new TextRun("\t"));
 
           listaCrachas.push(new ImageRun({
             data: image,
             transformation: {
-              width: 400,
-              height: 500
+              width: 430,
+              height: 537.5
             }
           }));
 
@@ -82,10 +86,12 @@ export default {
     loadImages() {
       const crachas = document.getElementsByClassName("cracha");
       return new Observable(subscriber => {
+        const completed = new Array(crachas.length).fill(false);
         for (let i = 0; i < crachas.length; i++) {
-          htmlToImage.toPng(crachas[i], {width: 400, height: 500}).then(png => {
-            subscriber.next([i + 1, png]);
-            if (i + 1 === crachas.length)
+          htmlToImage.toPng(crachas[i], {width: 400, height: 500, canvasWidth: 1600, canvasHeight: 2000}).then(png => {
+            subscriber.next(png);
+            completed[i] = true;
+            if (completed.every(i => i))
               subscriber.complete();
           })
         }
