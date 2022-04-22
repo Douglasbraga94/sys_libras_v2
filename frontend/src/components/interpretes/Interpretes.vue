@@ -169,6 +169,7 @@ import moment from 'moment';
 import 'vue-good-table/dist/vue-good-table.css'
 import { VueGoodTable } from 'vue-good-table';
 import Cracha from '../tamplate/Cracha.vue'
+
 export default {
     name: 'Interpretes',
     components:{PageTitle, VueGoodTable, Cracha},
@@ -300,8 +301,10 @@ export default {
             this.interprete = { ...interprete }
             this.isEdit = true
         },
+      
         exportID(item, event) {
           this.$loadingService.start();
+
           event.stopPropagation();
           this.$refs['cracha'].setItens([{
               nome: item.nome,
@@ -311,8 +314,13 @@ export default {
             }]
           );
         },
+
         exportIDSelected() {
-          this.$loadingService.start();
+            if(this.$refs['interpretes'].selectedRows.length == 0){
+                this.showAlert('selecione as linhas que deseja gerar o crachá');
+                return
+            } 
+            this.$loadingService.start();
             this.$refs['cracha'].setItens(this.$refs['interpretes'].selectedRows.map(item => {
                 return {
                     nome: item.nome,
@@ -322,9 +330,19 @@ export default {
                 };
             }));
         },
+
         onCompleteExport() {
           this.$loadingService.stop();
-        }
+        },
+        showAlert(msg) {
+            const options = {
+                icon: 'error',
+                tittle: 'Oops...',
+                text: msg,
+                timer: 1500
+            }
+            this.$swal(options);
+        },
     },
     watch:{
         'interprete.idadministracao': function(newVal, oldVal){
@@ -341,4 +359,6 @@ export default {
 </script>
 
 <style>
+</style>
+
 </style>

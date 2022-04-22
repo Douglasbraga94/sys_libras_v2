@@ -1,5 +1,6 @@
 <template>
 	<div id="app" :class="{'hide-menu': isMenuVisible}">
+    <Spinner />
 		<Header title="SYS - LIBRAS"/>
 		<Menu />
 		<Content />
@@ -12,11 +13,12 @@ import Header from "./components/tamplate/Header.vue"
 import Menu from "./components/tamplate/Menu.vue"
 import Content from "./components/tamplate/Content.vue"
 import Footer from "./components/tamplate/Footer.vue"
+import Spinner from "@/components/tamplate/Spinner";
 import { mapState } from "vuex"
 
 export default {
 	name: "App",
-	components: { Header, Menu, Content, Footer},
+	components: { Header, Menu, Content, Footer, Spinner},
 	computed: mapState(['isMenuVisible', 'user']),
 }
 </script>
