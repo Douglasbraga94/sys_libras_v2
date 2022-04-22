@@ -64,6 +64,9 @@
                             <i class="fa fa-trash"></i>
                         </b-button>
                     </span>
+                    <span v-if="data.column.field == 'idregional'">
+                        <span>{{findRegional(data.formattedRow[data.column.field])}}</span>
+                    </span>
                     <span v-else>
                     {{data.formattedRow[data.column.field]}}
                     </span>
@@ -106,6 +109,7 @@ export default {
             selectionChanged: [],
             columns: [
                 {label: 'Código',field: 'id',},
+                {label: 'Regional',field: 'idregional',},
                 {label: 'Nome',field: 'nome',},
                 {label: 'Ações',field: 'actions',},
       ],
@@ -155,6 +159,14 @@ export default {
                     this.regionais[index].text = res.data[index-1].nome
                 }
             })
+        },
+        findRegional(value){
+            console.log(value)
+            if(this.regionais.length>0){
+                let item = this.regionais.find(item=>item.value==value)
+                console.log(item)
+                return item.text
+            }  
         },
         // async setComum(item,event) {
         // },

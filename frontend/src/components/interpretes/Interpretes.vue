@@ -1,7 +1,7 @@
 <template>
 <div class="interpretes">
     <PageTitle icon="fa fa-users" main="Intérpretes de Libras - CCB"
-            sub="Controle de intérpretes de libras" />
+            sub="Controle de intérpretes de LIBRAS" />
     <div class="interprete-admin" >
         <b-form v-if="isEdit">
             <input id="interprete-id" type="hidden" v-model="interprete.id" />
@@ -105,12 +105,13 @@
                         <i class="fa fa-plus-circle"></i>
                     </button>
                     <span>&nbsp;</span>
-                    <button type="button" @click="print" class="btn btn-outline-info btn-lg">
-                        <i class="fa fa-print"></i>
+                    <button type="button" @click="exportIDSelected" class="btn btn-outline-info btn-lg">
+                        <i class="fa fa-id-card"></i>
                     </button>
                 </h3>
             </div>
             <div >
+            <Cracha ref="cracha" v-on:complete="onCompleteExport"></Cracha>
             <vue-good-table
                 ref="interpretes"
                 @on-selected-rows-change="selectionChanged"
@@ -124,6 +125,9 @@
                 
                 <template slot="table-row" slot-scope="data">
                     <span v-if="data.column.field == 'actions'">
+                        <b-button variant="primary" @click="exportID(data.row, $event)" class="mr-2">
+                            <i class="fa fa-id-card"></i>
+                        </b-button>
                         <b-button variant="warning" @click="loadinterprete(data.row)" class="mr-2">
                             <i class="fa fa-pencil"></i>
                         </b-button>
@@ -164,10 +168,10 @@ import axios from 'axios'
 import moment from 'moment';
 import 'vue-good-table/dist/vue-good-table.css'
 import { VueGoodTable } from 'vue-good-table';
-
+import Cracha from '../tamplate/Cracha.vue'
 export default {
     name: 'Interpretes',
-    components:{PageTitle, VueGoodTable},
+    components:{PageTitle, VueGoodTable, Cracha},
     data: function() {
         return {
             options: [
@@ -196,7 +200,7 @@ export default {
                 {label: 'email',field: 'email',},
                 {label: 'oficializacao',field: 'oficializacao', },
                 {label: 'Ações',field: 'actions',},
-      ],
+            ],
         }
     },
     methods: {
@@ -269,7 +273,7 @@ export default {
         save() {
             delete this.interprete.vgt_id
             delete this.interprete.originalIndex
-            typeof this.interprete.telefone1 == 'string' ? this.interprete.telefone1 = parseInt(this.interprete.telefone1) : this.interprete.telefone1
+            typeof this.interprete.telefone1 == 'string' ? this.interprete.telefone1 = parseInt(this.interprete.telefone1) : this.interprete.telefone1;
             (!this.interprete.telefone2 || this.interprete.telefone2.length == 0) ? delete this.interprete.telefone2 : this.interprete.telefone2
             const method = this.interprete.id ? 'put' : 'post'
             const id = this.interprete.id ? `/${this.interprete.id}` : ''
@@ -295,6 +299,31 @@ export default {
             this.mode = mode
             this.interprete = { ...interprete }
             this.isEdit = true
+        },
+        exportID(item, event) {
+          this.$loadingService.start();
+          event.stopPropagation();
+          this.$refs['cracha'].setItens([{
+              nome: item.nome,
+              codigo: item.codigo,
+              comum: this.findComum(item.idcomum),
+              tipo: "interprete"
+            }]
+          );
+        },
+        exportIDSelected() {
+          this.$loadingService.start();
+            this.$refs['cracha'].setItens(this.$refs['interpretes'].selectedRows.map(item => {
+                return {
+                    nome: item.nome,
+                    codigo: item.codigo,
+                    comum: this.findComum(item.idcomum),
+                    tipo: "interprete"
+                };
+            }));
+        },
+        onCompleteExport() {
+          this.$loadingService.stop();
         }
     },
     watch:{
@@ -304,7 +333,6 @@ export default {
         
     },
     async mounted() {
-
         await this.loadAdministracao()
         await this.loadComuns()
         this.loadinterpretes()
@@ -313,5 +341,4 @@ export default {
 </script>
 
 <style>
-
 </style>
