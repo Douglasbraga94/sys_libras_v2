@@ -1,6 +1,6 @@
 <template>
     <header class="header">
-        <a class="toggle" @click="toggleMenu" v-if="!hideUserDropdown">
+        <a class="toggle" @click="toggleMenu" v-if="!hideToggle">
             <i class="fa fa-lg" :class="icon"></i>
         </a>
         <div class="title">
@@ -14,10 +14,12 @@
 
 <script>
 import UserDropdown from './UserDropdown'
+import { mapState } from 'vuex'
 
 export default {
     name: 'Header',
     components: { UserDropdown },
+    computed:mapState(['isAdmin', 'user']),
     props: {
         title: String,
         hideToggle: Boolean,

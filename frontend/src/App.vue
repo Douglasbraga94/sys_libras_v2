@@ -1,25 +1,65 @@
 <template>
-	<div id="app" :class="{'hide-menu': isMenuVisible}">
+	<div id="app" :class="{'hide-menu': !isMenuVisible, 'no-user': !user}">
     <Spinner />
-		<Header title="SYS - LIBRAS"/>
-		<Menu />
-		<Content />
+		<Header title="SYS - LIBRAS"
+			:hideToggle="!user"
+			:hideUserDropdown="!user"/>
+		<Menu v-if="user"/>
+		<Loading v-if="validatingToken" />
+		<Content v-else />
 		<Footer />
 	</div>
 </template>
 
 <script>
+import axios from "axios"
+import { baseApiUrl, userKey } from "@/global"
 import Header from "./components/tamplate/Header.vue"
 import Menu from "./components/tamplate/Menu.vue"
 import Content from "./components/tamplate/Content.vue"
 import Footer from "./components/tamplate/Footer.vue"
 import Spinner from "@/components/tamplate/Spinner";
+import Loading from './components/tamplate/Loading.vue'
 import { mapState } from "vuex"
 
 export default {
 	name: "App",
-	components: { Header, Menu, Content, Footer, Spinner},
-	computed: mapState(['isMenuVisible', 'user']),
+	components: { Header, Menu, Content, Footer, Spinner, Loading},
+	computed: mapState(['isMenuVisible', 'user', 'isAdmin']),
+	data: function() {
+		return{
+			validatingToken: true
+		}
+	},
+		methods: {
+		async validateToken() {
+			this.validatingToken = true
+			const json = localStorage.getItem(userKey)
+			const userData = JSON.parse(json)
+			this.$store.commit('setUser', null)
+
+			if(!userData) {
+				this.validatingToken = false
+				this.$router.push({ name: 'auth' })
+				return
+			}
+
+			const res = await axios.post(`${baseApiUrl}/validateToken`, userData)
+
+			if (res.data) {
+				this.validatingToken = false
+				this.$store.commit('setUser', userData)
+			} else {
+				localStorage.removeItem(userKey)
+				this.$router.push({ name: 'auth' })
+			}
+
+			this.validatingToken = false
+		}
+	},
+	created() {
+		this.validateToken()
+	}
 }
 </script>
 
@@ -49,6 +89,10 @@ export default {
 
 	#app.hide-menu {
 		margin-left: -130px;
+		transition: all 0.25s;
+	}
+	#app.no-user{
+		margin-left: -200px;
 		transition: all 0.25s;
 	}
 

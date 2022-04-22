@@ -5,8 +5,9 @@ import Home from '../components/home/Home'
 import Admin from '../components/admin/Admin'
 import Interpretes from '../components/interpretes/Interpretes'
 import Regionais from '../components/regionais/Regionais'
+import Auth from '../components/auth/Auth'
 
-// import { userKey } from '@/global'
+import { userKey } from '@/global'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,11 @@ const routes = [{
     name: 'regionais',
     path: '/regionais',
     component: Regionais
+},
+{
+    name: 'auth',
+    path: '/auth',
+    component: Auth
 }]
 
 export default new VueRouter({

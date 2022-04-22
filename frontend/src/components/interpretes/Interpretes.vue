@@ -101,7 +101,7 @@
         <div v-show="!isEdit">
             <div class="card-header">
                 <h3>Intérpretes Regional Brasília 
-                    <button type="button" @click="isEdit = true" class="btn btn-outline-info btn-lg">
+                    <button type="button" @click="isEdit = true" class="btn btn-outline-info btn-lg" v-if="isAdmin">
                         <i class="fa fa-plus-circle"></i>
                     </button>
                     <span>&nbsp;</span>
@@ -128,10 +128,10 @@
                         <b-button variant="primary" @click="exportID(data.row, $event)" class="mr-2">
                             <i class="fa fa-id-card"></i>
                         </b-button>
-                        <b-button variant="warning" @click="loadinterprete(data.row)" class="mr-2">
+                        <b-button variant="warning" @click="loadinterprete(data.row)" class="mr-2" v-if="isAdmin">
                             <i class="fa fa-pencil"></i>
                         </b-button>
-                        <b-button variant="danger" @click="loadinterprete(data.row, 'remove')">
+                        <b-button variant="danger" @click="loadinterprete(data.row, 'remove')" v-if="isAdmin">
                             <i class="fa fa-trash"></i>
                         </b-button>
                     </span>
@@ -169,10 +169,12 @@ import moment from 'moment';
 import 'vue-good-table/dist/vue-good-table.css'
 import { VueGoodTable } from 'vue-good-table';
 import Cracha from '../tamplate/Cracha.vue'
-
+import { mapState } from 'vuex'
+    
 export default {
     name: 'Interpretes',
     components:{PageTitle, VueGoodTable, Cracha},
+    computed:mapState(['isAdmin']),
     data: function() {
         return {
             options: [
@@ -205,13 +207,6 @@ export default {
         }
     },
     methods: {
-        print(){
-            /**
-             * A variavel 'this.$refs['interpretes'].selectedRows'
-             * Contém as linhas selecionadas na tabela
-             */
-            alert(JSON.stringify(this.$refs['interpretes'].selectedRows))
-        },
         onRowSelected(items) {
             this.selected = items
         },
@@ -339,7 +334,7 @@ export default {
                 icon: 'error',
                 tittle: 'Oops...',
                 text: msg,
-                timer: 1500
+                timer: 2500
             }
             this.$swal(options);
         },

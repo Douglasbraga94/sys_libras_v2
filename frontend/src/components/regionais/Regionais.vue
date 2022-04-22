@@ -59,10 +59,12 @@ import PageTitle from "../tamplate/PageTitle.vue";
 import CadRegionais from './CadRegionais.vue'
 import CadAdministracoes from './CadAdministracoes.vue'
 import CadComuns from './CadComuns.vue'
+import { mapState } from 'vuex'
 
 export default {
   name: "Regionais",
   components: { PageTitle, CadRegionais, CadAdministracoes, CadComuns },
+computed:mapState(['isMenuVisible']),
   data: function () {
     return {
       component: "home",

@@ -35,12 +35,8 @@
         <div v-show="!isEdit">
             <div class="card-header">
                 <h3>administracoes
-                    <button type="button" @click="isEdit = true" class="btn btn-outline-info btn-lg">
+                    <button type="button" @click="isEdit = true" class="btn btn-outline-info btn-lg" v-if="isAdmin">
                         <i class="fa fa-plus-circle"></i>
-                    </button>
-                    <span>&nbsp;</span>
-                    <button type="button" @click="print" class="btn btn-outline-info btn-lg">
-                        <i class="fa fa-print"></i>
                     </button>
                 </h3>
             </div>
@@ -56,7 +52,7 @@
                 :search-options="{ enabled: true, placeholder: 'Procurar...', }"
                 styleClass="vgt-table striped hover">
                 <template slot="table-row" slot-scope="data">
-                    <span v-if="data.column.field == 'actions'">
+                    <span v-if="data.column.field == 'actions' && isAdmin">
                         <b-button variant="warning" @click="loadadministracao(data.row)" class="mr-2">
                             <i class="fa fa-pencil"></i>
                         </b-button>
@@ -83,64 +79,31 @@
 import PageTitle from '../tamplate/PageTitle.vue'
 import { baseApiUrl, showError } from '@/global'
 import axios from 'axios'
-import moment from 'moment';
 import 'vue-good-table/dist/vue-good-table.css'
 import { VueGoodTable } from 'vue-good-table';
+import { mapState } from 'vuex'
 
 export default {
     name: 'administracoes',
     components:{PageTitle, VueGoodTable},
+    computed:mapState(['isAdmin']),
     data: function() {
         return {
-            // options: [
-            //     { value: null, text: 'Selecione o Status' },
-            //     { value: 'Habilitado', text: 'Habilitado' },
-            //     { value: 'nao_hab', text: 'Não Habilitado' },
-            //     { value: 'diversos', text: 'Diverso'}
-            // ],
             mode: 'save',
             administracao: {},
             administracoes: [],
-            // administracao: 0,
-            // administracoes: [],
             regionais: [],
-            //FilteredComuns: [],
             isEdit: false,
             selectionChanged: [],
             columns: [
                 {label: 'Código',field: 'id',},
                 {label: 'Regional',field: 'idregional',},
                 {label: 'Nome',field: 'nome',},
-                {label: 'Ações',field: 'actions',},
+                this.isadmin ? {label: 'Ações',field: 'actions',} : {label: '#',field: 'null'}
       ],
         }
     },
     methods: {
-        print(){
-            /**
-             * A variavel 'this.$refs['administracoes'].selectedRows'
-             * Contém as linhas selecionadas na tabela
-             */
-            alert(JSON.stringify(this.$refs['administracoes'].selectedRows))
-        },
-        // onRowSelected(items) {
-        //     this.selected = items
-        // },
-        // dateFormat: function(date) {
-        // 		return moment(String(date)).format('DD/MM/YYYY');
-        // 	},
-        // findAdministracao(value){
-        //     if(this.administracoes.length>0){
-        //         let item = this.administracoes.find(item=>item.value==value)
-        //         return item.text
-        //     }  
-        // },
-        // findComum(value){
-        //     if(this.comuns.length>0){
-        //         let item = this.comuns.find(item=>item.value==value)
-        //         return item.text
-        //     }  
-        // },
         loadadministracoes() {
             const url = `${baseApiUrl}/administracao`
             axios.get(url).then(res => {
@@ -168,8 +131,6 @@ export default {
                 return item.text
             }  
         },
-        // async setComum(item,event) {
-        // },
         reset() {
             this.isEdit = false
             this.mode = 'save'
@@ -204,8 +165,6 @@ export default {
         }
     },
     async mounted() {
-
-        //await this.loadAdministracao()
         await this.loadRegionais()
         this.loadadministracoes()
     }

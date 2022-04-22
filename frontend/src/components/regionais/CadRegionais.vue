@@ -28,12 +28,8 @@
         <div v-show="!isEdit">
             <div class="card-header">
                 <h3>Regionais
-                    <button type="button" @click="isEdit = true" class="btn btn-outline-info btn-lg">
+                    <button type="button" @click="isEdit = true" class="btn btn-outline-info btn-lg" v-if="isAdmin">
                         <i class="fa fa-plus-circle"></i>
-                    </button>
-                    <span>&nbsp;</span>
-                    <button type="button" @click="print" class="btn btn-outline-info btn-lg">
-                        <i class="fa fa-print"></i>
                     </button>
                 </h3>
             </div>
@@ -49,7 +45,7 @@
                 :search-options="{ enabled: true, placeholder: 'Procurar...', }"
                 styleClass="vgt-table striped hover">
                 <template slot="table-row" slot-scope="data">
-                    <span v-if="data.column.field == 'actions'">
+                    <span v-if="data.column.field == 'actions' && isAdmin">
                         <b-button variant="warning" @click="loadregional(data.row)" class="mr-2">
                             <i class="fa fa-pencil"></i>
                         </b-button>
@@ -74,10 +70,12 @@ import { baseApiUrl, showError } from '@/global'
 import axios from 'axios'
 import 'vue-good-table/dist/vue-good-table.css'
 import { VueGoodTable } from 'vue-good-table';
+import { mapState } from 'vuex'
 
 export default {
     name: 'regionais',
     components:{PageTitle, VueGoodTable},
+    computed:mapState(['isAdmin']),
     data: function() {
         return {
             mode: 'save',
@@ -88,18 +86,11 @@ export default {
             columns: [
                 {label: 'Código',field: 'id',},
                 {label: 'Nome',field: 'nome',},
-                {label: 'Ações',field: 'actions',},
+                this.isadmin ? {label: 'Ações',field: 'actions',} : {label: '#',field: 'null'}
       ],
         }
     },
     methods: {
-        print(){
-            /**
-             * A variavel 'this.$refs['regionais'].selectedRows'
-             * Contém as linhas selecionadas na tabela
-             */
-            alert(JSON.stringify(this.$refs['regionais'].selectedRows))
-        },
         loadregionais() {
             const url = `${baseApiUrl}/regional`
             axios.get(url).then(res => {

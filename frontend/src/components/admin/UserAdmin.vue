@@ -60,17 +60,8 @@
                 </button>
                 </h3>
             </div>
-            <b-table hover striped :items="users" :fields="fields" :select-mode="selectMode">
-                <template #cell(selected)="{ rowSelected }">
-        <template v-if="rowSelected">
-          <span aria-hidden="true">&check;</span>
-          <span class="sr-only">Selected</span>
-        </template>
-        <template v-else>
-          <span aria-hidden="true">&nbsp;</span>
-          <span class="sr-only">Not selected</span>
-        </template>
-        </template>
+            <b-table hover striped :items="users" :fields="fields">
+
                 <template slot="actions" slot-scope="data">
                     <b-button variant="warning" @click="loadUser(data.item)" class="mr-2">
                         <i class="fa fa-pencil"></i>
