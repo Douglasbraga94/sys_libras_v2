@@ -5,7 +5,7 @@
 			:hideToggle="!user"
 			:hideUserDropdown="!user"/>
 		<Menu v-if="user"/>
-		<Loading v-if="validatingToken" />
+		<Spinner v-if="validatingToken" />
 		<Content v-else />
 		<Footer />
 	</div>
@@ -18,13 +18,12 @@ import Header from "./components/tamplate/Header.vue"
 import Menu from "./components/tamplate/Menu.vue"
 import Content from "./components/tamplate/Content.vue"
 import Footer from "./components/tamplate/Footer.vue"
-import Spinner from "@/components/tamplate/Spinner";
-import Loading from './components/tamplate/Loading.vue'
+import Spinner from "@/components/tamplate/Spinner"
 import { mapState } from "vuex"
 
 export default {
 	name: "App",
-	components: { Header, Menu, Content, Footer, Spinner, Loading},
+	components: { Header, Menu, Content, Footer, Spinner},
 	computed: mapState(['isMenuVisible', 'user', 'isAdmin']),
 	data: function() {
 		return{
