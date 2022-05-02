@@ -2,6 +2,7 @@ import Vue from 'vue'
 
 export const userKey = '__libras_user'
 export const baseApiUrl = 'http://localhost:3000'
+//PROD: export const baseApiUrl = 'http://154.12.230.250:3000'
 
 export function showError(e) {
     if(e && e.response && e.response.data) {
