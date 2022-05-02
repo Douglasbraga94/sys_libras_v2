@@ -4,6 +4,7 @@
 - Desenvolver API's mais especificas
 - Data no editar de interpretes
 - Tooltip para o status diversos
+- Deixar design mais reponsivo
 
 # frontend
 
