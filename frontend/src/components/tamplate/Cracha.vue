@@ -7,7 +7,7 @@
         id="cracha">
       <p class="titulo">
         Grupo de Estudo em LIBRAS <br/>
-        Congregação Cristã no Brasil
+        Congregação Cristã no   Brasil
       </p>
       <p class="nome">{{ item.nome }}</p>
       <p class="comum">{{ item.comum }}</p>
