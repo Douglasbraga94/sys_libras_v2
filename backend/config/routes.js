@@ -3,6 +3,7 @@ module.exports = app =>{
 //API's Publicas
     app.post('/signin', app.api.auth.signin)
     app.post('/validateToken', app.api.auth.validateToken)
+    app.post('/signup', app.api.user.save)
 
 
 //API's com acesso restrito... Precisa inserir Authorization bearer ao head com o Token
