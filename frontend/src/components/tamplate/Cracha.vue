@@ -12,7 +12,7 @@
       <p class="nome">{{ item.nome }}</p>
       <p class="comum">{{ item.comum }}</p>
       <p class="codigo">{{ item.codigo }}</p>
-      <p class="barras">{{ item.codigo }}</p>
+      <p class="barras">*{{ item.codigo }}*</p>
       <p class="tipo"></p>
     </div>
   </div>
