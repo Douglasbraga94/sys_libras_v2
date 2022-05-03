@@ -45,13 +45,18 @@
                 :search-options="{ enabled: true, placeholder: 'Procurar...', }"
                 styleClass="vgt-table striped hover">
                 <template slot="table-row" slot-scope="data">
-                    <span v-if="data.column.field == 'actions' && isAdmin">
-                        <b-button variant="warning" @click="loadregional(data.row)" class="mr-2">
-                            <i class="fa fa-pencil"></i>
-                        </b-button>
-                        <b-button variant="danger" @click="loadregional(data.row, 'remove')">
-                            <i class="fa fa-trash"></i>
-                        </b-button>
+                    <span v-if="data.column.field == 'actions'">
+                        <div v-if="isAdmin"> 
+                            <b-button variant="warning" @click="loadregional(data.row)" class="mr-2">
+                                <i class="fa fa-pencil"></i>
+                            </b-button>
+                            <b-button variant="danger" @click="loadregional(data.row, 'remove')">
+                                <i class="fa fa-trash"></i>
+                            </b-button>
+                        </div>
+                        <div v-else>
+                            --
+                        </div>
                     </span>
                     <span v-else>
                     {{data.formattedRow[data.column.field]}}
@@ -86,7 +91,7 @@ export default {
             columns: [
                 {label: 'Código',field: 'id',},
                 {label: 'Nome',field: 'nome',},
-                this.isadmin ? {label: 'Ações',field: 'actions',} : {label: '#',field: 'null'}
+                {label: 'Ações',field: 'actions',}
       ],
         }
     },
@@ -132,6 +137,7 @@ export default {
     },
     async mounted() {
         this.loadregionais()
+        console.log(this.isAdmin ? "{label: 'Ações',field: 'actions',}" : "{label: '#',field: 'null'}")
     }
 }
 </script>

@@ -52,13 +52,18 @@
                 :search-options="{ enabled: true, placeholder: 'Procurar...', }"
                 styleClass="vgt-table striped hover">
                 <template slot="table-row" slot-scope="data">
-                    <span v-if="data.column.field == 'actions' && isAdmin">
-                        <b-button variant="warning" @click="loadadministracao(data.row)" class="mr-2">
-                            <i class="fa fa-pencil"></i>
-                        </b-button>
-                        <b-button variant="danger" @click="loadadministracao(data.row, 'remove')">
-                            <i class="fa fa-trash"></i>
-                        </b-button>
+                    <span v-if="data.column.field == 'actions'">
+                        <div v-if="isAdmin"> 
+                            <b-button variant="warning" @click="loadadministracao(data.row)" class="mr-2">
+                                <i class="fa fa-pencil"></i>
+                            </b-button>
+                            <b-button variant="danger" @click="loadadministracao(data.row, 'remove')">
+                                <i class="fa fa-trash"></i>
+                            </b-button>
+                        </div>
+                        <div v-else>
+                            --
+                        </div>
                     </span>
                     <span v-if="data.column.field == 'idregional'">
                         <span>{{findRegional(data.formattedRow[data.column.field])}}</span>
@@ -99,7 +104,7 @@ export default {
                 {label: 'Código',field: 'id',},
                 {label: 'Regional',field: 'idregional',},
                 {label: 'Nome',field: 'nome',},
-                this.isadmin ? {label: 'Ações',field: 'actions',} : {label: '#',field: 'null'}
+                {label: 'Ações',field: 'actions',}
       ],
         }
     },
