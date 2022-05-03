@@ -163,6 +163,9 @@ export default {
             const method = this.comum.id ? 'put' : 'post'
             const id = this.comum.id ? `/${this.comum.id}` : ''
             delete this.comum.idregional;
+            delete this.comum.vgt_id;
+            delete this.comum.originalIndex;
+
             axios[method](`${baseApiUrl}/comum${id}`, this.comum)
                 .then(() => {
                     this.$toasted.global.defaultSuccess()
