@@ -17,6 +17,10 @@ export default {
     this.$loadingService.registerSpinner(this);
   },
   methods: {
+    enable(val) {
+      this.ativo = val;
+      this.$forceUpdate();
+    },
     prevent(ev) {
       ev.preventDefault();
       ev.stopPropagation();

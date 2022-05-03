@@ -6,11 +6,10 @@ export class LoadingService {
     }
 
     start() {
-        console.log(this.spinner)
-        this.spinner.ativo = true;
+        this.spinner.enable(true);
     }
 
     stop() {
-        this.spinner.ativo = false;
+        this.spinner.enable(false);
     }
 }
