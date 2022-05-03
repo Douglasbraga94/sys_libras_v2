@@ -20,12 +20,12 @@ module.exports = app => {
                 .where({ id: administracao.id })
                 //.whereNull('deletedAt')
                 .then(_ => res.status(204).send())
-                .catch(err => res.status(500).send(err))
+                .catch(err => res.status(500).send(err.message))
         } else {
             app.db('administracoes')
                 .insert(administracao)
                 .then(_ => res.status(204).send())
-                .catch(err => res.status(500).send(err))
+                .catch(err => res.status(500).send(err.message))
         }
      }
 
@@ -34,7 +34,7 @@ module.exports = app => {
             .select('id', 'nome', 'idregional')
             //.whereNull('deletedAt')
             .then(administracao => res.json(administracao))
-            .catch(err => res.status(500).send(err))
+            .catch(err => res.status(500).send(err.message))
     }
 
     const getById = (req, res) => {
@@ -44,7 +44,7 @@ module.exports = app => {
             //.whereNull('deletedAt')
             .first()
             .then(administracao => res.json(administracao))
-            .catch(err => res.status(500).send(err))
+            .catch(err => res.status(500).send(err.message))
     }
 
     const remove = async (req, res) => {
