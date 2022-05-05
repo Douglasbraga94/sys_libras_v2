@@ -89,8 +89,7 @@ export default {
             isEdit: false,
             selectionChanged: [],
             columns: [
-                {label: 'Código',field: 'id',},
-                {label: 'Nome',field: 'nome',},
+                {label: 'RA - Regional Administrativa',field: 'nome',},
                 {label: 'Ações',field: 'actions',}
       ],
         }
@@ -109,6 +108,8 @@ export default {
             this.loadregionais()
         },
         save() {
+            delete this.regional.vgt_id
+            delete this.regional.originalIndex
             const method = this.regional.id ? 'put' : 'post'
             const id = this.regional.id ? `/${this.regional.id}` : ''
             axios[method](`${baseApiUrl}/regional${id}`, this.regional)

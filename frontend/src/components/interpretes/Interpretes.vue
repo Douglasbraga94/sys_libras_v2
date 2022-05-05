@@ -226,6 +226,7 @@ export default {
             }  
         },
         loadinterpretes() {
+            
             const url = `${baseApiUrl}/interprete`
             axios.get(url).then(res => {
                 this.interpretes = res.data
@@ -267,6 +268,7 @@ export default {
             this.loadinterpretes()
         },
         save() {
+            console.log(this.interprete.oficializacao)
             delete this.interprete.vgt_id
             delete this.interprete.originalIndex
             typeof this.interprete.telefone1 == 'string' ? this.interprete.telefone1 = parseInt(this.interprete.telefone1) : this.interprete.telefone1;
@@ -292,8 +294,12 @@ export default {
                 .catch(showError)
         },
         loadinterprete(interprete, mode = 'save') {
+            debugger
+
             this.mode = mode
             this.interprete = { ...interprete }
+            let arr = this.interprete.oficializacao.split('-')
+            this.interprete.oficializacao = arr[0] +'-'+arr[1]+'-'+arr[2].substring(0, 2);
             this.isEdit = true
         },
       

@@ -21,7 +21,7 @@
 			<PageTitle
 				icon="fa fa-university"
 				main="Regionais"
-				sub="Controle de Regionais"
+				sub="Controle das Regionais"
 			/>
 			<button type="button" @click="openComponent('home')" class="btn btn-secondary btn-sm m-1">
 				<i class="fa fa-chevron-circle-left"> Voltar</i>
