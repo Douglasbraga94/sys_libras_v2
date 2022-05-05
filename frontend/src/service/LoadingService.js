@@ -1,16 +1,18 @@
 export class LoadingService {
     spinner;
+    level = 0;
 
     registerSpinner(spinner) {
         this.spinner = spinner;
     }
 
     start() {
-        console.log(this.spinner)
-        this.spinner.ativo = true;
+        if (this.level > 0)
+            console.warn("Atenção, sobreposição do loading!");
+        this.spinner.enable(++this.level > 0);
     }
 
     stop() {
-        this.spinner.ativo = false;
+        this.spinner.enable(--this.level > 0);
     }
 }

@@ -5,8 +5,7 @@
 			:hideToggle="!user"
 			:hideUserDropdown="!user"/>
 		<Menu v-if="user"/>
-		<Spinner v-if="validatingToken" />
-		<Content v-else />
+		<Content v-if="!validatingToken" />
 		<Footer />
 	</div>
 </template>
@@ -30,7 +29,7 @@ export default {
 			validatingToken: true
 		}
 	},
-		methods: {
+  methods: {
 		async validateToken() {
 			this.validatingToken = true
 			const json = localStorage.getItem(userKey)
@@ -56,8 +55,11 @@ export default {
 			this.validatingToken = false
 		}
 	},
-	created() {
-		this.validateToken()
+  async mounted() {
+    this.$loadingService.start();
+
+    await this.validateToken()
+    this.$loadingService.stop();
 	}
 }
 </script>

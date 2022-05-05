@@ -36,12 +36,12 @@ module.exports = app => {
                 .where({ id: user.id })
                 .whereNull('deletado_em')
                 .then(_ => res.status(204).send())
-                .catch(err => res.status(500).send(err))
+                .catch(err => res.status(500).send(err.message))
         } else {
             app.db('usuarios')
                 .insert(user)
                 .then(_ => res.status(204).send())
-                .catch(err => res.status(500).send(err))
+                .catch(err => res.status(500).send(err.message))
         }
      }
 
@@ -50,7 +50,7 @@ module.exports = app => {
             .select('id', 'nome', 'email', 'admin', 'ministerio')
             .whereNull('deletado_em')
             .then(users => res.json(users))
-            .catch(err => res.status(500).send(err))
+            .catch(err => res.status(500).send(err.message))
     }
 
     const getById = (req, res) => {
@@ -60,7 +60,7 @@ module.exports = app => {
             .whereNull('deletado_em')
             .first()
             .then(user => res.json(user))
-            .catch(err => res.status(500).send(err))
+            .catch(err => res.status(500).send(err.message))
     }
 
     const remove = async (req, res) => {
