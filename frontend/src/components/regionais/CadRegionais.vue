@@ -35,6 +35,24 @@
             </div>
             <div >
             <vue-good-table
+                :pagination-options="{
+                    enabled: true,
+                    mode: 'records',
+                    perPage: 5,
+                    position: 'bottom',
+                    perPageDropdown: [3, 5, 10],
+                    dropdownAllowAll: true,
+                    setCurrentPage: 1,
+                    jumpFirstOrLast : true,
+                    firstLabel : 'Primeira',
+                    lastLabel : 'Última',
+                    nextLabel: 'Próxima',
+                    prevLabel: 'Anterior',
+                    rowsPerPageLabel: 'Linhas por página',
+                    ofLabel: 'de',
+                    pageLabel: 'Página', // for 'pages' mode
+                    allLabel: 'Todas',
+                }"
                 ref="regionais"
                 @on-selected-rows-change="selectionChanged"
                 :columns="columns"

@@ -49,6 +49,24 @@
             </div>
             <div >
             <vue-good-table
+                :pagination-options="{
+                    enabled: true,
+                    mode: 'records',
+                    perPage: 5,
+                    position: 'bottom',
+                    perPageDropdown: [3, 5, 10],
+                    dropdownAllowAll: true,
+                    setCurrentPage: 1,
+                    jumpFirstOrLast : true,
+                    firstLabel : 'Primeira',
+                    lastLabel : 'Última',
+                    nextLabel: 'Próxima',
+                    prevLabel: 'Anterior',
+                    rowsPerPageLabel: 'Linhas por página',
+                    ofLabel: 'de',
+                    pageLabel: 'Página', // for 'pages' mode
+                    allLabel: 'Todas',
+                }"
                 ref="comuns"
                 @on-selected-rows-change="selectionChanged"
                 :columns="columns"
@@ -75,7 +93,10 @@
                     <span v-if="data.column.field == 'idadministracao'">
                         <span>{{findAdministracao(data.formattedRow[data.column.field])}}</span>
                     </span>
-                    <span v-else>
+                    <span v-if="data.column.field == 'idregional'">
+                        <span>{{findRegional(data.formattedRow[data.column.field])}}</span>
+                    </span>
+                    <span v-if="data.column.field != 'idregional' && data.column.field != 'idadministracao' && data.column.field != 'actions'">
                     {{data.formattedRow[data.column.field]}}
                     </span>
                 </template>
@@ -112,8 +133,9 @@ export default {
             isEdit: false,
             selectionChanged: [],
             columns: [
-                {label: 'Código',field: 'id',},
-                {label: 'Nome',field: 'nome',},
+                {label: 'RA - Regional Administrativa',field: 'idregional',},
+                {label: 'ADM - Administração',field: 'idadministracao',},
+                {label: 'Setor - Comum',field: 'nome',},
                 {label: 'Ações',field: 'actions',} 
       ],
         }
@@ -187,6 +209,12 @@ export default {
         findAdministracao(value){
             if(this.administracoes.length>0){
                 let item = this.administracoes.find(item=>item.value==value)
+                return item.text
+            }  
+        },
+        findRegional(value){
+            if(this.regionais.length>0){
+                let item = this.regionais.find(item=>item.value==value)
                 return item.text
             }  
         },

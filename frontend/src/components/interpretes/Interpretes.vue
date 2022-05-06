@@ -1,7 +1,7 @@
 <template>
 <div class="interpretes">
     <PageTitle icon="fa fa-users" main="Intérpretes de Libras - CCB"
-            sub="Controle de intérpretes de LIBRAS" />
+            sub="Controle de Intérpretes de LIBRAS" />
     <div class="interprete-admin" >
         <b-form v-if="isEdit">
             <input id="interprete-id" type="hidden" v-model="interprete.id" />
@@ -49,24 +49,28 @@
                     </b-form-group>
                 </b-col>
                 <b-col md="4" sm="12">
-                    <label>Status:</label>
-                    <b-form-select id="interprete-status" v-show="mode === 'save'" v-model="interprete.status" :options="options"> 
+                    <b-form-group label="Status:" 
+                        label-for="Status">
+                    <b-form-select  id="interprete-status" v-show="mode === 'save'" v-model="interprete.status" :options="options"> 
                     </b-form-select>
+                    </b-form-group>
                 </b-col>
             </b-row>
 
             <b-row align-h="start" v-show="mode === 'save'">
                 <b-col md="4" sm="12">
-                    <label>Administração:</label>
-                    <b-form-select id="interprete-administracao" v-show="mode === 'save'" 
-                    v-model="interprete.idadministracao" :options="administracoes" ><!--@change="setComum(administracao,$event)"--> 
-                    </b-form-select>
+                    <b-form-group label="Administração:" label-for="administracao">
+                        <b-form-select id="interprete-administracao" v-show="mode === 'save'" 
+                        v-model="interprete.idadministracao" :options="administracoes" ><!--@change="setComum(administracao,$event)"--> 
+                        </b-form-select>
+                    </b-form-group>
                 </b-col>
                 <b-col md="4" sm="12">
-                    <label>Comum:</label>
-                    <b-form-select id="interprete-comum" v-show="mode === 'save'" 
-                    v-model="interprete.idcomum" :options="FilteredComuns"> 
-                    </b-form-select>
+                    <b-form-group label="Setor - Comum:" label-for="comum">
+                        <b-form-select id="interprete-comum" v-show="mode === 'save'" 
+                        v-model="interprete.idcomum" :options="FilteredComuns"> 
+                        </b-form-select>
+                    </b-form-group>
                 </b-col>
                 <b-col md="4" sm="12" v-if="interprete.status == 'diversos'">
                     <b-form-group label="Justificativa Status Diverso:" label-for="statusJustificativa">
@@ -113,6 +117,24 @@
             <div >
             <Cracha ref="cracha" v-on:complete="onCompleteExport"></Cracha>
             <vue-good-table
+                :pagination-options="{
+                    enabled: true,
+                    mode: 'records',
+                    perPage: 5,
+                    position: 'bottom',
+                    perPageDropdown: [3, 5, 10],
+                    dropdownAllowAll: true,
+                    setCurrentPage: 1,
+                    jumpFirstOrLast : true,
+                    firstLabel : 'Primeira',
+                    lastLabel : 'Última',
+                    nextLabel: 'Próxima',
+                    prevLabel: 'Anterior',
+                    rowsPerPageLabel: 'Linhas por página',
+                    ofLabel: 'de',
+                    pageLabel: 'Página', // for 'pages' mode
+                    allLabel: 'Todas',
+                }"
                 ref="interpretes"
                 @on-selected-rows-change="selectionChanged"
                 :columns="columns"
@@ -125,13 +147,13 @@
                 
                 <template slot="table-row" slot-scope="data">
                     <span v-if="data.column.field == 'actions'">
-                        <b-button variant="primary" @click="exportID(data.row, $event)" class="mr-2">
+                        <b-button variant="primary" @click="exportID(data.row, $event)" class="mr-2 botoes">
                             <i class="fa fa-id-card"></i>
                         </b-button>
-                        <b-button variant="warning" @click="loadinterprete(data.row)" class="mr-2" v-if="isAdmin">
+                        <b-button variant="warning" @click="loadinterprete(data.row)" class="mr-2 botoes" v-if="isAdmin">
                             <i class="fa fa-pencil"></i>
                         </b-button>
-                        <b-button variant="danger" @click="loadinterprete(data.row, 'remove')" v-if="isAdmin">
+                        <b-button variant="danger" @click="loadinterprete(data.row, 'remove')" class="mr-2 botoes" v-if="isAdmin">
                             <i class="fa fa-trash"></i>
                         </b-button>
                     </span>
@@ -197,11 +219,11 @@ export default {
                 {label: 'Status',field: 'status',},
                 {label: 'Nome',field: 'nome',},
                 {label: 'Administração',field: 'idadministracao',},
-                {label: 'Comum',field: 'idcomum',},
-                {label: 'telefone1',field: 'telefone1',},
-                {label: 'telefone2',field: 'telefone2',},
-                {label: 'email',field: 'email',},
-                {label: 'oficializacao',field: 'oficializacao', },
+                {label: 'Setor - Comum',field: 'idcomum',},
+                {label: 'Telefone 1',field: 'telefone1',},
+                {label: 'Telefone 2',field: 'telefone2',},
+                {label: 'E-mail',field: 'email',},
+                {label: 'Oficialização',field: 'oficializacao', },
                 {label: 'Ações',field: 'actions',},
             ],
         }
@@ -360,4 +382,12 @@ export default {
 </script>
 
 <style>
+input[type=number]::-webkit-inner-spin-button { 
+    -webkit-appearance: none;
+    
+}
+
+.botoes{
+    margin: 4px;
+}
 </style>

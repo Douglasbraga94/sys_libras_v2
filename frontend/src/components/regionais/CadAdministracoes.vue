@@ -34,7 +34,7 @@
         <hr>
         <div v-show="!isEdit">
             <div class="card-header">
-                <h3>administracoes
+                <h3>Administrações
                     <button type="button" @click="isEdit = true" class="btn btn-outline-info btn-lg" v-if="isAdmin">
                         <i class="fa fa-plus-circle"></i>
                     </button>
@@ -42,6 +42,24 @@
             </div>
             <div >
             <vue-good-table
+                :pagination-options="{
+                    enabled: true,
+                    mode: 'records',
+                    perPage: 5,
+                    position: 'bottom',
+                    perPageDropdown: [3, 5, 10],
+                    dropdownAllowAll: true,
+                    setCurrentPage: 1,
+                    jumpFirstOrLast : true,
+                    firstLabel : 'Primeira',
+                    lastLabel : 'Última',
+                    nextLabel: 'Próxima',
+                    prevLabel: 'Anterior',
+                    rowsPerPageLabel: 'Linhas por página',
+                    ofLabel: 'de',
+                    pageLabel: 'Página', // for 'pages' mode
+                    allLabel: 'Todas',
+                }"
                 ref="administracoes"
                 @on-selected-rows-change="selectionChanged"
                 :columns="columns"
@@ -101,9 +119,8 @@ export default {
             isEdit: false,
             selectionChanged: [],
             columns: [
-                {label: 'Código',field: 'id',},
-                {label: 'Regional',field: 'idregional',},
-                {label: 'Nome',field: 'nome',},
+                {label: 'RA - Regional Administrativa',field: 'idregional',},
+                {label: 'ADM - Administração',field: 'nome',},
                 {label: 'Ações',field: 'actions',}
       ],
         }
@@ -143,6 +160,8 @@ export default {
             this.loadadministracoes()
         },
         save() {
+            delete this.administracao.vgt_id
+            delete this.administracao.originalIndex
             const method = this.administracao.id ? 'put' : 'post'
             const id = this.administracao.id ? `/${this.administracao.id}` : ''
             axios[method](`${baseApiUrl}/administracao${id}`, this.administracao)

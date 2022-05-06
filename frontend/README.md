@@ -1,11 +1,13 @@
 # Melhorias:
 - Inserir paginação das tabelas
 - Definir paleta de cores do projeto
-- Desenvolver API's mais especificas
+- Desenvolver API's mais especificas (consultas con JOIN ao inves de trazer o id...)
 - Data no editar de interpretes
 - Tooltip para o status diversos
 - Deixar design mais reponsivo
 - Spinner ao carregar informações do back
+- Ajustar Ícones de Ordenação
+- Selects ordenados (Ordenar query)
 
 # frontend
 
