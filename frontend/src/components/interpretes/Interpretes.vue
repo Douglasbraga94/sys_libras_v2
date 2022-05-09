@@ -10,7 +10,7 @@
                     <b-form-group label="Código:" label-for="codigo">
                         <b-form-input id="codigo" type="text"
                             v-model="interprete.codigo" required
-                            :readonly="mode === 'remove'"
+                            :readonly="mode === 'remove' || mode === 'vizualizar'"
                             placeholder="Informe o código do Usuário..." />
                     </b-form-group>
                 </b-col>
@@ -18,7 +18,7 @@
                     <b-form-group label="Nome:" label-for="interprete-name">
                         <b-form-input id="interprete-name" type="text"
                             v-model="interprete.nome" required
-                            :readonly="mode === 'remove'"
+                            :readonly="mode === 'remove' || mode === 'vizualizar'"
                             placeholder="Informe o Nome do Usuário..." />
                     </b-form-group>
                 </b-col>
@@ -26,16 +26,16 @@
                     <b-form-group label="E-mail:" label-for="interprete-email">
                         <b-form-input id="interprete-email" type="text"
                             v-model="interprete.email" required
-                            :readonly="mode === 'remove'"
+                            :readonly="mode === 'remove' || mode === 'vizualizar'"
                             placeholder="Informe o E-mail do Usuário..." />
                     </b-form-group>
                 </b-col>
             </b-row>
             
-            <b-row align-h="start" v-show="mode === 'save'">
+            <b-row align-h="start" v-show="mode === 'save' || mode === 'vizualizar'">
                 <b-col md="4" sm="12">
                     <b-form-group label="Telefone Principal:" label-for="telefone1">
-                        <b-form-input id="telefone1" type="text"
+                        <b-form-input :readonly="mode === 'vizualizar'" id="telefone1" type="text"
                             v-model="interprete.telefone1" required
                             placeholder="Informe o melhor número..." />
                     </b-form-group>
@@ -43,7 +43,7 @@
                 <b-col md="4" sm="12">
                     <b-form-group label="Telefone Secundário:" 
                         label-for="telefone2">
-                        <b-form-input id="telefone2" type="text"
+                        <b-form-input :readonly="mode === 'vizualizar'" id="telefone2" type="text"
                             v-model="interprete.telefone2" required
                             placeholder="Telefone secundário..." />
                     </b-form-group>
@@ -51,40 +51,40 @@
                 <b-col md="4" sm="12">
                     <b-form-group label="Status:" 
                         label-for="Status">
-                    <b-form-select  id="interprete-status" v-show="mode === 'save'" v-model="interprete.status" :options="options"> 
+                    <b-form-select :disabled = "mode == 'vizualizar'" id="interprete-status" v-model="interprete.status" :options="options"> 
                     </b-form-select>
                     </b-form-group>
                 </b-col>
             </b-row>
 
-            <b-row align-h="start" v-show="mode === 'save'">
+            <b-row align-h="start" v-show="mode === 'save' || mode === 'vizualizar'">
                 <b-col md="4" sm="12">
                     <b-form-group label="Administração:" label-for="administracao">
-                        <b-form-select id="interprete-administracao" v-show="mode === 'save'" 
+                        <b-form-select :disabled = "mode == 'vizualizar'" id="interprete-administracao" 
                         v-model="interprete.idadministracao" :options="administracoes" ><!--@change="setComum(administracao,$event)"--> 
                         </b-form-select>
                     </b-form-group>
                 </b-col>
                 <b-col md="4" sm="12">
                     <b-form-group label="Setor - Comum:" label-for="comum">
-                        <b-form-select id="interprete-comum" v-show="mode === 'save'" 
+                        <b-form-select :disabled = "mode == 'vizualizar'" id="interprete-comum" 
                         v-model="interprete.idcomum" :options="FilteredComuns"> 
                         </b-form-select>
                     </b-form-group>
                 </b-col>
                 <b-col md="4" sm="12" v-if="interprete.status == 'diversos'">
                     <b-form-group label="Justificativa Status Diverso:" label-for="statusJustificativa">
-                        <b-form-input id="statusJustificativa" type="text"
+                        <b-form-input :readonly="mode === 'vizualizar'" id="statusJustificativa" type="text"
                             v-model="interprete.statusJustificativa" required
                              />
                     </b-form-group>
                 </b-col>
             </b-row>
 
-            <b-row align-h="start" v-show="mode === 'save'">
+            <b-row align-h="start" v-show="mode === 'save' || mode === 'vizualizar'">
                 <b-col md="4" sm="12">
                     <b-form-group label="Oficialização:" label-for="oficializacao">
-                        <b-form-input id="oficializacao" type="date"
+                        <b-form-input :readonly="mode === 'vizualizar'" id="oficializacao" type="date"
                             v-model="interprete.oficializacao" required
                              />
                     </b-form-group>
@@ -147,13 +147,16 @@
                     
                     <template slot="table-row" slot-scope="data">
                         <span v-if="data.column.field == 'actions'">
-                            <b-button variant="primary" @click="exportID(data.row, $event)" class="mr-2 botoes">
+                            <b-button v-b-tooltip.hover title="Imprimir Crachá" variant="primary" @click="exportID(data.row, $event)" class="mr-2 botoes">
                                 <i class="fa fa-id-card"></i>
                             </b-button>
-                            <b-button variant="warning" @click="loadinterprete(data.row)" class="mr-2 botoes" v-if="isAdmin">
+                            <b-button v-b-tooltip.hover title="Vizualizar" variant="success" @click="loadinterprete(data.row, 'vizualizar')" class="mr-2 botoes">
+                                <i class="fa fa-eye"></i>
+                            </b-button>
+                            <b-button v-b-tooltip.hover title="Editar" variant="warning" @click="loadinterprete(data.row)" class="mr-2 botoes" v-if="isAdmin">
                                 <i class="fa fa-pencil"></i>
                             </b-button>
-                            <b-button variant="danger" @click="loadinterprete(data.row, 'remove')" class="mr-2 botoes" v-if="isAdmin">
+                            <b-button v-b-tooltip.hover title="Excluir" variant="danger" @click="loadinterprete(data.row, 'remove')" class="mr-2 botoes" v-if="isAdmin">
                                 <i class="fa fa-trash"></i>
                             </b-button>
                         </span>
@@ -168,7 +171,7 @@
                             <span>{{dateFormat(data.formattedRow[data.column.field])}}</span>
                         </span>
                         <span v-if="data.column.field == 'status'">
-                            <span>{{data.formattedRow[data.column.field]!='Habilitado' ? (data.formattedRow[data.column.field]=='nao_hab' ? 'Não Habilitado' : 'Diversos') : data.formattedRow[data.column.field]}}</span>
+                            <span v-b-tooltip.hover :title="data.formattedRow[data.column.field]=='diversos' ? (data.row.statusJustificativa) : undefined ">{{data.formattedRow[data.column.field]!='Habilitado' ? (data.formattedRow[data.column.field]=='nao_hab' ? 'Não Habilitado' : 'Diversos') : data.formattedRow[data.column.field]}}</span>
                         </span>
                         <span v-if="data.column.field != 'actions' && data.column.field != 'idadministracao' &&
                             data.column.field != 'idcomum' && data.column.field != 'oficializacao' && data.column.field != 'status'">
@@ -215,16 +218,16 @@ export default {
             isEdit: false,
             selectionChanged: [],
             columns: [
-                {label: 'Código',field: 'codigo',},
+                // {label: 'Código',field: 'codigo',},
                 {label: 'Status',field: 'status',},
                 {label: 'Nome',field: 'nome', width: '150px'},
-                {label: 'Administração',field: 'idadministracao',},
-                {label: 'Setor - Comum',field: 'idcomum', width: '150px'},
-                {label: 'Telefone 1',field: 'telefone1',},
-                {label: 'Telefone 2',field: 'telefone2',},
-                {label: 'E-mail',field: 'email',},
-                {label: 'Oficialização',field: 'oficializacao', },
-                {label: 'Ações',field: 'actions',},
+                // {label: 'Administração',field: 'idadministracao',},
+                {label: 'Setor - Comum',field: 'idcomum', },
+                {label: 'Telefone Principal',field: 'telefone1',},
+                // {label: 'Telefone 2',field: 'telefone2',width: '150px'},
+                // {label: 'E-mail',field: 'email',},
+                // {label: 'Oficialização',field: 'oficializacao', },
+                {label: 'Ações',field: 'actions', },
             ],
         }
     },
