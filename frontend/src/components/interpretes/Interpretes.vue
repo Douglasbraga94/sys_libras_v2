@@ -294,8 +294,8 @@ export default {
             console.log(this.interprete.oficializacao)
             delete this.interprete.vgt_id
             delete this.interprete.originalIndex
-            typeof this.interprete.telefone1 == 'string' ? this.interprete.telefone1 = parseInt(this.interprete.telefone1) : this.interprete.telefone1;
-            (!this.interprete.telefone2 || this.interprete.telefone2.length == 0) ? delete this.interprete.telefone2 : this.interprete.telefone2
+            // typeof this.interprete.telefone1 == 'string' ? this.interprete.telefone1 = parseInt(this.interprete.telefone1) : this.interprete.telefone1;
+            // (!this.interprete.telefone2 || this.interprete.telefone2.length == 0) ? delete this.interprete.telefone2 : this.interprete.telefone2
             const method = this.interprete.id ? 'put' : 'post'
             const id = this.interprete.id ? `/${this.interprete.id}` : ''
             axios[method](`${baseApiUrl}/interprete${id}`, this.interprete)
