@@ -1,6 +1,6 @@
 <template>
     <header class="header">
-        <a class="toggle" @click="toggleMenu" v-if="!hideToggle">
+        <a class="toggle" @click="toggleMenu"  >
             <i class="fa fa-lg" :class="icon"></i>
         </a>
         <div class="title">
@@ -19,11 +19,11 @@ import { mapState } from 'vuex'
 export default {
     name: 'Header',
     components: { UserDropdown },
-    computed:mapState(['isAdmin', 'user']),
+    computed:mapState(['isAdmin', 'user', 'isMenuVisible']),
     props: {
         title: String,
         hideToggle: Boolean,
-        hideUserDropdown: Boolean
+        hideUserDropdown: Boolean,
     },
     computed: {
         icon() {
@@ -41,12 +41,11 @@ export default {
 <style>
     .header {
         grid-area: header;
-
         display: flex;
         justify-content: center;
         align-items: center;
+        transition: all 0.25s;
     }
-
     .title {
         font-size: 1.2rem;
         color: #fff;
@@ -66,6 +65,7 @@ export default {
     }
 
     header.header > a.toggle {
+        
         width: 60px;
         height: 100%;
         color: black;

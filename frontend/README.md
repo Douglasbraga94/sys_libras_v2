@@ -1,5 +1,6 @@
 # Melhorias:
-- Inserir paginação das tabelas
+- ~~Inserir paginação das tabelas~~
+- Alterar Tabela de Usuários para vue good table
 - Definir paleta de cores do projeto
 - Desenvolver API's mais especificas (consultas con JOIN ao inves de trazer o id...)
 - Data no editar de interpretes

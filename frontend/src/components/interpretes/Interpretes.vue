@@ -35,7 +35,7 @@
             <b-row align-h="start" v-show="mode === 'save'">
                 <b-col md="4" sm="12">
                     <b-form-group label="Telefone Principal:" label-for="telefone1">
-                        <b-form-input id="telefone1" type="number"
+                        <b-form-input id="telefone1" type="text"
                             v-model="interprete.telefone1" required
                             placeholder="Informe o melhor número..." />
                     </b-form-group>
@@ -43,7 +43,7 @@
                 <b-col md="4" sm="12">
                     <b-form-group label="Telefone Secundário:" 
                         label-for="telefone2">
-                        <b-form-input id="telefone2" type="number"
+                        <b-form-input id="telefone2" type="text"
                             v-model="interprete.telefone2" required
                             placeholder="Telefone secundário..." />
                     </b-form-group>
@@ -102,7 +102,7 @@
             </b-row>
         </b-form>
         <hr>
-        <div v-show="!isEdit">
+        <div v-show="!isEdit" :class="{'tabela_hide': !isMenuVisible, 'tabela': isMenuVisible}">
             <div class="card-header">
                 <h3>Intérpretes Regional Brasília 
                     <button type="button" @click="isEdit = true" class="btn btn-outline-info btn-lg" v-if="isAdmin">
@@ -115,68 +115,68 @@
                 </h3>
             </div>
             <div >
-            <Cracha ref="cracha" v-on:complete="onCompleteExport"></Cracha>
-            <vue-good-table
-                :pagination-options="{
-                    enabled: true,
-                    mode: 'records',
-                    perPage: 5,
-                    position: 'bottom',
-                    perPageDropdown: [3, 5, 10],
-                    dropdownAllowAll: true,
-                    setCurrentPage: 1,
-                    jumpFirstOrLast : true,
-                    firstLabel : 'Primeira',
-                    lastLabel : 'Última',
-                    nextLabel: 'Próxima',
-                    prevLabel: 'Anterior',
-                    rowsPerPageLabel: 'Linhas por página',
-                    ofLabel: 'de',
-                    pageLabel: 'Página', // for 'pages' mode
-                    allLabel: 'Todas',
-                }"
-                ref="interpretes"
-                @on-selected-rows-change="selectionChanged"
-                :columns="columns"
-                :rows="interpretes"
-                :select-options="{ enabled: true, 
-                    selectionText: 'Linhas selecionadas',
-                    disableSelectInfo: true}"
-                :search-options="{ enabled: true, placeholder: 'Procurar...', }"
-                styleClass="vgt-table striped hover">
-                
-                <template slot="table-row" slot-scope="data">
-                    <span v-if="data.column.field == 'actions'">
-                        <b-button variant="primary" @click="exportID(data.row, $event)" class="mr-2 botoes">
-                            <i class="fa fa-id-card"></i>
-                        </b-button>
-                        <b-button variant="warning" @click="loadinterprete(data.row)" class="mr-2 botoes" v-if="isAdmin">
-                            <i class="fa fa-pencil"></i>
-                        </b-button>
-                        <b-button variant="danger" @click="loadinterprete(data.row, 'remove')" class="mr-2 botoes" v-if="isAdmin">
-                            <i class="fa fa-trash"></i>
-                        </b-button>
-                    </span>
+                <Cracha ref="cracha" v-on:complete="onCompleteExport"></Cracha>
+                <vue-good-table
+                    :pagination-options="{
+                        enabled: true,
+                        mode: 'records',
+                        perPage: 5,
+                        position: 'bottom',
+                        perPageDropdown: [3, 5, 10],
+                        dropdownAllowAll: true,
+                        setCurrentPage: 1,
+                        jumpFirstOrLast : true,
+                        firstLabel : 'Primeira',
+                        lastLabel : 'Última',
+                        nextLabel: 'Próxima',
+                        prevLabel: 'Anterior',
+                        rowsPerPageLabel: 'Linhas por página',
+                        ofLabel: 'de',
+                        pageLabel: 'Página', // for 'pages' mode
+                        allLabel: 'Todas',
+                    }"
+                    ref="interpretes"
+                    @on-selected-rows-change="selectionChanged"
+                    :columns="columns"
+                    :rows="interpretes"
+                    :select-options="{ enabled: true, 
+                        selectionText: 'Linhas selecionadas',
+                        disableSelectInfo: true}"
+                    :search-options="{ enabled: true, placeholder: 'Procurar...', }"
+                    styleClass="vgt-table striped hover">
                     
-                    <span v-if="data.column.field == 'idadministracao'">
-                        <span>{{findAdministracao(data.formattedRow[data.column.field])}}</span>
-                    </span>
-                    <span v-if="data.column.field == 'idcomum'">
-                        <span>{{findComum(data.formattedRow[data.column.field])}}</span>
-                    </span>
-                    <span v-if="data.column.field == 'oficializacao'">
-                        <span>{{dateFormat(data.formattedRow[data.column.field])}}</span>
-                    </span>
-                    <span v-if="data.column.field == 'status'">
-                        <span>{{data.formattedRow[data.column.field]!='Habilitado' ? (data.formattedRow[data.column.field]=='nao_hab' ? 'Não Habilitado' : 'Diversos') : data.formattedRow[data.column.field]}}</span>
-                    </span>
-                    <span v-if="data.column.field != 'actions' && data.column.field != 'idadministracao' &&
-                        data.column.field != 'idcomum' && data.column.field != 'oficializacao' && data.column.field != 'status'">
-                    {{data.formattedRow[data.column.field]}}
-                    </span>
-                </template> 
+                    <template slot="table-row" slot-scope="data">
+                        <span v-if="data.column.field == 'actions'">
+                            <b-button variant="primary" @click="exportID(data.row, $event)" class="mr-2 botoes">
+                                <i class="fa fa-id-card"></i>
+                            </b-button>
+                            <b-button variant="warning" @click="loadinterprete(data.row)" class="mr-2 botoes" v-if="isAdmin">
+                                <i class="fa fa-pencil"></i>
+                            </b-button>
+                            <b-button variant="danger" @click="loadinterprete(data.row, 'remove')" class="mr-2 botoes" v-if="isAdmin">
+                                <i class="fa fa-trash"></i>
+                            </b-button>
+                        </span>
+                        
+                        <span v-if="data.column.field == 'idadministracao'">
+                            <span>{{findAdministracao(data.formattedRow[data.column.field])}}</span>
+                        </span>
+                        <span v-if="data.column.field == 'idcomum'">
+                            <span>{{findComum(data.formattedRow[data.column.field])}}</span>
+                        </span>
+                        <span v-if="data.column.field == 'oficializacao'">
+                            <span>{{dateFormat(data.formattedRow[data.column.field])}}</span>
+                        </span>
+                        <span v-if="data.column.field == 'status'">
+                            <span>{{data.formattedRow[data.column.field]!='Habilitado' ? (data.formattedRow[data.column.field]=='nao_hab' ? 'Não Habilitado' : 'Diversos') : data.formattedRow[data.column.field]}}</span>
+                        </span>
+                        <span v-if="data.column.field != 'actions' && data.column.field != 'idadministracao' &&
+                            data.column.field != 'idcomum' && data.column.field != 'oficializacao' && data.column.field != 'status'">
+                        {{data.formattedRow[data.column.field]}}
+                        </span>
+                    </template> 
 
-            </vue-good-table>
+                </vue-good-table>
             </div>
         </div>
     </div>
@@ -196,7 +196,7 @@ import { mapState } from 'vuex'
 export default {
     name: 'Interpretes',
     components:{PageTitle, VueGoodTable, Cracha},
-    computed:mapState(['isAdmin']),
+    computed:mapState(['isAdmin', 'isMenuVisible']),
     data: function() {
         return {
             options: [
@@ -217,9 +217,9 @@ export default {
             columns: [
                 {label: 'Código',field: 'codigo',},
                 {label: 'Status',field: 'status',},
-                {label: 'Nome',field: 'nome',},
+                {label: 'Nome',field: 'nome', width: '150px'},
                 {label: 'Administração',field: 'idadministracao',},
-                {label: 'Setor - Comum',field: 'idcomum',},
+                {label: 'Setor - Comum',field: 'idcomum', width: '150px'},
                 {label: 'Telefone 1',field: 'telefone1',},
                 {label: 'Telefone 2',field: 'telefone2',},
                 {label: 'E-mail',field: 'email',},
@@ -228,6 +228,7 @@ export default {
             ],
         }
     },
+    
     methods: {
         onRowSelected(items) {
             this.selected = items
@@ -387,6 +388,15 @@ input[type=number]::-webkit-inner-spin-button {
     
 }
 
+.tabela_hide{
+    width: 92vw;
+    transition: all 0.25s;
+}
+
+.tabela{
+    width: 83vw;
+    transition: all 0.25s;
+}
 .botoes{
     margin: 4px;
 }
