@@ -184,7 +184,6 @@ export default {
         save() {
             const method = this.comum.id ? 'put' : 'post'
             const id = this.comum.id ? `/${this.comum.id}` : ''
-            delete this.comum.idregional;
             delete this.comum.vgt_id;
             delete this.comum.originalIndex;
 
