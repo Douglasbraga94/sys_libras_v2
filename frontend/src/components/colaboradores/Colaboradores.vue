@@ -53,7 +53,7 @@
                     <b-form-group label="Competência:" label-for="colaborador-competencia">
                         <b-form-input :readonly="mode === 'vizualizar'" id="competencia" type="text"
                             v-model="colaborador.competencia" required
-                            placeholder="Informe a competencia do colaborador" />
+                            placeholder="Informe a competência do colaborador" />
                     </b-form-group>
                 </b-col>
             </b-row>        
@@ -75,7 +75,7 @@
                     </b-form-group>
                 </b-col>
                 <b-col md="4" sm="12">
-                    <b-form-group label="Comum:" label-for="comum">
+                    <b-form-group label="Setor - Comum:" label-for="comum">
                         <b-form-select :disabled = "mode == 'vizualizar'" id="colaborador-comum" 
                         v-model="colaborador.idcomum" :options="FilteredComuns"> 
                         </b-form-select>
@@ -215,13 +215,14 @@ export default {
             selectionChanged: [],
             columns: [
                 // {label: 'Código',field: 'codigo',},
+                {label: 'Competência',field: 'competencia',},
                 {label: 'Nome',field: 'nome', width: '150px'},
+                {label: 'Setor - Comum',field: 'idcomum', },
                 {label: 'Telefone Principal',field: 'telefone1',},
                 // {label: 'Telefone 2',field: 'telefone2',width: '150px'},
                 // {label: 'E-mail',field: 'email',},
-                {label: 'Regional',field: 'idregional',},
-                {label: 'Administração',field: 'idadministracao',},
-                {label: 'Comum',field: 'idcomum',},
+                //{label: 'Regional',field: 'idregional',},
+                //{label: 'Administração',field: 'idadministracao',},
                 {label: 'Ações',field: 'actions', },
             ],
         }
