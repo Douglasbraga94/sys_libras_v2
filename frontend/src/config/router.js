@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import Home from '../components/home/Home'
 import Admin from '../components/admin/Admin'
 import Interpretes from '../components/interpretes/Interpretes'
+import Colaboradores from '../components/colaboradores/Colaboradores'
 import Regionais from '../components/regionais/Regionais'
 import Auth from '../components/auth/Auth'
 
@@ -23,6 +24,10 @@ const routes = [{
     name: 'interpretes',
     path: '/interpretes',
     component: Interpretes
+},{
+    name: 'colaboradores',
+    path: '/colaboradores',
+    component: Colaboradores
 },
 {
     name: 'regionais',
