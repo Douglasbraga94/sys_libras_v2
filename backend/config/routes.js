@@ -39,6 +39,16 @@ module.exports = app =>{
         .put(app.api.interprete.save)
         .delete(app.api.interprete.remove)
         .get(app.api.interprete.getById)
+    
+    app.route('/colaborador')
+        .post(app.api.colaborador.save)
+        .get(app.api.colaborador.get)
+
+    app.route('/colaborador/:id')
+        .all(app.config.passport.authenticate())
+        .put(app.api.colaborador.save)
+        .delete(app.api.colaborador.remove)
+        .get(app.api.colaborador.getById) 
 
     app.route('/comum')
         .all(app.config.passport.authenticate())
