@@ -218,7 +218,7 @@ export default {
             isEdit: false,
             selectionChanged: [],
             columns: [
-                // {label: 'Código',field: 'codigo',},
+                {label: 'Código',field: 'codigo',},
                 {label: 'Status',field: 'status',},
                 {label: 'Nome',field: 'nome', width: '150px'},
                 // {label: 'Administração',field: 'idadministracao',},
