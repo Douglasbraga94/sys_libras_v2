@@ -163,4 +163,10 @@ export default {
 .cracha.interprete .tipo:before {
   content: "INTÉRPRETE";
 }
+.cracha.surdo .tipo:before {
+  content: "SURDO";
+}
+.cracha.colaborador .tipo:before {
+  content: "COLABORADOR";
+}
 </style>
