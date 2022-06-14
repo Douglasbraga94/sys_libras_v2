@@ -33,6 +33,10 @@ module.exports = app =>{
     app.route('/interprete')
         .post(app.api.interprete.save)
         .get(app.api.interprete.get)
+        
+    app.route('/interpreteComComum')
+        .get(app.api.interprete.getInterpretesWhithComum)
+        
 
     app.route('/interprete/:id')
         .all(app.config.passport.authenticate())

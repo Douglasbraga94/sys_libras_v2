@@ -164,9 +164,9 @@
                         <span v-if="data.column.field == 'idadministracao'">
                             <span>{{findAdministracao(data.formattedRow[data.column.field])}}</span>
                         </span>
-                        <span v-if="data.column.field == 'idcomum'">
-                            <span>{{findComum(data.formattedRow[data.column.field])}}</span>
-                        </span>
+                        <!-- <span v-if="data.column.field == 'idcomum'">
+                            <span>{{data.formattedRow[data.column.field]}}</span>
+                        </span> -->
                         <span v-if="data.column.field == 'oficializacao'">
                             <span>{{dateFormat(data.formattedRow[data.column.field])}}</span>
                         </span>
@@ -222,7 +222,7 @@ export default {
                 {label: 'Status',field: 'status',},
                 {label: 'Nome',field: 'nome', width: '150px'},
                 // {label: 'Administração',field: 'idadministracao',},
-                {label: 'Setor - Comum',field: 'idcomum', },
+                {label: 'Setor - Comum',field: 'comum', },
                 {label: 'Telefone Principal',field: 'telefone1',},
                 // {label: 'Telefone 2',field: 'telefone2',width: '150px'},
                 // {label: 'E-mail',field: 'email',},
@@ -253,7 +253,7 @@ export default {
         },
         loadinterpretes() {
             
-            const url = `${baseApiUrl}/interprete`
+            const url = `${baseApiUrl}/interpreteComComum`
             axios.get(url).then(res => {
                 this.interpretes = res.data
             })

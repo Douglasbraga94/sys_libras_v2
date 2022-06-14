@@ -43,6 +43,18 @@ module.exports = app => {
             .catch(err => res.status(500).send(err.message))
     }
 
+    const getInterpretesWhithComum = (req, res) => {
+        app.db('interpretes')
+        .join('comuns', 'comuns.id', 'interpretes.idcomum')
+        .select('interpretes.id', 'interpretes.nome', 'interpretes.codigo', 'interpretes.status', 
+        'interpretes.telefone1', 'interpretes.telefone2', 'interpretes.email', 
+        'interpretes.oficializacao', 'interpretes.statusJustificativa', 'interpretes.idcomum', 'comuns.nome AS comum')
+            //.whereNull('deletedAt')
+            .then(interprete => res.json(interprete))
+            .catch(err => res.status(500).send(err.message))
+    }
+
+
     const getById = (req, res) => {
         app.db('interpretes')
             .select('id', 'nome', 'codigo', 'status', 
@@ -71,5 +83,5 @@ module.exports = app => {
         }
     }
 
-     return {save, get, getById, remove}
+     return {save, get, getById, remove, getInterpretesWhithComum}
 }
