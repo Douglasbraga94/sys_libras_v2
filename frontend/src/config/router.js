@@ -5,6 +5,7 @@ import Home from '../components/home/Home'
 import Admin from '../components/admin/Admin'
 import Interpretes from '../components/interpretes/Interpretes'
 import Colaboradores from '../components/colaboradores/Colaboradores'
+import Surdos from '../components/surdos/Surdos'
 import Regionais from '../components/regionais/Regionais'
 import Auth from '../components/auth/Auth'
 
@@ -28,6 +29,10 @@ const routes = [{
     name: 'colaboradores',
     path: '/colaboradores',
     component: Colaboradores
+},{
+    name: 'surdos',
+    path: '/surdos',
+    component: Surdos
 },
 {
     name: 'regionais',
