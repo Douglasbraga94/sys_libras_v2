@@ -8,7 +8,7 @@ exports.up = function(knex, Promise) {
       table.string('telefone2')
       table.string('email').notNull()
       table.string('competencia').notNull()
-      table.string('observacao')
+      table.string('observacao', 1000)
       table.integer('idcomum').references('id').inTable('comuns')
       table.integer('idadministracao').references('id').inTable('administracoes')
       table.integer('idregional').references('id').inTable('regionais')
