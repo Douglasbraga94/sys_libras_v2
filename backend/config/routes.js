@@ -50,6 +50,16 @@ module.exports = app =>{
         .delete(app.api.colaborador.remove)
         .get(app.api.colaborador.getById) 
 
+    app.route('/surdo')
+        .post(app.api.surdo.save)
+        .get(app.api.surdo.get)
+
+    app.route('/surdo/:id')
+        .all(app.config.passport.authenticate())
+        .put(app.api.surdo.save)
+        .delete(app.api.surdo.remove)
+        .get(app.api.surdo.getById) 
+
     app.route('/comum')
         .all(app.config.passport.authenticate())
         .post(app.api.comum.save)
