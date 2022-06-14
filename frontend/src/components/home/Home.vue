@@ -1,7 +1,8 @@
 <template>
     <div class="home">
         <PageTitle icon="fa fa-home" main="Dashboard"
-            sub="Relatório de Intérpretes" />
+            sub="Relatório do Sistema" />
+        <h3>Intérpretes</h3>
         <div class="stats">
             <Stat title="Intérpretes da Regional" value="interpretes"
                 icon="fa fa-user" color="#4682B4" />
@@ -12,6 +13,7 @@
             <Stat title="Intérpretes com Status Diversos" value="diversos"
                 icon="fa fa-user" color="#d0d009" />
         </div>
+        <h3>Surdos</h3>
         <div class="stats">
             <Stat title="Total de Surdos da Regional" value="total"
                 icon="fa fa-user" color="#4682B4" />
