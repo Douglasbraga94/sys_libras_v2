@@ -1,5 +1,5 @@
 <template>
-    <div class="stat">
+    <div class="stat" :class="{'hide': value == 'hide'}">
         <div class="stat-icon">
             <i :class="icon" :style="style"></i>
         </div>
@@ -30,6 +30,24 @@ export default {
     },
     methods:{
         async getStats(item) {
+                if(item == 'interpretes' || item == 'habilitados' || item == 'nao_hab' || item == 'diversos'){
+                    return await axios.get( `${baseApiUrl}/interprete`).then(res => {
+                        if(item == 'interpretes') return res.data.length
+                        else if(item == 'habilitados') return res.data.filter(item => item.status == 'Habilitado').length
+                        else if(item == 'nao_hab') return res.data.filter(item => item.status == 'nao_hab').length
+                        else if(item == 'diversos') return res.data.filter(item => item.status == 'diversos').length
+                    })
+                }else{
+                    return await axios.get( `${baseApiUrl}/surdo`).then(res => {
+                        if(item == 'total') return res.data.length
+                        else if(item == 'batizados') return res.data.filter(item => item.batismo == 'S').length
+                        else if(item == 'nao_bat') return res.data.filter(item => item.batismo == 'N').length
+                    })
+                }
+                
+            
+        },
+        async getStatsSurdos(item) {
             return await axios.get( `${baseApiUrl}/interprete`).then(res => {
                 console.log(item)
                 if(item == 'interpretes') return res.data.length
@@ -82,5 +100,9 @@ export default {
 
     .stat-value {
         font-size: 3rem;
+    }
+
+    .hide{
+        visibility:hidden;
     }
 </style>
