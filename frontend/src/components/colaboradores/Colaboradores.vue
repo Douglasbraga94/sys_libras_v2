@@ -217,7 +217,7 @@ export default {
                 {label: 'Código',field: 'codigo',},
                 {label: 'Competência',field: 'competencia',},
                 {label: 'Nome',field: 'nome', width: '150px'},
-                {label: 'Setor - Comum',field: 'idcomum', },
+                {label: 'Setor - Comum',field: 'comum', },
                 {label: 'Telefone Principal',field: 'telefone1',},
                 // {label: 'Telefone 2',field: 'telefone2',width: '150px'},
                 // {label: 'E-mail',field: 'email',},
@@ -255,7 +255,7 @@ export default {
         },
         loadcolaboradores() {
             
-            const url = `${baseApiUrl}/colaborador`
+            const url = `${baseApiUrl}/colaboradorComcomum`
             axios.get(url).then(res => {
                 this.colaboradores = res.data
             })

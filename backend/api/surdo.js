@@ -40,6 +40,15 @@ module.exports = app => {
             .catch(err => res.status(500).send(err.message))
     }
 
+    const getSurdosWhithComum = (req, res) => {
+        app.db('surdos')
+        .join('comuns', 'comuns.id', 'surdos.idcomum')
+            .select('surdos.id', 'surdos.nome', 'surdos.codigo', 'surdos.telefone1', 
+            'surdos.telefone2', 'surdos.idcomum', 'surdos.idadministracao', 'surdos.batismo', 'surdos.observacao', 'comuns.nome AS comum')
+            .then(surdo => res.json(surdo))
+            .catch(err => res.status(500).send(err.message))
+    }
+
     const getById = (req, res) => {
         app.db('surdos')
         .select('id', 'nome', 'codigo', 'telefone1', 
@@ -67,5 +76,5 @@ module.exports = app => {
         }
     }
 
-     return {save, get, getById, remove}
+     return {save, get, getById, remove, getSurdosWhithComum}
 }

@@ -39,6 +39,16 @@ module.exports = app => {
             .then(colaborador => res.json(colaborador))
             .catch(err => res.status(500).send(err.message))
     }
+    const getColaboradorWhithComum = (req, res) => {
+        app.db('colaboradores')
+            .join('comuns', 'comuns.id', 'colaboradores.idcomum')
+            .select('colaboradores.id', 'colaboradores.nome', 'colaboradores.codigo', 'colaboradores.telefone1', 
+            'colaboradores.telefone2', 'colaboradores.email', 'colaboradores.idcomum', 
+            'colaboradores.idadministracao', 'colaboradores.idregional', 'colaboradores.competencia', 'colaboradores.observacao', 'comuns.nome AS comum')
+            .then(colaborador => res.json(colaborador))
+            .catch(err => res.status(500).send(err.message))
+    }
+    
 
     const getById = (req, res) => {
         app.db('colaboradores')
@@ -67,5 +77,5 @@ module.exports = app => {
         }
     }
 
-     return {save, get, getById, remove}
+     return {save, get, getById, remove, getColaboradorWhithComum}
 }

@@ -36,8 +36,13 @@ module.exports = app =>{
         
     app.route('/interpreteComComum')
         .get(app.api.interprete.getInterpretesWhithComum)
-        
+     
+    app.route('/surdoComcomum')
+        .get(app.api.surdo.getSurdosWhithComum)
 
+    app.route('/colaboradorComcomum')
+        .get(app.api.colaborador.getColaboradorWhithComum)
+        
     app.route('/interprete/:id')
         .all(app.config.passport.authenticate())
         .put(app.api.interprete.save)

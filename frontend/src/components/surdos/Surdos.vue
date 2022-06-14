@@ -204,7 +204,7 @@ export default {
                 {label: 'Nome',field: 'nome', width: '150px'},
                 {label: 'Telefone Principal',field: 'telefone1',},
                 {label: 'Batizado?',field: 'batismo',},
-                {label: 'Setor - Comum',field: 'idcomum', },
+                {label: 'Setor - Comum',field: 'comum', },
                 // {label: 'Telefone 2',field: 'telefone2',width: '150px'},
                 {label: 'Administração',field: 'idadministracao',},
                 {label: 'Ações',field: 'actions', },
@@ -233,7 +233,7 @@ export default {
         },
         loadSurdos() {
             
-            const url = `${baseApiUrl}/surdo`
+            const url = `${baseApiUrl}/surdoComcomum`
             axios.get(url).then(res => {
                 this.surdos = res.data
             })
