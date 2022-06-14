@@ -84,9 +84,9 @@
             </b-row>
             
             <b-row align-h="start" v-show="mode === 'save' || mode === 'vizualizar'">
-                <b-col md="4" sm="12">
+                <b-col md="6" sm="24">
                     <b-form-group label="Observações:" label-for="observacoes">
-                        <b-form-input :readonly="mode === 'vizualizar'" id="observacoes" type="text"
+                        <b-form-textarea :readonly="mode === 'vizualizar'" id="observacoes" type="text"
                             v-model="colaborador.observacao" required
                             placeholder="Observações" />
                     </b-form-group>
@@ -214,7 +214,7 @@ export default {
             isEdit: false,
             selectionChanged: [],
             columns: [
-                // {label: 'Código',field: 'codigo',},
+                {label: 'Código',field: 'codigo',},
                 {label: 'Competência',field: 'competencia',},
                 {label: 'Nome',field: 'nome', width: '150px'},
                 {label: 'Setor - Comum',field: 'idcomum', },
@@ -415,4 +415,8 @@ input[type=number]::-webkit-inner-spin-button {
 .botoes{
     margin: 4px;
 }
+#observacoes{
+    height: 15vw;
+}
 </style>
+
