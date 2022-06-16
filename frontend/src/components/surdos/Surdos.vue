@@ -41,7 +41,7 @@
                             placeholder="Telefone secundário" />
                     </b-form-group>
                 </b-col>
-                                <b-col md="4" sm="12">
+                <b-col md="4" sm="12">
                     <b-form-group label="Administração:" label-for="administracao">
                         <b-form-select :disabled = "mode == 'vizualizar'" id="surdo-administracao" 
                         v-model="surdo.idadministracao" :options="administracoes" >
@@ -277,6 +277,7 @@ export default {
             console.log(this.surdo.oficializacao)
             delete this.surdo.vgt_id
             delete this.surdo.originalIndex
+            delete this.surdo.comum
             const method = this.surdo.id ? 'put' : 'post'
             const id = this.surdo.id ? `/${this.surdo.id}` : ''
             axios[method](`${baseApiUrl}/surdo${id}`, this.surdo)

@@ -312,6 +312,7 @@ export default {
             console.log(this.colaborador.oficializacao)
             delete this.colaborador.vgt_id
             delete this.colaborador.originalIndex
+            delete this.colaborador.comum
             const method = this.colaborador.id ? 'put' : 'post'
             const id = this.colaborador.id ? `/${this.colaborador.id}` : ''
             axios[method](`${baseApiUrl}/colaborador${id}`, this.colaborador)

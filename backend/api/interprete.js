@@ -48,7 +48,7 @@ module.exports = app => {
         .join('comuns', 'comuns.id', 'interpretes.idcomum')
         .select('interpretes.id', 'interpretes.nome', 'interpretes.codigo', 'interpretes.status', 
         'interpretes.telefone1', 'interpretes.telefone2', 'interpretes.email', 
-        'interpretes.oficializacao', 'interpretes.statusJustificativa', 'interpretes.idcomum', 'comuns.nome AS comum')
+        'interpretes.oficializacao', 'interpretes.statusJustificativa', 'interpretes.idcomum', 'interpretes.idadministracao', 'comuns.nome AS comum')
             //.whereNull('deletedAt')
             .then(interprete => res.json(interprete))
             .catch(err => res.status(500).send(err.message))
