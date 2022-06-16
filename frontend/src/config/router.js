@@ -3,9 +3,7 @@ import VueRouter from 'vue-router'
 
 import Home from '../components/home/Home'
 import Admin from '../components/admin/Admin'
-import Interpretes from '../components/interpretes/Interpretes'
-import Colaboradores from '../components/colaboradores/Colaboradores'
-import Surdos from '../components/surdos/Surdos'
+import Pessoas from '../components/pessoas/Pessoas'
 import Regionais from '../components/regionais/Regionais'
 import Auth from '../components/auth/Auth'
 
@@ -21,23 +19,16 @@ const routes = [{
     name: 'admin',
     path: '/admin',
     component: Admin
-},{
-    name: 'interpretes',
-    path: '/interpretes',
-    component: Interpretes
-},{
-    name: 'colaboradores',
-    path: '/colaboradores',
-    component: Colaboradores
-},{
-    name: 'surdos',
-    path: '/surdos',
-    component: Surdos
 },
 {
     name: 'regionais',
     path: '/regionais',
     component: Regionais
+},
+{
+    name: 'pessoas',
+    path: '/pessoas',
+    component: Pessoas
 },
 {
     name: 'auth',
