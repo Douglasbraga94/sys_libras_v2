@@ -42,6 +42,12 @@ module.exports = app =>{
 
     app.route('/colaboradorComcomum')
         .get(app.api.colaborador.getColaboradorWhithComum)
+
+    app.route('/GELAlvoradaComcomum')
+        .get(app.api.GELAlvorada.getGELAlvoradaWhithComum)
+
+    app.route('/GELGuaraComcomum')
+        .get(app.api.GELGuara.getGELGuaraWhithComum)
         
     app.route('/interprete/:id')
         .all(app.config.passport.authenticate())
@@ -90,5 +96,25 @@ module.exports = app =>{
         .put(app.api.administracao.save)
         .delete(app.api.administracao.remove)
         .get(app.api.administracao.getById)
+
+    app.route('/GELGuara')
+        .post(app.api.GELGuara.save)
+        .get(app.api.GELGuara.get)
+
+    app.route('/GELGuara/:id')
+        .all(app.config.passport.authenticate())
+        .put(app.api.GELGuara.save)
+        .delete(app.api.GELGuara.remove)
+        .get(app.api.GELGuara.getById) 
+
+    app.route('/GELAlvorada')
+        .post(app.api.GELAlvorada.save)
+        .get(app.api.GELAlvorada.get)
+
+    app.route('/GELAlvorada/:id')
+        .all(app.config.passport.authenticate())
+        .put(app.api.GELAlvorada.save)
+        .delete(app.api.GELAlvorada.remove)
+        .get(app.api.GELAlvorada.getById) 
 
     }
