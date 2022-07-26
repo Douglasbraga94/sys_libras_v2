@@ -247,8 +247,8 @@ export default {
         return {
             optionsSurdo: [
                 { value: null, text: 'Selecione uma opção' },
-                { value: 'S',  text: 'Sim' },
                 { value: 'N', text: 'Não' },
+                { value: 'S',  text: 'Sim' },
             ],
             optionsCartaEncaminhamento: [
                 { value: null, text: 'Selecione uma opção' },
@@ -258,11 +258,12 @@ export default {
             ],
             optionsStatus: [
                 { value: null, text: 'Selecione uma opção' },
-                { value: 'Em Andamento',  text: 'Em Andamento' },
-                { value: 'Acompanhando', text: 'Acompanhando' },
-                { value: 'Aprovado', text: 'Aprovado' },
                 { value: 'Reteste', text: 'Reteste' },
+                { value: 'Candidato', text: 'Candidato' },
+                { value: 'Acompanhando', text: 'Acompanhando' },
+                { value: 'Em Andamento',  text: 'Em Andamento' },
                 { value: 'Desistente', text: 'Desistente' },
+                { value: 'Aprovado', text: 'Aprovado' },
                 { value: 'N/A', text: 'N/A' },
             ],
             mode: 'save',
