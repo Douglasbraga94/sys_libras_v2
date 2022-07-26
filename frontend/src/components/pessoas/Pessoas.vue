@@ -59,7 +59,7 @@
 				main="Alunos de Libras - CCB"
             	sub="Controle de Alunos de LIBRAS" 
 			/>
-			<button type="button" @click="openComponent('home')" class="btn btn-secondary btn-sm m-1">
+			<button type="button" v-show="voltar" @click="openComponent('home')" class="btn btn-secondary btn-sm m-1">
 				<i class="fa fa-chevron-circle-left"> Voltar</i>
 			</button>
 			<Alunos />
@@ -70,7 +70,7 @@
 
 <script>
 import PageTitle from "../tamplate/PageTitle.vue";
-import Alunos from './CadAlunos.vue'
+import Alunos from "./alunos/Alunos.vue";
 import Interpretes from './CadInterpretes.vue'
 import Surdos from './CadSurdos.vue'
 import Colaboradores from './CadColaboradores.vue'
@@ -83,6 +83,7 @@ computed:mapState(['isMenuVisible']),
   data: function () {
     return {
       component: "home",
+	  voltar: true,
     };
   },
   methods: {
