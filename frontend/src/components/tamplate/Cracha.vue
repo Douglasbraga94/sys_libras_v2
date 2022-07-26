@@ -169,4 +169,7 @@ export default {
 .cracha.colaborador .tipo:before {
   content: "COLABORADOR";
 }
+.cracha.aluno .tipo:before {
+  content: "ALUNO";
+}
 </style>
