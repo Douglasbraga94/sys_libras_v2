@@ -325,6 +325,7 @@ export default {
             delete this.interprete.vgt_id
             delete this.interprete.originalIndex
             delete this.interprete.comum
+            delete this.interprete.regional
             // typeof this.interprete.telefone1 == 'string' ? this.interprete.telefone1 = parseInt(this.interprete.telefone1) : this.interprete.telefone1;
             // (!this.interprete.telefone2 || this.interprete.telefone2.length == 0) ? delete this.interprete.telefone2 : this.interprete.telefone2
             const method = this.interprete.id ? 'put' : 'post'

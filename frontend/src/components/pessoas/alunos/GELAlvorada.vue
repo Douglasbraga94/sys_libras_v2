@@ -385,6 +385,9 @@ export default {
             delete this.aluno.vgt_id
             delete this.aluno.originalIndex
             delete this.aluno.comum
+            delete this.aluno.administracao
+            delete this.aluno.idregional
+            delete this.aluno.regional
             const method = this.aluno.id ? 'put' : 'post'
             const id = this.aluno.id ? `/${this.aluno.id}` : ''
             axios[method](`${baseApiUrl}/GELAlvorada${id}`, this.aluno)
