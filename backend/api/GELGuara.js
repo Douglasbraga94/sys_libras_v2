@@ -49,11 +49,14 @@ module.exports = app => {
     const getGELGuaraWhithComum = (req, res) => {
         app.db('GELGuara')
         .join('comuns', 'comuns.id', 'GELGuara.idcomum')
+        .join('administracoes','administracoes.id','comuns.idadministracao')
+        .join('regionais','regionais.id','administracoes.idregional')
             .select('GELGuara.id', 'GELGuara.nome', 'GELGuara.codigo', 'GELGuara.telefone1', 
             'GELGuara.telefone2', 'GELGuara.email', 'GELGuara.surdo', 'GELGuara.status', 
             'GELGuara.cartaEncaminhamento', 'GELGuara.idadeInicioCurso','GELGuara.dataBatismo',
             'GELGuara.dataNascimento','GELGuara.idcomum', 'GELGuara.idadministracao', 
-            'GELGuara.observacao', 'comuns.nome AS comum')
+            'GELGuara.observacao', 'comuns.nome AS comum','administracoes.nome AS administracao', 
+            'administracoes.idregional','regionais.nome AS regional')
             .then(aluno => res.json(aluno))
             .catch(err => res.status(500).send(err.message))
     }

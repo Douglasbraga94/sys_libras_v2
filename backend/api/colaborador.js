@@ -42,6 +42,7 @@ module.exports = app => {
     const getColaboradorWhithComum = (req, res) => {
         app.db('colaboradores')
             .join('comuns', 'comuns.id', 'colaboradores.idcomum')
+            .join('administracoes','administracoes.id', 'comuns.idadministracao')
             .select('colaboradores.id', 'colaboradores.nome', 'colaboradores.codigo', 'colaboradores.telefone1', 
             'colaboradores.telefone2', 'colaboradores.email', 'colaboradores.idcomum', 
             'colaboradores.idadministracao', 'colaboradores.idregional', 'colaboradores.competencia', 'colaboradores.observacao', 'comuns.nome AS comum')

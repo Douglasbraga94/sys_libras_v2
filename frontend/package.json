@@ -27,7 +27,8 @@
     "vue-sweetalert2": "^5.0.2",
     "vue-toasted": "1.1.24",
     "vue2-editor": "2.6.6",
-    "vuex": "3.0.1"
+    "vuex": "3.0.1",
+    "xlsx": "^0.17.5"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.12.3",

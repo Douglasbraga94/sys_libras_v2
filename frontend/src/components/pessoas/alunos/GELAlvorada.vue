@@ -119,8 +119,8 @@
                              />
                     </b-form-group>
                 </b-col>
-            </b-row>        
-            
+            </b-row>
+
             <b-row align-h="start" v-show="mode === 'save' || mode === 'vizualizar'">
                 <b-col md="6" sm="24">
                     <b-form-group label="Observações:" label-for="observacoes">
@@ -129,7 +129,7 @@
                             placeholder="Observações" />
                     </b-form-group>
                 </b-col>
-            </b-row>  
+            </b-row>
             <br>
             <b-row>
                 <b-col xs="12">
@@ -152,6 +152,12 @@
                     <button type="button" @click="exportIDSelected" class="btn btn-outline-info btn-lg">
                         <i class="fa fa-id-card"></i>
                     </button>
+                    <span>&nbsp;</span>
+                    <BotaoDownloadExcel 
+                        :dados="dadosPlanilha"
+                        planilha="Alunos - GEL Alvorada"
+                        arquivo="Grupo de Estudos de LIBRAS - Alvorada.xlsx"
+                    />
                 </h3>
             </div>
             <div >
@@ -184,7 +190,7 @@
                         disableSelectInfo: true}"
                     :search-options="{ enabled: true, placeholder: 'Procurar...', }"
                     styleClass="vgt-table striped hover">
-                    
+
                     <template slot="table-row" slot-scope="data">
                         <span v-if="data.column.field == 'actions'">
                             <b-button v-b-tooltip.hover title="Imprimir Crachá" variant="primary" @click="exportID(data.row, $event)" class="mr-2 botoes">
@@ -200,7 +206,7 @@
                                 <i class="fa fa-trash"></i>
                             </b-button>
                         </span>
-                        
+
                         <span v-if="data.column.field == 'idadministracao'">
                             <span>{{findAdministracao(data.formattedRow[data.column.field])}}</span>
                         </span>
@@ -238,11 +244,38 @@ import 'vue-good-table/dist/vue-good-table.css'
 import { VueGoodTable } from 'vue-good-table';
 import Cracha from '../../tamplate/Cracha.vue'
 import { mapState } from 'vuex'
+import BotaoDownloadExcel from '../../exportacao/BotaoDownloadExcel.vue'
     
 export default {
     name: 'alunos',
-    components:{PageTitle, VueGoodTable, Cracha},
-    computed:mapState(['isAdmin', 'isMenuVisible']),
+    components:{PageTitle, VueGoodTable, Cracha, BotaoDownloadExcel},
+    computed: {
+        dadosPlanilha() {
+            const dados = []
+            this.alunos.forEach((obj) => {
+                let aluno = {}
+                aluno['Id Aluno'] = obj.id;
+                aluno['Código'] = obj.codigo
+                aluno['Nome'] = obj.nome;
+                aluno['Telefone Principal'] = obj.telefone1;
+                aluno['Telefone Secundário'] = obj.telefone2;
+                aluno['E-mail'] = obj.email;
+                aluno['Idade de Inicio do curso'] = obj.idadeInicioCurso;
+                aluno['Carta de Encaminhamento'] = obj.cartaEncaminhamento;
+                aluno['Status'] = obj.status;
+                aluno['Surdo?'] = obj.surdo;
+                aluno['Data de Nascimento'] = this.dateFormat(obj.dataNascimento);
+                aluno['Data de Batismo'] = this.dateFormat(obj.dataBatismo);
+                aluno['Setor - Comum'] = obj.comum;
+                aluno['ADM - Administração'] = obj.administracao;
+                aluno['RA - Regional Administrativa'] = obj.regional;
+                aluno['Observações'] = obj.observacao;
+                dados.push(aluno);
+            })
+            return dados
+        },
+        ...mapState(['isAdmin', 'isMenuVisible'])
+    },
     data: function() {
         return {
             optionsSurdo: [
@@ -287,28 +320,27 @@ export default {
             ],
         }
     },
-    
+
     methods: {
         onRowSelected(items) {
             this.selected = items
         },
         dateFormat: function(date) {
-        		return moment(String(date)).format('DD/MM/YYYY');
-        	},
+            return moment(String(date)).format('DD/MM/YYYY');
+        },
         findAdministracao(value){
             if(this.administracoes.length>0){
                 let item = this.administracoes.find(item=>item.value==value)
                 return item.text
-            }  
+            }
         },
         findComum(value){
             if(this.comuns.length>0){
                 let item = this.comuns.find(item=>item.value==value)
                 return item.text
-            }  
+            }
         },
         loadalunos() {
-            
             const url = `${baseApiUrl}/GELAlvoradaComcomum`
             axios.get(url).then(res => {
                 this.alunos = res.data
@@ -374,8 +406,6 @@ export default {
                 .catch(showError)
         },
         loadaluno(aluno, mode = 'save') {
-            debugger
-
             this.mode = mode
             this.aluno = { ...aluno }
             let arr = this.aluno.dataNascimento.split('-')
@@ -384,7 +414,6 @@ export default {
             this.aluno.dataBatismo = arr2[0] +'-'+arr2[1]+'-'+arr2[2].substring(0, 2);
             this.isEdit = true
         },
-      
         exportID(item, event) {
           this.$loadingService.start();
 
@@ -402,7 +431,7 @@ export default {
             if(this.$refs['alunos'].selectedRows.length == 0){
                 this.showAlert('selecione as linhas que deseja gerar o crachá');
                 return
-            } 
+            }
             this.$loadingService.start();
             this.$refs['cracha'].setItens(this.$refs['alunos'].selectedRows.map(item => {
                 return {
@@ -431,7 +460,6 @@ export default {
         'aluno.idadministracao': function(newVal, oldVal){
             this.FilteredComuns = this.comuns.filter((item) => item.idadministracao == newVal)
         },
-        
     },
     async mounted() {
         //await this.loadRegional()

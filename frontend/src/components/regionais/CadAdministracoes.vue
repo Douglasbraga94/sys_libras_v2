@@ -38,6 +38,12 @@
                     <button type="button" @click="isEdit = true" class="btn btn-outline-info btn-lg" v-if="isAdmin">
                         <i class="fa fa-plus-circle"></i>
                     </button>
+                    <span>&nbsp;</span>
+                    <BotaoDownloadExcel 
+                        :dados="dadosPlanilha"
+                        planilha="Administrações"
+                        arquivo="Controle das Administrações.xlsx"
+                    />
                 </h3>
             </div>
             <div >
@@ -105,11 +111,24 @@ import axios from 'axios'
 import 'vue-good-table/dist/vue-good-table.css'
 import { VueGoodTable } from 'vue-good-table';
 import { mapState } from 'vuex'
+import BotaoDownloadExcel from '../exportacao/BotaoDownloadExcel.vue'
 
 export default {
     name: 'administracoes',
-    components:{PageTitle, VueGoodTable},
-    computed:mapState(['isAdmin']),
+    components:{PageTitle, VueGoodTable, BotaoDownloadExcel},
+    computed: {
+        dadosPlanilha() {
+            const dados = []
+            this.administracoes.forEach((obj) => {
+                let administracao = {};
+                administracao['RA - Regional Administrativa'] = this.findRegional(obj.idregional);
+                administracao['ADM - Administração'] = obj.nome;
+                dados.push(administracao);
+            })
+            return dados
+        },
+        ...mapState(['isAdmin'])
+    },
     data: function() {
         return {
             mode: 'save',

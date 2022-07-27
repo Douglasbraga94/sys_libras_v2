@@ -43,8 +43,12 @@ module.exports = app => {
     const getSurdosWhithComum = (req, res) => {
         app.db('surdos')
         .join('comuns', 'comuns.id', 'surdos.idcomum')
+        .join('administracoes','administracoes.id','comuns.idadministracao')
+        .join('regionais','regionais.id','administracoes.idregional')
             .select('surdos.id', 'surdos.nome', 'surdos.codigo', 'surdos.telefone1', 
-            'surdos.telefone2', 'surdos.idcomum', 'surdos.idadministracao', 'surdos.batismo', 'surdos.observacao', 'comuns.nome AS comum')
+            'surdos.telefone2', 'surdos.idcomum', 'surdos.idadministracao', 'surdos.batismo', 
+            'surdos.observacao', 'comuns.nome AS comum', 'administracoes.nome AS administracao', 
+            'administracoes.idregional','regionais.nome AS regional')
             .then(surdo => res.json(surdo))
             .catch(err => res.status(500).send(err.message))
     }

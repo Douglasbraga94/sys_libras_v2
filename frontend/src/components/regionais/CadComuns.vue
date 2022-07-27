@@ -45,6 +45,12 @@
                     <button type="button" @click="isEdit = true" class="btn btn-outline-info btn-lg" v-if="isAdmin">
                         <i class="fa fa-plus-circle"></i>
                     </button>
+                    <span>&nbsp;</span>
+                    <BotaoDownloadExcel 
+                        :dados="dadosPlanilha"
+                        planilha="Comuns"
+                        arquivo="Controle de Setores - Comuns.xlsx"
+                    />
                 </h3>
             </div>
             <div >
@@ -116,12 +122,26 @@ import moment from 'moment';
 import 'vue-good-table/dist/vue-good-table.css'
 import { VueGoodTable } from 'vue-good-table';
 import { mapState } from 'vuex'
+import BotaoDownloadExcel from '../exportacao/BotaoDownloadExcel.vue'
 
     
 export default {
     name: 'comuns',
-    components:{PageTitle, VueGoodTable},
-    computed:mapState(['isAdmin']),
+    components:{PageTitle, VueGoodTable, BotaoDownloadExcel},
+    computed: {
+        dadosPlanilha() {
+            const dados = []
+            this.comuns.forEach((obj) => {
+                let comum = {};
+                comum['RA - Regional Administrativa'] = this.findRegional(obj.idregional);
+                comum['ADM - Administração'] = this.findAdministracao(obj.idadministracao);
+                comum['Setor - Comum'] = obj.nome;
+                dados.push(comum);
+            })
+            return dados
+        },
+        ...mapState(['isAdmin'])
+    } ,
     data: function() {
         return {
             mode: 'save',
@@ -143,7 +163,7 @@ export default {
     methods: {
 
         loadcomuns() {
-            const url = `${baseApiUrl}/comum`
+            const url = `${baseApiUrl}/comumComAdministracao`
             axios.get(url).then(res => {
                 this.comuns = res.data
             })
@@ -222,7 +242,7 @@ export default {
             this.mode = mode
             this.comum = { ...comum }
             this.isEdit = true
-        },
+        }
         
     },
      watch:{

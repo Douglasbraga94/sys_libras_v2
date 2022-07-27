@@ -112,6 +112,12 @@
                     <button type="button" @click="exportIDSelected" class="btn btn-outline-info btn-lg">
                         <i class="fa fa-id-card"></i>
                     </button>
+                    <span>&nbsp;</span>
+                    <BotaoDownloadExcel 
+                        :dados="dadosPlanilha"
+                        planilha="Colaboradores"
+                        arquivo="Controle de Colaboradores de LIBRAS.xlsx"
+                    />
                 </h3>
             </div>
             <div >
@@ -193,11 +199,32 @@ import 'vue-good-table/dist/vue-good-table.css'
 import { VueGoodTable } from 'vue-good-table';
 import Cracha from '../tamplate/Cracha.vue'
 import { mapState } from 'vuex'
+import BotaoDownloadExcel from '../exportacao/BotaoDownloadExcel.vue'
     
 export default {
     name: 'colaboradores',
-    components:{PageTitle, VueGoodTable, Cracha},
-    computed:mapState(['isAdmin', 'isMenuVisible']),
+    components:{PageTitle, VueGoodTable, Cracha, BotaoDownloadExcel},
+    computed: {
+        dadosPlanilha() {
+            const dados = []
+            this.colaboradores.forEach((obj) => {
+                let colaborador = {}
+                colaborador['Id Colaborador'] = obj.id;
+                colaborador['Código'] = obj.codigo
+                colaborador['Competência'] = obj.competencia;
+                colaborador['Nome'] = obj.nome;
+                colaborador['Setor - Comum'] = this.findComum(obj.idcomum);
+                colaborador['Telefone Principal'] = obj.telefone1;
+                colaborador['Telefone Secundário'] = obj.telefone2;
+                colaborador['E-mail'] = obj.email;
+                colaborador['ADM - Administração'] = this.findAdministracao(obj.idadministracao);
+                colaborador['RA - Regional Administrativa'] = this.findRegional(obj.idregional);
+                dados.push(colaborador);
+            })
+            return dados
+        },
+        ...mapState(['isAdmin', 'isMenuVisible'])
+    },
     data: function() {
         return {
             mode: 'save',
@@ -231,8 +258,8 @@ export default {
             this.selected = items
         },
         dateFormat: function(date) {
-        		return moment(String(date)).format('DD/MM/YYYY');
-        	},
+            return moment(String(date)).format('DD/MM/YYYY');
+        },
         findAdministracao(value){
             if(this.administracoes.length>0){
                 let item = this.administracoes.find(item=>item.value==value)
@@ -332,8 +359,6 @@ export default {
                 .catch(showError)
         },
         loadcolaborador(colaborador, mode = 'save') {
-            debugger
-
             this.mode = mode
             this.colaborador = { ...colaborador }
             this.isEdit = true
