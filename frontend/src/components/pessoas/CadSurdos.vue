@@ -302,6 +302,9 @@ export default {
             delete this.surdo.vgt_id
             delete this.surdo.originalIndex
             delete this.surdo.comum
+            delete this.surdo.administracao
+            delete this.surdo.idregional
+            delete this.surdo.regional
             const method = this.surdo.id ? 'put' : 'post'
             const id = this.surdo.id ? `/${this.surdo.id}` : ''
             axios[method](`${baseApiUrl}/surdo${id}`, this.surdo)
