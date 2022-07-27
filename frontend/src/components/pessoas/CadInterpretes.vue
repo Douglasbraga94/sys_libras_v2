@@ -110,6 +110,12 @@
                     <button type="button" @click="exportIDSelected" class="btn btn-outline-info btn-lg">
                         <i class="fa fa-id-card"></i>
                     </button>
+                    <span>&nbsp;</span>
+                    <BotaoDownloadExcel 
+                        :dados="dadosPlanilha"
+                        planilha="Interpretes"
+                        arquivo="Controle de Intérpretes de LIBRAS.xlsx"
+                    />
                 </h3>
             </div>
             <div >
@@ -193,11 +199,34 @@ import 'vue-good-table/dist/vue-good-table.css'
 import { VueGoodTable } from 'vue-good-table';
 import Cracha from '../tamplate/Cracha.vue'
 import { mapState } from 'vuex'
-    
+import BotaoDownloadExcel from '../exportacao/BotaoDownloadExcel.vue'
+
 export default {
     name: 'Interpretes',
-    components:{PageTitle, VueGoodTable, Cracha},
-    computed:mapState(['isAdmin', 'isMenuVisible']),
+    components:{PageTitle, VueGoodTable, Cracha, BotaoDownloadExcel},
+    computed: {
+        dadosPlanilha() {
+            const dados = []
+            this.interpretes.forEach((obj) => {
+                let interprete = {}
+                interprete['Id Intérprete'] = obj.id;
+                interprete['Código'] = obj.codigo;
+                interprete['Status'] = obj.status;
+                interprete['Nome'] = obj.nome;
+                interprete['Setor - Comum'] = this.findComum(obj.idcomum);
+                interprete['Telefone Principal'] = obj.telefone1;
+                interprete['Telefone Secundário'] = obj.telefone2;
+                interprete['E-mail'] = obj.email;
+                interprete['Oficialização'] = this.dateFormat(obj.oficializacao);
+                interprete['Justificativa Status'] = obj.statusJustificativa;
+                interprete['ADM - Administração'] = this.findAdministracao(obj.idadministracao);
+                interprete['RA - Regional Administrativa'] = obj.regional;
+                dados.push(interprete);
+            })
+            return dados
+        },
+        ...mapState(['isAdmin', 'isMenuVisible'])
+    },
     data: function() {
         return {
             options: [
@@ -229,28 +258,27 @@ export default {
             ],
         }
     },
-    
+
     methods: {
         onRowSelected(items) {
             this.selected = items
         },
         dateFormat: function(date) {
-        		return moment(String(date)).format('DD/MM/YYYY');
-        	},
+            return moment(String(date)).format('DD/MM/YYYY');
+        },
         findAdministracao(value){
             if(this.administracoes.length>0){
                 let item = this.administracoes.find(item=>item.value==value)
                 return item.text
-            }  
+            }
         },
         findComum(value){
             if(this.comuns.length>0){
                 let item = this.comuns.find(item=>item.value==value)
                 return item.text
-            }  
+            }
         },
         loadinterpretes() {
-            
             const url = `${baseApiUrl}/interpreteComComum`
             axios.get(url).then(res => {
                 this.interpretes = res.data
@@ -269,7 +297,7 @@ export default {
                 }
             })
         },
-        
+
         async loadComuns() {
             const url = `${baseApiUrl}/comum`
             await axios.get(url).then(res => {
@@ -320,15 +348,13 @@ export default {
                 .catch(showError)
         },
         loadinterprete(interprete, mode = 'save') {
-            debugger
-
             this.mode = mode
             this.interprete = { ...interprete }
             let arr = this.interprete.oficializacao.split('-')
             this.interprete.oficializacao = arr[0] +'-'+arr[1]+'-'+arr[2].substring(0, 2);
             this.isEdit = true
         },
-      
+
         exportID(item, event) {
           this.$loadingService.start();
 
@@ -346,7 +372,7 @@ export default {
             if(this.$refs['interpretes'].selectedRows.length == 0){
                 this.showAlert('selecione as linhas que deseja gerar o crachá');
                 return
-            } 
+            }
             this.$loadingService.start();
             this.$refs['cracha'].setItens(this.$refs['interpretes'].selectedRows.map(item => {
                 return {
@@ -375,7 +401,6 @@ export default {
         'interprete.idadministracao': function(newVal, oldVal){
             this.FilteredComuns = this.comuns.filter((item) => item.idadministracao == newVal)
         },
-        
     },
     async mounted() {
         await this.loadAdministracao()

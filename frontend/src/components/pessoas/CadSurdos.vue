@@ -96,6 +96,12 @@
                     <button type="button" @click="exportIDSelected" class="btn btn-outline-info btn-lg">
                         <i class="fa fa-id-card"></i>
                     </button>
+                    <span>&nbsp;</span>
+                    <BotaoDownloadExcel 
+                        :dados="dadosPlanilha"
+                        planilha="Surdos"
+                        arquivo="Controle de Surdos de LIBRAS.xlsx"
+                    />
                 </h3>
             </div>
             <div >
@@ -128,7 +134,7 @@
                         disableSelectInfo: true}"
                     :search-options="{ enabled: true, placeholder: 'Procurar...', }"
                     styleClass="vgt-table striped hover">
-                    
+
                     <template slot="table-row" slot-scope="data">
                         <span v-if="data.column.field == 'actions'">
                             <b-button v-b-tooltip.hover title="Imprimir Crachá" variant="primary" @click="exportID(data.row, $event)" class="mr-2 botoes">
@@ -144,7 +150,7 @@
                                 <i class="fa fa-trash"></i>
                             </b-button>
                         </span>
-                        
+
                         <span v-if="data.column.field == 'idadministracao'">
                             <span>{{findAdministracao(data.formattedRow[data.column.field])}}</span>
                         </span>
@@ -176,11 +182,33 @@ import 'vue-good-table/dist/vue-good-table.css'
 import { VueGoodTable } from 'vue-good-table';
 import Cracha from '../tamplate/Cracha.vue'
 import { mapState } from 'vuex'
-    
+import BotaoDownloadExcel from '../exportacao/BotaoDownloadExcel.vue'
+
 export default {
     name: 'Surdos',
-    components:{PageTitle, VueGoodTable, Cracha},
-    computed:mapState(['isAdmin', 'isMenuVisible']),
+    components:{PageTitle, VueGoodTable, Cracha, BotaoDownloadExcel},
+    computed: {
+        dadosPlanilha() {
+            const dados = []
+            this.surdos.forEach((obj) => {
+                let surdo = {}
+                surdo['Id Surdo'] = obj.id;
+                surdo['Código'] = obj.codigo
+                surdo['Nome'] = obj.nome;
+                surdo['Telefone Principal'] = obj.telefone1;
+                surdo['Telefone Secundário'] = obj.telefone2;
+                surdo['E-mail'] = obj.email;
+                surdo['Batizado?'] = obj.batismo;
+                surdo['Setor - Comum'] = obj.comum;
+                surdo['ADM - Administração'] = obj.administracao;
+                surdo['RA - Regional Administrativa'] = obj.regional;
+                surdo['Observação'] = obj.observacao;
+                dados.push(surdo);
+            })
+            return dados
+        },
+        ...mapState(['isAdmin', 'isMenuVisible'])
+    } ,
     data: function() {
         return {
             options: [
@@ -209,28 +237,26 @@ export default {
             ],
         }
     },
-    
     methods: {
         onRowSelected(items) {
             this.selected = items
         },
         dateFormat: function(date) {
-        		return moment(String(date)).format('DD/MM/YYYY');
-        	},
+            return moment(String(date)).format('DD/MM/YYYY');
+        },
         findAdministracao(value){
             if(this.administracoes.length>0){
                 let item = this.administracoes.find(item=>item.value==value)
                 return item.text
-            }  
+            }
         },
         findComum(value){
             if(this.comuns.length>0){
                 let item = this.comuns.find(item=>item.value==value)
                 return item.text
-            }  
+            }
         },
         loadSurdos() {
-            
             const url = `${baseApiUrl}/surdoComcomum`
             axios.get(url).then(res => {
                 this.surdos = res.data
@@ -297,13 +323,10 @@ export default {
                 .catch(showError)
         },
         loadsurdo(surdo, mode = 'save') {
-            debugger
-
             this.mode = mode
             this.surdo = { ...surdo }
             this.isEdit = true
         },
-      
         exportID(item, event) {
           this.$loadingService.start();
 
@@ -350,7 +373,6 @@ export default {
         'surdo.idadministracao': function(newVal, oldVal){
             this.FilteredComuns = this.comuns.filter((item) => item.idadministracao == newVal)
         },
-        
     },
     async mounted() {
         //await this.loadRegional()
@@ -362,9 +384,8 @@ export default {
 </script>
 
 <style>
-input[type=number]::-webkit-inner-spin-button { 
+input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
-    
 }
 
 .tabela_hide{

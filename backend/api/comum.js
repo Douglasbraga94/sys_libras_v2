@@ -31,7 +31,7 @@ module.exports = app => {
 
      const get = (req, res) => {
         app.db('comuns')
-            .select('id', 'nome', 'idadministracao', 'idregional')
+            .select('id', 'nome', 'idadministracao')
             //.whereNull('deletedAt')
             .then(comum => res.json(comum))
             .catch(err => res.status(500).send(err.message))
@@ -39,9 +39,17 @@ module.exports = app => {
 
     const getById = (req, res) => {
         app.db('comuns')
-            .select('id', 'nome', 'idadministracao', 'idregional')
+            .select('id', 'nome', 'idadministracao')
             .where({ idadministracao: req.params.id })
             //.whereNull('deletedAt')
+            .then(comum => res.json(comum))
+            .catch(err => res.status(500).send(err.message))
+    }
+
+    const getComumWithAdministracao = (req, res) => {
+        app.db('comuns')
+            .join('administracoes', 'comuns.idadministracao', 'administracoes.id')
+            .select('comuns.id', 'comuns.nome', 'comuns.idadministracao', 'administracoes.idregional')
             .then(comum => res.json(comum))
             .catch(err => res.status(500).send(err.message))
     }
@@ -66,5 +74,5 @@ module.exports = app => {
         }
     }
 
-     return {save, get, getById, remove}
+     return {save, get, getById, getComumWithAdministracao, remove}
 }

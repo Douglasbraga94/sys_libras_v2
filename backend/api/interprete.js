@@ -46,9 +46,12 @@ module.exports = app => {
     const getInterpretesWhithComum = (req, res) => {
         app.db('interpretes')
         .join('comuns', 'comuns.id', 'interpretes.idcomum')
+        .join('administracoes','comuns.idadministracao', 'interpretes.idadministracao')
+        .join('regionais','regionais.id','administracoes.idregional')
         .select('interpretes.id', 'interpretes.nome', 'interpretes.codigo', 'interpretes.status', 
         'interpretes.telefone1', 'interpretes.telefone2', 'interpretes.email', 
-        'interpretes.oficializacao', 'interpretes.statusJustificativa', 'interpretes.idcomum', 'interpretes.idadministracao', 'comuns.nome AS comum')
+        'interpretes.oficializacao', 'interpretes.statusJustificativa', 'interpretes.idcomum', 'interpretes.idadministracao', 
+        'comuns.nome AS comum','administracoes.idregional', 'regionais.nome AS regional')
             //.whereNull('deletedAt')
             .then(interprete => res.json(interprete))
             .catch(err => res.status(500).send(err.message))

@@ -86,6 +86,11 @@ module.exports = app =>{
         .delete(app.api.comum.remove)
         .get(app.api.comum.getById)
 
+    app.route('/comumComAdministracao')
+        .all(app.config.passport.authenticate())
+        .post(app.api.comum.save)
+        .get(app.api.comum.getComumWithAdministracao)
+
     app.route('/administracao')
         .all(app.config.passport.authenticate())
         .post(app.api.administracao.save)
