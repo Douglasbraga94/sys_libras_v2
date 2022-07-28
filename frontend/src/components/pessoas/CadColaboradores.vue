@@ -219,6 +219,7 @@ export default {
                 colaborador['E-mail'] = obj.email;
                 colaborador['ADM - Administração'] = this.findAdministracao(obj.idadministracao);
                 colaborador['RA - Regional Administrativa'] = this.findRegional(obj.idregional);
+                colaborador['Observações'] = obj.observacao;
                 dados.push(colaborador);
             })
             return dados
