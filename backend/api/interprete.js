@@ -46,7 +46,7 @@ module.exports = app => {
     const getInterpretesWhithComum = (req, res) => {
         app.db('interpretes')
         .join('comuns', 'comuns.id', 'interpretes.idcomum')
-        .join('administracoes','comuns.idadministracao', 'interpretes.idadministracao')
+        .join('administracoes','administracoes.id', 'comuns.idadministracao')
         .join('regionais','regionais.id','administracoes.idregional')
         .select('interpretes.id', 'interpretes.nome', 'interpretes.codigo', 'interpretes.status', 
         'interpretes.telefone1', 'interpretes.telefone2', 'interpretes.email', 
