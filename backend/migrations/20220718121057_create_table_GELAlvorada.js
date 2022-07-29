@@ -10,7 +10,7 @@ exports.up = function(knex, Promise) {
       table.string('surdo', 1).notNull()
       table.string('status').notNull()
       table.string('cartaEncaminhamento').notNull()
-      table.string('idadeInicioCurso')
+      table.integer('idadeInicioCurso')
       table.date('dataBatismo').notNull()
       table.date('dataNascimento').notNull()
       table.string('observacao', 1000)
