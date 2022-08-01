@@ -237,8 +237,8 @@ export default {
             this.selected = items
         },
         dateFormat: function(date) {
-        		return moment(String(date)).format('DD/MM/YYYY');
-        	},
+            return moment(String(date)).format('DD/MM/YYYY');
+        },
         findAdministracao(value){
             if(this.administracoes.length>0){
                 let item = this.administracoes.find(item=>item.value==value)
@@ -322,15 +322,13 @@ export default {
                 .catch(showError)
         },
         loadinterprete(interprete, mode = 'save') {
-            debugger
-
             this.mode = mode
             this.interprete = { ...interprete }
             let arr = this.interprete.oficializacao.split('-')
             this.interprete.oficializacao = arr[0] +'-'+arr[1]+'-'+arr[2].substring(0, 2);
             this.isEdit = true
         },
-      
+
         exportID(item, event) {
           this.$loadingService.start();
 
@@ -377,7 +375,7 @@ export default {
         'interprete.idadministracao': function(newVal, oldVal){
             this.FilteredComuns = this.comuns.filter((item) => item.idadministracao == newVal)
         },
-        
+
     },
     async mounted() {
         await this.loadAdministracao()
@@ -388,9 +386,9 @@ export default {
 </script>
 
 <style>
-input[type=number]::-webkit-inner-spin-button { 
+input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
-    
+
 }
 
 .tabela_hide{
