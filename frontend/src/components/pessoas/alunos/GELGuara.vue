@@ -247,7 +247,7 @@ import { mapState } from 'vuex'
 import BotaoDownloadExcel from '../../exportacao/BotaoDownloadExcel.vue'
 
 export default {
-    name: 'alunos',
+    name: 'GELGuara',
     components:{PageTitle, VueGoodTable, Cracha, BotaoDownloadExcel},
     computed: {
         dadosPlanilha() {
@@ -310,12 +310,12 @@ export default {
             selectionChanged: [],
             columns: [
                 {label: 'Código',field: 'codigo',},
-                {label: 'Nome',field: 'nome',},
-                {label: 'Telefone Principal',field: 'telefone1',},
                 {label: 'Status',field: 'status',},
+                {label: 'Nome',field: 'nome',},
                 {label: 'Setor - Comum',field: 'comum', },
-                // {label: 'Telefone 2',field: 'telefone2',width: '150px'},
-                {label: 'Administração',field: 'idadministracao',},
+                {label: 'Telefone Principal',field: 'telefone1',},
+                //{label: 'Telefone 2',field: 'telefone2',width: '150px'},
+                //{label: 'Administração',field: 'idadministracao',},
                 {label: 'Ações',field: 'actions', },
             ],
         }

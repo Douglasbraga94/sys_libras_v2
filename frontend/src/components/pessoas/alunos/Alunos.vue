@@ -1,6 +1,6 @@
 <template>
 	<div>
-    	<div class="row" v-if="component == 'home'">
+    <div class="row" v-if="component == 'home'">
         <div class="card2 purple" @click="openComponent('GELAlvorada')">
           <h2>GEL - Alvorada</h2>
           <p>Grupo de Estudos de LIBRAS - Alvorada</p>
@@ -9,6 +9,11 @@
         <div class="card2 orange" @click="openComponent('GELGuara')">
           <h2>GEL - Guará</h2>
           <p>Grupo de Estudos de LIBRAS - Guará</p>
+        </div>
+
+        <div class="card2 green" @click="openComponent('Letramento')">
+          <h2>Letramento - Planaltina </h2>
+          <p>Letramento de LIBRAS - Planaltina/GO</p>
         </div>
 
 		</div>
@@ -28,6 +33,13 @@
 			<GELGuara />
 		</div>
 
+    <div v-if="component == 'Letramento'">
+			<!--<button type="button" @click="openComponent('home')" class="btn btn-secondary btn-sm m-1">
+				<i class="fa fa-chevron-circle-left"> Voltar</i>
+			</button>-->
+			<Letramento />
+		</div>
+
 	</div>
   <!--  -->
 </template>
@@ -35,11 +47,12 @@
 <script>
 import GELAlvorada from './GELAlvorada.vue'
 import GELGuara from './GELGuara.vue'
+import Letramento from './Letramento.vue'
 import { mapState } from 'vuex'
 
 export default {
   name: "Alunos",
-  components: { GELAlvorada, GELGuara},
+  components: { GELAlvorada, GELGuara, Letramento},
 computed:mapState(['isMenuVisible']),
   data: function () {
     return {
@@ -97,11 +110,15 @@ body {
 }
 
 .purple {
-	  border-left: 3px solid #750270;
+  border-left: 3px solid #750270;
 }
 
 .orange {
   border-left: 3px solid #ca6e04;
+}
+
+.green {
+  border-left: 3px solid #039227;
 }
 
 .btn-back {
