@@ -119,8 +119,8 @@
                              />
                     </b-form-group>
                 </b-col>
-            </b-row>
-
+            </b-row>        
+            
             <b-row align-h="start" v-show="mode === 'save' || mode === 'vizualizar'">
                 <b-col md="6" sm="24">
                     <b-form-group label="Observações:" label-for="observacoes">
@@ -129,7 +129,7 @@
                             placeholder="Observações" />
                     </b-form-group>
                 </b-col>
-            </b-row>
+            </b-row>  
             <br>
             <b-row>
                 <b-col xs="12">
@@ -144,7 +144,7 @@
         <hr>
         <div v-show="!isEdit" :class="{'tabela_hide': !isMenuVisible, 'tabela': isMenuVisible}">
             <div class="card-header">
-                <h3>Grupo de Estudos de LIBRAS - Alvorada do Norte
+                <h3>Letramento - Planaltina/GO
                     <button type="button" @click="isEdit = true" class="btn btn-outline-info btn-lg" v-if="isAdmin">
                         <i class="fa fa-plus-circle"></i>
                     </button>
@@ -155,8 +155,8 @@
                     <span>&nbsp;</span>
                     <BotaoDownloadExcel 
                         :dados="dadosPlanilha"
-                        planilha="Alunos - GEL Alvorada"
-                        arquivo="Grupo de Estudos de LIBRAS - Alvorada.xlsx"
+                        planilha="Letramento - Planaltina"
+                        arquivo="Letramento de LIBRAS - Planaltina.xlsx"
                     />
                 </h3>
             </div>
@@ -190,7 +190,7 @@
                         disableSelectInfo: true}"
                     :search-options="{ enabled: true, placeholder: 'Procurar...', }"
                     styleClass="vgt-table striped hover">
-
+                    
                     <template slot="table-row" slot-scope="data">
                         <span v-if="data.column.field == 'actions'">
                             <b-button v-b-tooltip.hover title="Imprimir Crachá" variant="primary" @click="exportID(data.row, $event)" class="mr-2 botoes">
@@ -206,7 +206,7 @@
                                 <i class="fa fa-trash"></i>
                             </b-button>
                         </span>
-
+                        
                         <span v-if="data.column.field == 'idadministracao'">
                             <span>{{findAdministracao(data.formattedRow[data.column.field])}}</span>
                         </span>
@@ -245,9 +245,9 @@ import { VueGoodTable } from 'vue-good-table';
 import Cracha from '../../tamplate/Cracha.vue'
 import { mapState } from 'vuex'
 import BotaoDownloadExcel from '../../exportacao/BotaoDownloadExcel.vue'
-    
+
 export default {
-    name: 'GELAlvorada',
+    name: 'Letramento',
     components:{PageTitle, VueGoodTable, Cracha, BotaoDownloadExcel},
     computed: {
         dadosPlanilha() {
@@ -341,7 +341,7 @@ export default {
             }
         },
         loadalunos() {
-            const url = `${baseApiUrl}/GELAlvoradaComcomum`
+            const url = `${baseApiUrl}/LetramentoComcomum`
             axios.get(url).then(res => {
                 this.alunos = res.data
             })
@@ -390,7 +390,7 @@ export default {
             delete this.aluno.regional
             const method = this.aluno.id ? 'put' : 'post'
             const id = this.aluno.id ? `/${this.aluno.id}` : ''
-            axios[method](`${baseApiUrl}/GELAlvorada${id}`, this.aluno)
+            axios[method](`${baseApiUrl}/Letramento${id}`, this.aluno)
                 .then(() => {
                     this.$toasted.global.defaultSuccess()
                     this.reset()
@@ -401,7 +401,7 @@ export default {
             delete this.aluno.vgt_id
             delete this.aluno.originalIndex
             const id = this.aluno.id
-            axios.delete(`${baseApiUrl}/GELAlvorada/${id}`)
+            axios.delete(`${baseApiUrl}/Letramento/${id}`)
                 .then(() => {
                     this.$toasted.global.defaultSuccess()
                     this.reset()
@@ -417,6 +417,7 @@ export default {
             this.aluno.dataBatismo = arr2[0] +'-'+arr2[1]+'-'+arr2[2].substring(0, 2);
             this.isEdit = true
         },
+
         exportID(item, event) {
           this.$loadingService.start();
 
@@ -434,7 +435,7 @@ export default {
             if(this.$refs['alunos'].selectedRows.length == 0){
                 this.showAlert('selecione as linhas que deseja gerar o crachá');
                 return
-            }
+            } 
             this.$loadingService.start();
             this.$refs['cracha'].setItens(this.$refs['alunos'].selectedRows.map(item => {
                 return {
