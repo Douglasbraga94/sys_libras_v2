@@ -1,5 +1,5 @@
 <template>
-    <div class="stat" :class="{'hide': value == 'hide'}">
+    <div class="stat" :class="{'hide': value == 'hide'}" @click="onClickStat">
         <div class="stat-icon">
             <i :class="icon" :style="style"></i>
         </div>
@@ -17,7 +17,8 @@ import { baseApiUrl } from '@/global'
 
 export default {
     name: 'Stat',
-    props: ['title', 'value', 'icon', 'color'],
+    props: ['title', 'value', 'icon', 'color', 'component'],
+    emits: ['stat-clicked'],
     data: function(){
         return {
             valor: 0
@@ -44,8 +45,7 @@ export default {
                         else if(item == 'nao_bat') return res.data.filter(item => item.batismo == 'N').length
                     })
                 }
-                
-            
+
         },
         async getStatsSurdos(item) {
             return await axios.get( `${baseApiUrl}/interprete`).then(res => {
@@ -55,6 +55,9 @@ export default {
                 else if(item == 'nao_hab') return res.data.filter(item => item.status == 'nao_hab').length
                 else if(item == 'diversos') return res.data.filter(item => item.status == 'diversos').length
             })
+        }, 
+        onClickStat() {
+            this.$emit('stat-clicked', this.component)
         }
     },
     async mounted() {
@@ -75,6 +78,10 @@ export default {
         padding: 20px;
         border: 1px solid rgba(0, 0, 0, 0.2);
         box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    }
+
+    .stat:hover {
+        cursor: pointer;
     }
 
     .stat-icon {
