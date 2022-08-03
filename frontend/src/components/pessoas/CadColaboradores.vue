@@ -337,6 +337,7 @@ export default {
         save() {
             console.log(this.colaborador.oficializacao)
             delete this.colaborador.vgt_id
+            delete this.colaborador.vgtSelected
             delete this.colaborador.originalIndex
             delete this.colaborador.comum
             const method = this.colaborador.id ? 'put' : 'post'

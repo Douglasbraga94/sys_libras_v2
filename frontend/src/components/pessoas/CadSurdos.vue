@@ -227,12 +227,12 @@ export default {
             selectionChanged: [],
             columns: [
                 {label: 'Código',field: 'codigo',},
-                {label: 'Nome',field: 'nome',},
-                {label: 'Telefone Principal',field: 'telefone1',},
                 {label: 'Batizado?',field: 'batismo',},
+                {label: 'Nome',field: 'nome',},
                 {label: 'Setor - Comum',field: 'comum', },
+                {label: 'Telefone Principal',field: 'telefone1',},
                 // {label: 'Telefone 2',field: 'telefone2',width: '150px'},
-                {label: 'Administração',field: 'idadministracao',},
+                //{label: 'Administração',field: 'idadministracao',},
                 {label: 'Ações',field: 'actions', },
             ],
         }
@@ -298,8 +298,8 @@ export default {
             this.loadSurdos()
         },
         save() {
-            console.log(this.surdo.oficializacao)
             delete this.surdo.vgt_id
+            delete this.surdo.vgtSelected
             delete this.surdo.originalIndex
             delete this.surdo.comum
             delete this.surdo.administracao

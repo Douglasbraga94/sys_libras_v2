@@ -180,6 +180,7 @@ export default {
         },
         save() {
             delete this.administracao.vgt_id
+            delete this.administracao.vgtSelected
             delete this.administracao.originalIndex
             const method = this.administracao.id ? 'put' : 'post'
             const id = this.administracao.id ? `/${this.administracao.id}` : ''
