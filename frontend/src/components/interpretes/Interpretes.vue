@@ -139,12 +139,12 @@
                     @on-selected-rows-change="selectionChanged"
                     :columns="columns"
                     :rows="interpretes"
-                    :select-options="{ enabled: true, 
+                    :select-options="{ enabled: true,
                         selectionText: 'Linhas selecionadas',
                         disableSelectInfo: true}"
                     :search-options="{ enabled: true, placeholder: 'Procurar...', }"
                     styleClass="vgt-table striped hover">
-                    
+
                     <template slot="table-row" slot-scope="data">
                         <span v-if="data.column.field == 'actions'">
                             <b-button v-b-tooltip.hover title="Imprimir Crachá" variant="primary" @click="exportID(data.row, $event)" class="mr-2 botoes">
@@ -160,7 +160,7 @@
                                 <i class="fa fa-trash"></i>
                             </b-button>
                         </span>
-                        
+
                         <span v-if="data.column.field == 'idadministracao'">
                             <span>{{findAdministracao(data.formattedRow[data.column.field])}}</span>
                         </span>
@@ -195,7 +195,7 @@ import 'vue-good-table/dist/vue-good-table.css'
 import { VueGoodTable } from 'vue-good-table';
 import Cracha from '../tamplate/Cracha.vue'
 import { mapState } from 'vuex'
-    
+
 export default {
     name: 'Interpretes',
     components:{PageTitle, VueGoodTable, Cracha},
@@ -231,28 +231,28 @@ export default {
             ],
         }
     },
-    
+
     methods: {
         onRowSelected(items) {
             this.selected = items
         },
         dateFormat: function(date) {
-        		return moment(String(date)).format('DD/MM/YYYY');
-        	},
+            return moment(String(date)).format('DD/MM/YYYY');
+        },
         findAdministracao(value){
             if(this.administracoes.length>0){
                 let item = this.administracoes.find(item=>item.value==value)
                 return item.text
-            }  
+            }
         },
         findComum(value){
             if(this.comuns.length>0){
                 let item = this.comuns.find(item=>item.value==value)
                 return item.text
-            }  
+            }
         },
         loadinterpretes() {
-            
+
             const url = `${baseApiUrl}/interpreteComComum`
             axios.get(url).then(res => {
                 this.interpretes = res.data
@@ -271,7 +271,7 @@ export default {
                 }
             })
         },
-        
+
         async loadComuns() {
             const url = `${baseApiUrl}/comum`
             await axios.get(url).then(res => {
@@ -322,15 +322,13 @@ export default {
                 .catch(showError)
         },
         loadinterprete(interprete, mode = 'save') {
-            debugger
-
             this.mode = mode
             this.interprete = { ...interprete }
             let arr = this.interprete.oficializacao.split('-')
             this.interprete.oficializacao = arr[0] +'-'+arr[1]+'-'+arr[2].substring(0, 2);
             this.isEdit = true
         },
-      
+
         exportID(item, event) {
           this.$loadingService.start();
 
@@ -377,7 +375,7 @@ export default {
         'interprete.idadministracao': function(newVal, oldVal){
             this.FilteredComuns = this.comuns.filter((item) => item.idadministracao == newVal)
         },
-        
+
     },
     async mounted() {
         await this.loadAdministracao()
@@ -388,9 +386,9 @@ export default {
 </script>
 
 <style>
-input[type=number]::-webkit-inner-spin-button { 
+input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
-    
+
 }
 
 .tabela_hide{

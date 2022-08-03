@@ -1,6 +1,6 @@
 <template>
 	<div>
-    	<div class="row" v-if="component == 'home'">
+		<div class="row" v-if="component == 'home'">
 			<div class="card2 black" @click="openComponent('Alunos')">
 				<h2>Alunos</h2>
 				<p>Cadastro de Alunos</p>
@@ -10,23 +10,23 @@
 				<h2>Colaboradores</h2>
 				<p>Cadastro de Colaboradores</p>
 			</div>
-      		
-			<div class="card2 green" @click="openComponent('Interpretes')">
-        		<h2>Intérpretes</h2>
-        		<p>Cadastro de Intérpretes</p>
-      		</div>
 
-      		<div class="card2 blue" @click="openComponent('Surdos')">
-        		<h2>Surdos</h2>
-        		<p>Cadastro de Surdos</p>
-      		</div>
+			<div class="card2 green" @click="openComponent('Interpretes')">
+				<h2>Intérpretes</h2>
+				<p>Cadastro de Intérpretes</p>
+			</div>
+
+			<div class="card2 blue" @click="openComponent('Surdos')">
+				<h2>Surdos</h2>
+				<p>Cadastro de Surdos</p>
+			</div>
 
 		</div>
 		<div v-if="component != 'home'" class="m-2 btn-back"></div>
 		<div v-if="component == 'Interpretes'">
-			<PageTitle icon="fa fa-users" 
+			<PageTitle icon="fa fa-users"
 			main="Intérpretes de Libras - CCB"
-            sub="Controle de Intérpretes de LIBRAS" 
+            sub="Controle de Intérpretes de LIBRAS"
 			/>
 			<button type="button" @click="openComponent('home')" class="btn btn-secondary btn-sm m-1">
 				<i class="fa fa-chevron-circle-left"> Voltar</i>
@@ -34,7 +34,7 @@
 			<Interpretes />
 		</div>
 		<div v-if="component == 'Surdos'">
-    		<PageTitle icon="fa fa-users" 
+			<PageTitle icon="fa fa-users" 
 			main="Surdos - CCB"
             sub="Controle de Surdos de LIBRAS" />
 			<button type="button" @click="openComponent('home')" class="btn btn-secondary btn-sm m-1">
@@ -46,7 +46,7 @@
 			<PageTitle 
 				icon="fa fa-users" 
 				main="Colaboradores de Libras - CCB"
-            	sub="Controle de Colaboradores de LIBRAS" 
+				sub="Controle de Colaboradores de LIBRAS" 
 			/>
 			<button type="button" @click="openComponent('home')" class="btn btn-secondary btn-sm m-1">
 				<i class="fa fa-chevron-circle-left"> Voltar</i>
@@ -57,14 +57,14 @@
 			<PageTitle 
 				icon="fa fa-users" 
 				main="Alunos de Libras - CCB"
-            	sub="Controle de Alunos de LIBRAS" 
+				sub="Controle de Alunos de LIBRAS" 
 			/>
 			<button type="button" v-show="voltar" @click="openComponent('home')" class="btn btn-secondary btn-sm m-1">
 				<i class="fa fa-chevron-circle-left"> Voltar</i>
 			</button>
 			<Alunos />
 		</div>
-  	</div>
+	</div>
   <!--  -->
 </template>
 
@@ -79,11 +79,11 @@ import { mapState } from 'vuex'
 export default {
   name: "Pessoas",
   components: { PageTitle, Alunos, Interpretes, Surdos, Colaboradores },
-computed:mapState(['isMenuVisible']),
+  computed:mapState(['isMenuVisible']),
   data: function () {
     return {
-      component: "home",
-	  voltar: true,
+		component: "home",
+		voltar: true,
     };
   },
   methods: {
@@ -92,6 +92,9 @@ computed:mapState(['isMenuVisible']),
       console.log(this.component);
     },
   },
+  mounted() {
+	this.component = this.$route.params.component  || "home"	
+  }
 };
 </script>
 
@@ -146,7 +149,7 @@ body {
 }
 
 .black{
-	  border-left: 3px solid #131313;
+  border-left: 3px solid #131313;
 }
 
 .btn-back {
