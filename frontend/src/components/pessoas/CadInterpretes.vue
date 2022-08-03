@@ -323,6 +323,7 @@ export default {
         save() {
             console.log(this.interprete.oficializacao)
             delete this.interprete.vgt_id
+            delete this.interprete.vgtSelected
             delete this.interprete.originalIndex
             delete this.interprete.comum
             delete this.interprete.regional

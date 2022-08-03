@@ -205,6 +205,7 @@ export default {
             const method = this.comum.id ? 'put' : 'post'
             const id = this.comum.id ? `/${this.comum.id}` : ''
             delete this.comum.vgt_id;
+            delete this.comum.vgtSelected
             delete this.comum.originalIndex;
             delete this.comum.idregional;
             axios[method](`${baseApiUrl}/comum${id}`, this.comum)

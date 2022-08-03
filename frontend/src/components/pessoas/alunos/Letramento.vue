@@ -383,6 +383,7 @@ export default {
         },
         save() {
             delete this.aluno.vgt_id
+            delete this.aluno.vgtSelected
             delete this.aluno.originalIndex
             delete this.aluno.comum
             delete this.aluno.administracao

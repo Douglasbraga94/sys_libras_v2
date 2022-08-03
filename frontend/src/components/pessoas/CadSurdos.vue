@@ -298,8 +298,8 @@ export default {
             this.loadSurdos()
         },
         save() {
-            console.log(this.surdo.oficializacao)
             delete this.surdo.vgt_id
+            delete this.surdo.vgtSelected
             delete this.surdo.originalIndex
             delete this.surdo.comum
             delete this.surdo.administracao
