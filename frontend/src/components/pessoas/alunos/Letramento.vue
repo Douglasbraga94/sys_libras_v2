@@ -144,7 +144,7 @@
         <hr>
         <div v-show="!isEdit" :class="{'tabela_hide': !isMenuVisible, 'tabela': isMenuVisible}">
             <div class="card-header">
-                <h3>Grupo de Estudos de LIBRAS - Guará
+                <h3>Letramento - Planaltina/GO
                     <button type="button" @click="isEdit = true" class="btn btn-outline-info btn-lg" v-if="isAdmin">
                         <i class="fa fa-plus-circle"></i>
                     </button>
@@ -155,8 +155,8 @@
                     <span>&nbsp;</span>
                     <BotaoDownloadExcel 
                         :dados="dadosPlanilha"
-                        planilha="Alunos - GEL Guará"
-                        arquivo="Grupo de Estudos de LIBRAS - Guará.xlsx"
+                        planilha="Letramento - Planaltina"
+                        arquivo="Letramento de LIBRAS - Planaltina.xlsx"
                     />
                 </h3>
             </div>
@@ -247,7 +247,7 @@ import { mapState } from 'vuex'
 import BotaoDownloadExcel from '../../exportacao/BotaoDownloadExcel.vue'
 
 export default {
-    name: 'GELGuara',
+    name: 'Letramento',
     components:{PageTitle, VueGoodTable, Cracha, BotaoDownloadExcel},
     computed: {
         dadosPlanilha() {
@@ -341,7 +341,7 @@ export default {
             }
         },
         loadalunos() {
-            const url = `${baseApiUrl}/GELGuaraComcomum`
+            const url = `${baseApiUrl}/LetramentoComcomum`
             axios.get(url).then(res => {
                 this.alunos = res.data
             })
@@ -391,7 +391,7 @@ export default {
             delete this.aluno.regional
             const method = this.aluno.id ? 'put' : 'post'
             const id = this.aluno.id ? `/${this.aluno.id}` : ''
-            axios[method](`${baseApiUrl}/GELGuara${id}`, this.aluno)
+            axios[method](`${baseApiUrl}/Letramento${id}`, this.aluno)
                 .then(() => {
                     this.$toasted.global.defaultSuccess()
                     this.reset()
@@ -402,7 +402,7 @@ export default {
             delete this.aluno.vgt_id
             delete this.aluno.originalIndex
             const id = this.aluno.id
-            axios.delete(`${baseApiUrl}/GELGuara/${id}`)
+            axios.delete(`${baseApiUrl}/Letramento/${id}`)
                 .then(() => {
                     this.$toasted.global.defaultSuccess()
                     this.reset()

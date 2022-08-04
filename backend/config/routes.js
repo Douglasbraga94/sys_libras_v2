@@ -49,6 +49,9 @@ module.exports = app =>{
     app.route('/GELGuaraComcomum')
         .get(app.api.GELGuara.getGELGuaraWhithComum)
         
+    app.route('/LetramentoComcomum')
+        .get(app.api.Letramento.getLetramentoWhithComum)
+        
     app.route('/interprete/:id')
         .all(app.config.passport.authenticate())
         .put(app.api.interprete.save)
@@ -122,4 +125,13 @@ module.exports = app =>{
         .delete(app.api.GELAlvorada.remove)
         .get(app.api.GELAlvorada.getById) 
 
+    app.route('/Letramento')
+        .post(app.api.Letramento.save)
+        .get(app.api.Letramento.get)
+
+    app.route('/Letramento/:id')
+        .all(app.config.passport.authenticate())
+        .put(app.api.Letramento.save)
+        .delete(app.api.Letramento.remove)
+        .get(app.api.Letramento.getById) 
     }

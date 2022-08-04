@@ -144,7 +144,7 @@
         <hr>
         <div v-show="!isEdit" :class="{'tabela_hide': !isMenuVisible, 'tabela': isMenuVisible}">
             <div class="card-header">
-                <h3>Grupo de Estudos de LIBRAS - Alvorada
+                <h3>Grupo de Estudos de LIBRAS - Alvorada do Norte
                     <button type="button" @click="isEdit = true" class="btn btn-outline-info btn-lg" v-if="isAdmin">
                         <i class="fa fa-plus-circle"></i>
                     </button>
@@ -247,7 +247,7 @@ import { mapState } from 'vuex'
 import BotaoDownloadExcel from '../../exportacao/BotaoDownloadExcel.vue'
     
 export default {
-    name: 'alunos',
+    name: 'GELAlvorada',
     components:{PageTitle, VueGoodTable, Cracha, BotaoDownloadExcel},
     computed: {
         dadosPlanilha() {
@@ -310,12 +310,12 @@ export default {
             selectionChanged: [],
             columns: [
                 {label: 'Código',field: 'codigo',},
-                {label: 'Nome',field: 'nome',},
-                {label: 'Telefone Principal',field: 'telefone1',},
                 {label: 'Status',field: 'status',},
+                {label: 'Nome',field: 'nome',},
                 {label: 'Setor - Comum',field: 'comum', },
-                // {label: 'Telefone 2',field: 'telefone2',width: '150px'},
-                {label: 'Administração',field: 'idadministracao',},
+                {label: 'Telefone Principal',field: 'telefone1',},
+                //{label: 'Telefone 2',field: 'telefone2',width: '150px'},
+                //{label: 'Administração',field: 'idadministracao',},
                 {label: 'Ações',field: 'actions', },
             ],
         }
@@ -383,6 +383,7 @@ export default {
         },
         save() {
             delete this.aluno.vgt_id
+            delete this.aluno.vgtSelected
             delete this.aluno.originalIndex
             delete this.aluno.comum
             delete this.aluno.administracao

@@ -19,7 +19,6 @@ import { mapState } from 'vuex'
 export default {
     name: 'Header',
     components: { UserDropdown },
-    computed:mapState(['isAdmin', 'user', 'isMenuVisible']),
     props: {
         title: String,
         hideToggle: Boolean,
@@ -28,7 +27,8 @@ export default {
     computed: {
         icon() {
             return this.$store.state.isMenuVisible ? "fa-angle-left" : "fa-angle-down"
-        }
+        },
+        ...mapState(['isAdmin', 'user', 'isMenuVisible'])
     },
     methods: {
         toggleMenu() {

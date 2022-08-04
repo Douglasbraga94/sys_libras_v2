@@ -145,6 +145,7 @@ export default {
         },
         save() {
             delete this.regional.vgt_id
+            delete this.regional.vgtSelected
             delete this.regional.originalIndex
             const method = this.regional.id ? 'put' : 'post'
             const id = this.regional.id ? `/${this.regional.id}` : ''
