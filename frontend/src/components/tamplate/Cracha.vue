@@ -13,7 +13,8 @@
       <p class="comum">{{ item.comum }}</p>
       <p class="codigo">{{ item.codigo }}</p>
       <p class="barras">*{{ item.codigo }}*</p>
-      <p class="tipo"></p>
+      <p class="tipo" v-if="item.tipo !== 'surdo'"></p>
+      <p class="tipoSurdo" v-else></p>
     </div>
   </div>
 </template>
@@ -120,6 +121,7 @@ export default {
   height: 500px;
   padding: 16px;
   overflow: hidden;
+  position: relative;
 
   text-align: center;
   box-sizing: border-box;
@@ -163,13 +165,21 @@ export default {
 .cracha.interprete .tipo:before {
   content: "INTÉRPRETE";
 }
-.cracha.surdo .tipo:before {
-  content: "SURDO";
-}
 .cracha.colaborador .tipo:before {
   content: "COLABORADOR";
 }
 .cracha.aluno .tipo:before {
   content: "ALUNO";
+}
+.cracha.surdo .tipoSurdo {
+  background: url("../../assets/logo_surdo.png") no-repeat center;
+  background-size: 112px 85px;
+  position: absolute;
+  left: 0;
+  bottom: 8px;
+  width: 100%;
+  height: 85px;
+  z-index: 1000;
+  content: "";
 }
 </style>
