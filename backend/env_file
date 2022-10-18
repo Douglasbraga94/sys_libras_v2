@@ -6,5 +6,6 @@ module.exports = {
         database: '',
         user: '',
         password: ''
-    }
+    }, 
+    searchPath: ['','']
 }
