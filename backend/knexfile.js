@@ -1,5 +1,5 @@
 // Update with your config settings.
-const { db } = require('./.env')
+const { db, searchPath } = require('./.env')
 module.exports = {
 
     client: 'postgresql',
@@ -10,6 +10,7 @@ module.exports = {
     },
     migrations: {
       tableName: 'knex_migrations'
-    }
+    }, 
+    searchPath: searchPath
 
 };
