@@ -7,7 +7,7 @@ exports.up = function(knex) {
     .createTable('interprete', table => {
         table.integer('codigoPessoa').references('codigo').inTable('pessoa');
         table.integer('codigoSituacao').references('codigo').inTable('interprete_situacao');
-        table.string('observacao', 255).nullable();
+        table.string('justificativa', 255).nullable();
         table.date('dataOficializacao').notNullable();
         table.boolean('ativo', true).notNullable();
 
