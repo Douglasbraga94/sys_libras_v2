@@ -11,6 +11,7 @@ exports.up = function(knex, Promise) {
         table.date('dataNascimento').notNullable(); 
         table.date('dataBatismo').nullable();
         table.boolean('batizado', false).notNullable();
+        table.boolean('cursoExternoLibras', false).notNullable();
         table.boolean('ativo', true).notNullable();        
     })
     .raw('ALTER TABLE pessoa ALTER COLUMN codigo ADD GENERATED ALWAYS AS IDENTITY');
