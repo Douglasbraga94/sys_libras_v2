@@ -9,24 +9,43 @@ module.exports = app =>{
             return res.status(400).send('Informe usuário e senha!')
         }
 
-        const user = await app.db('usuarios')
+        const user = await app.db('vw_usuario')
             .where({ email: req.body.email })
-            .whereNull('deletado_em')
+            .andWhere({ ativo: true })
             .first()
 
         if (!user) return res.status(400).send('Usuário não encontrado!')
 
-        const isMatch = bcrypt.compareSync(req.body.senha, user.senha)
+        const bindVars = {
+            _email: req.body.email, 
+            _senha: req.body.senha, 
+            _autenticado: null
+        }
+
+        const result = await app.db.raw(
+            'Call autentica_usuario(:_email,:_senha,:_autenticado)',
+            bindVars
+        )
+        .then(ret => ret)
+        .catch(err => {
+            console.log(err);
+            throw err;
+        });
+
+        const isMatch = result.rows[0]._autenticado;
+
         if (!isMatch) return res.status(401).send('Email/Senha inválidos!')
 
         const now = Math.floor(Date.now() / 1000)
 
         const payload = {
-            id: user.id,
+            codigo: user.codigo,
             nome: user.nome,
             email: user.email,
             admin: user.admin,
             ministerio: user.ministerio,
+            codigoPerfil: user.codigoPerfil,
+            perfil: user.perfil,
             iat: now,
             exp: now + (60 * 60 * 24 )
         }
@@ -34,7 +53,10 @@ module.exports = app =>{
         res.json({
             ...payload,
             token: jwt.encode(payload, authSecret)
-        })
+        })        
+
+        
+
     }
 
     const validateToken = async (req, res) => {

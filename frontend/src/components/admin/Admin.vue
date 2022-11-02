@@ -6,9 +6,8 @@
             <b-card no-body>
                 <b-tabs card>
                     <b-tab title="Minhas Informações" active>
-                        
                         <b-form >
-                            <input id="user-id" type="hidden" v-model="user.id" />
+                            <input id="user-codigo" type="hidden" v-model="user.codigo" />
                             <b-row>
                                 <b-col md="6" sm="12">
                                     <b-form-group label="Nome:" label-for="user-name">
@@ -37,7 +36,7 @@
                                     </b-form-group>
                                 </b-col>
                                 <b-col md="6" sm="12">
-                                    <b-form-group label="Ministério:" 
+                                    <b-form-group label="Ministério:"
                                         label-for="ministerio">
                                         <b-form-input id="ministerio" type="text"
                                             v-model="user.ministerio" :readonly="!isEdit" required
@@ -46,10 +45,18 @@
                                 </b-col>
                             </b-row>
                             <b-row>
+                                <b-col md="6" sm="12">
+                                    <b-form-group label="Perfil:" label-for="user-profile">
+                                        <b-form-select id="user-profile" v-model="user.codigoPerfil" :readonly="!isEdit" :options="profilesOptions"></b-form-select>
+                                    </b-form-group>
+                                </b-col>
+                                <b-col md="6" sm="12"></b-col>
+                            </b-row>
+                            <b-row>
                                 <b-col xs="12">
                                     <b-button variant="success" v-if="isEdit"
                                         @click="save">Salvar</b-button>
-                                    <b-button variant="primary" 
+                                    <b-button variant="primary"
                                         @click="isEdit=true" v-if="!isEdit">Editar</b-button>
                                     <b-button class="ml-2" @click="isEdit=false" v-if="isEdit"> Cancelar</b-button>
                                 </b-col>
@@ -73,7 +80,6 @@ import UserAdmin from './UserAdmin'
 import { mapState } from 'vuex'
 import axios from 'axios'
 
-    
 export default {
     name: 'AdminPages',
     components: { PageTitle, UserAdmin },
@@ -81,7 +87,9 @@ export default {
     data: function() {
         return {
             isEdit: false,
-            mode: 'edit'
+            mode: 'edit',
+            profiles: [],
+            profilesOptions: []
         }
     },
     methods:{
@@ -90,16 +98,9 @@ export default {
             this.mode = 'save'
         },
         save() {
-            let user = this.user
-            delete user.exp
-            delete user.iat
-            delete user.token
-            console.log(user)
-            const method = user.id ? 'put' : 'post'
-            const id = user.id ? `/${user.id}` : ''
-            console.log(method)
-            console.log(id)
-            axios[method](`${baseApiUrl}/usuario${id}`, user)
+            const method = this.user.codigo ? 'put' : 'post'
+            const codigo = this.user.codigo ? `/${this.user.codigo}` : ''
+            axios[method](`${baseApiUrl}/usuario${codigo}`, this.user)
                 .then(() => {
                     this.$toasted.global.defaultSuccess()
                     this.reset()
@@ -107,16 +108,42 @@ export default {
                 .catch(showError)
         },
         remove() {
-            const id = this.user.id
-            axios.delete(`${baseApiUrl}/usuario/${id}`)
+            const codigo = this.user.codigo
+            axios.delete(`${baseApiUrl}/usuario/${codigo}`)
                 .then(() => {
                     this.$toasted.global.defaultSuccess()
                     this.reset()
                 })
                 .catch(showError)
         },
+        async loadProfiles() {
+            await axios.get(`${baseApiUrl}/perfil`)
+                .then((res) => {
+                    this.profiles = res.data;
+                })
+        }, 
+        setProfilesOptions() {
+            this.profiles.forEach(profile => {
+                const option = {
+                    value: profile.codigo, 
+                    text: profile.nome, 
+                    disabled: !profile.ativo
+                }
+                this.profilesOptions.push(option);
+            })
+        }
 
     },
+    watch: {
+        'user.codigoPerfil'(newValue) {
+            if(newValue)
+                this.user.perfil = this.profiles.find(profile => profile.codigo === newValue ).nome
+        }
+    },
+    async mounted() {
+        await this.loadProfiles()
+        this.setProfilesOptions()
+    }
 
 }
 </script>

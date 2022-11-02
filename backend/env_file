@@ -7,5 +7,5 @@ module.exports = {
         user: '',
         password: ''
     }, 
-    searchPath: ['','']
+    searchPath: ['','relatorio','pgcrypto']
 }
