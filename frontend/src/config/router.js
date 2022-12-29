@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import Home from '../components/home/Home'
 import Admin from '../components/admin/Admin'
 import Pessoas from '../components/pessoas/Pessoas'
+import PessoaWizard from '../components/pessoas/PessoaWizard.vue'
 import Regionais from '../components/regionais/Regionais'
 import Auth from '../components/auth/Auth'
 
@@ -28,7 +29,7 @@ const routes = [{
 {
     name: 'pessoas',
     path: '/pessoas',
-    component: Pessoas
+    component: PessoaWizard
 },
 {
     name: 'auth',

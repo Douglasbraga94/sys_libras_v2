@@ -13,11 +13,11 @@
 <script>
 import axios from "axios"
 import { baseApiUrl, userKey } from "@/global"
-import Header from "./components/tamplate/Header.vue"
-import Menu from "./components/tamplate/Menu.vue"
-import Content from "./components/tamplate/Content.vue"
-import Footer from "./components/tamplate/Footer.vue"
-import Spinner from "@/components/tamplate/Spinner"
+import Header from "./components/template/Header.vue"
+import Menu from "./components/template/Menu.vue"
+import Content from "./components/template/Content.vue"
+import Footer from "./components/template/Footer.vue"
+import Spinner from "@/components/template/Spinner"
 import { mapState } from "vuex"
 
 export default {

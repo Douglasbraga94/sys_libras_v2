@@ -187,13 +187,13 @@
 </template>
 
 <script>
-import PageTitle from '../tamplate/PageTitle.vue'
+import PageTitle from '../template/PageTitle.vue'
 import { baseApiUrl, showError } from '@/global'
 import axios from 'axios'
 import moment from 'moment';
 import 'vue-good-table/dist/vue-good-table.css'
 import { VueGoodTable } from 'vue-good-table';
-import Cracha from '../tamplate/Cracha.vue'
+import Cracha from '../template/Cracha.vue'
 import { mapState } from 'vuex'
     
 export default {

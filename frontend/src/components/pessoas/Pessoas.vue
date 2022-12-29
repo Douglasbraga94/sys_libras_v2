@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import PageTitle from "../tamplate/PageTitle.vue";
+import PageTitle from "../template/PageTitle.vue";
 import Alunos from "./alunos/Alunos.vue";
 import Interpretes from './CadInterpretes.vue'
 import Surdos from './CadSurdos.vue'

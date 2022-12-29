@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import PageTitle from '../tamplate/PageTitle.vue'
+import PageTitle from '../template/PageTitle.vue'
 import { baseApiUrl, showError } from '@/global'
 import axios from 'axios'
 import 'vue-good-table/dist/vue-good-table.css'

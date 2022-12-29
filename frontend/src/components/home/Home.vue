@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import PageTitle from '../tamplate/PageTitle.vue'
+import PageTitle from '../template/PageTitle.vue'
 import Stat from './Stat'
 
 export default {

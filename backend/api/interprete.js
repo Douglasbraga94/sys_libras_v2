@@ -86,5 +86,12 @@ module.exports = app => {
         }
     }
 
-     return {save, get, getById, remove, getInterpretesWhithComum}
+    const getState = async (req, res) => {
+        app.db('vw_interprete_situacao')
+            .select('codigo', 'nome', 'descricao','ativo')
+            .then(situacao => res.json(situacao))
+            .catch(err => res.status(500).send(err.message))
+    }
+
+     return {save, get, getById, remove, getInterpretesWhithComum, getState}
 }

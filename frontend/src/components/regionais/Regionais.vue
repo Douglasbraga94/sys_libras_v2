@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import PageTitle from "../tamplate/PageTitle.vue";
+import PageTitle from "../template/PageTitle.vue";
 import CadRegionais from './CadRegionais.vue'
 import CadAdministracoes from './CadAdministracoes.vue'
 import CadComuns from './CadComuns.vue'

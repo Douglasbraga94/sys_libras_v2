@@ -19,6 +19,7 @@
     "moment": "^2.29.3",
     "rxjs": "^7.5.5",
     "vue": "2.5.17",
+    "vue-form-wizard": "^0.8.4",
     "vue-good-table": "^2.21.11",
     "vue-gravatar": "1.2.1",
     "vue-mq": "0.2.1",

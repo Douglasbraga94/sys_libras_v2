@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import PageTitle from '../tamplate/PageTitle.vue'
+import PageTitle from '../template/PageTitle.vue'
 import { baseApiUrl, showError } from '@/global'
 import UserAdmin from './UserAdmin'
 import { mapState } from 'vuex'

@@ -12,7 +12,7 @@ module.exports = app =>{
         .all(app.config.passport.authenticate())
         .post(admin(app.api.user.save))
         .get(admin(app.api.user.get))
-    
+
     app.route('/usuario/:codigo')
         .all(app.config.passport.authenticate())
         .put(app.api.user.save)
@@ -22,11 +22,75 @@ module.exports = app =>{
     app.route('/perfil')
         .all(app.config.passport.authenticate())
         .get(admin(app.api.perfil.get))
-        
+
     app.route('/perfil/:codigo')
         .all(app.config.passport.authenticate())
         .get(admin(app.api.perfil.getById))
-    
+
+    app.route('/pessoa')
+        .all(app.config.passport.authenticate())
+        .get(app.api.pessoa.get)
+
+    app.route('/pessoa/:codigo')
+        .all(app.config.passport.authenticate())
+        .get(app.api.pessoa.getById)
+
+    app.route('/cidade')
+        .all(app.config.passport.authenticate())
+        .get(app.api.cidade.get)
+
+    app.route('/cidade/:codigo')
+        .all(app.config.passport.authenticate())
+        .get(app.api.cidade.getById)
+
+    app.route('/estado')
+        .all(app.config.passport.authenticate())
+        .get(app.api.estado.get)
+
+    app.route('/estado/:codigo')
+        .all(app.config.passport.authenticate())
+        .get(app.api.estado.getById)
+
+    app.route('/localidade')
+        .all(app.config.passport.authenticate())
+        .get(app.api.localidade.get)
+
+    app.route('/localidade/:codigo')
+        .all(app.config.passport.authenticate())
+        .get(app.api.localidade.getById)
+
+    app.route('/papel')
+        .all(app.config.passport.authenticate())
+        .get(app.api.papel.get)
+
+    app.route('/papel/:codigo')
+        .all(app.config.passport.authenticate())
+        .get(app.api.papel.getById)
+
+    app.route('/curso')
+        .all(app.config.passport.authenticate())
+        .get(app.api.curso.get)
+
+    app.route('/curso/:codigo')
+        .all(app.config.passport.authenticate())
+        .get(app.api.curso.getById)
+
+    app.route('/turma')
+        .all(app.config.passport.authenticate())
+        .get(app.api.turma.get)
+
+    app.route('/turma/:codigo')
+        .all(app.config.passport.authenticate())
+        .get(app.api.turma.getById)
+
+    app.route('/turmaSituacao')
+        .all(app.config.passport.authenticate())
+        .get(app.api.turma.getState)
+
+    app.route('/cartaEncaminhamento')
+        .all(app.config.passport.authenticate())
+        .get(app.api.turma.getLetterForwarding)
+
     app.route('/regional')
         .all(app.config.passport.authenticate())
         .post(app.api.regional.save)
@@ -41,10 +105,10 @@ module.exports = app =>{
     app.route('/interprete')
         .post(app.api.interprete.save)
         .get(app.api.interprete.get)
-        
+
     app.route('/interpreteComComum')
         .get(app.api.interprete.getInterpretesWhithComum)
-     
+
     app.route('/surdoComcomum')
         .get(app.api.surdo.getSurdosWhithComum)
 
@@ -56,16 +120,20 @@ module.exports = app =>{
 
     app.route('/GELGuaraComcomum')
         .get(app.api.GELGuara.getGELGuaraWhithComum)
-        
+
     app.route('/LetramentoComcomum')
         .get(app.api.Letramento.getLetramentoWhithComum)
-        
+
     app.route('/interprete/:id')
         .all(app.config.passport.authenticate())
         .put(app.api.interprete.save)
         .delete(app.api.interprete.remove)
         .get(app.api.interprete.getById)
-    
+
+    app.route('/interpreteSituacao')
+        .all(app.config.passport.authenticate())
+        .get(app.api.interprete.getState)
+
     app.route('/colaborador')
         .post(app.api.colaborador.save)
         .get(app.api.colaborador.get)
@@ -74,7 +142,11 @@ module.exports = app =>{
         .all(app.config.passport.authenticate())
         .put(app.api.colaborador.save)
         .delete(app.api.colaborador.remove)
-        .get(app.api.colaborador.getById) 
+        .get(app.api.colaborador.getById)
+
+    app.route('/colaboradorCompetencia')
+        .all(app.config.passport.authenticate())
+        .get(app.api.colaborador.getCompetence)
 
     app.route('/surdo')
         .post(app.api.surdo.save)
