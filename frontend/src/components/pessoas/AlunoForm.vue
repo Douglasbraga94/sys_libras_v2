@@ -1,69 +1,70 @@
 <template>
-    <b-card 
-        bg-variant="default"
-        border-variant="default"
-    >
-        <b-card-title v-if="pessoa.dataNascimento || pessoa.batizado">
+    <b-card bg-variant="default" border-variant="default" :title="local.nome">
+        <b-card-header v-if="pessoa.dataNascimento || pessoa.batizado">
             <b-badge pill variant="info" v-if="pessoa.dataNascimento">
                 {{ idadeInicioCurso }} ANOS
             </b-badge>&nbsp;
             <b-badge pill variant="info" v-if="pessoa.batizado">
                 BATIZADO
             </b-badge>
-        </b-card-title>
+        </b-card-header>
         <b-form-row>
             <b-col>
-                <b-form-group :id="'curso-grupo-' + turma.codigo" label="Curso:" :label-for="'curso-' + turma.codigo">
-                    <b-form-select :id="'curso-' + turma.codigo" v-model="turma.curso.codigo" :options="optionsCursos"
-                        name="curso" :disabled="mode === 'view' || mode === 'remove'">
-                    </b-form-select>
-                </b-form-group>
-            </b-col>
-            <b-col>
-                <b-form-group :id="'turma-grupo-' + turma.codigo" label="Turma:" :label-for="'turma-' + turma.codigo">
-                    <b-form-select :id="'turma-' + turma.codigo" v-model="turma.codigo" :options="optionsTurmas"
-                        name="turma" :disabled="mode === 'view' || mode === 'remove'">
-                    </b-form-select>
-                </b-form-group>
-            </b-col>
-            <b-col>
-                <b-form-group :id="'turma-situacao-grupo-' + turma.codigo" label="Situação:"
-                    :label-for="'turma-situacao-' + turma.codigo">
-                    <b-form-select :id="'turma-situacao-' + turma.codigo" v-model="turma.situacao.codigo"
-                        :options="optionsSituacoesTurma" name="turma-situacao-grupo"
+                <b-form-group :id="'curso-grupo-' + local.codigo" label="Curso:" :label-for="'curso-' + local.codigo">
+                    <b-form-select :id="'curso-' + local.codigo" :value="local.curso.codigo"
+                        @input="update('curso.codigo', $event)" :options="optionsCursos" name="curso"
                         :disabled="mode === 'view' || mode === 'remove'">
+                    </b-form-select>
+                </b-form-group>
+            </b-col>
+            <b-col>
+                <b-form-group :id="'turma-grupo-' + local.codigo" label="Turma:" :label-for="'turma-' + local.codigo">
+                    <b-form-select :id="'turma-' + local.codigo" :value="local.codigo" @input="update('codigo', $event)"
+                        :options="optionsTurmas" name="turma" :disabled="mode === 'view' || mode === 'remove'">
+                    </b-form-select>
+                </b-form-group>
+            </b-col>
+            <b-col>
+                <b-form-group :id="'turma-situacao-grupo-' + local.codigo" label="Situação:"
+                    :label-for="'turma-situacao-' + local.codigo">
+                    <b-form-select :id="'turma-situacao-' + local.codigo" :value="local.situacao.codigo"
+                        @input="update('situacao.codigo', $event)" :options="optionsSituacoesTurma"
+                        name="turma-situacao-grupo" :disabled="mode === 'view' || mode === 'remove'">
                     </b-form-select>
                 </b-form-group>
             </b-col>
         </b-form-row>
         <b-form-row>
             <b-col>
-                <b-form-group :id="'carta-encaminhamento-grupo-' + turma.codigo" label="Carta de Encaminhamento:"
-                    :label-for="'carta-encaminhamento-' + turma.codigo">
-                    <b-form-select :id="'carta-encaminhamento-' + turma.codigo"
-                        v-model="turma.cartaEncaminhamento.codigo" :options="optionsEncaminhamentosCarta"
-                        name="carta-encaminhamento" :disabled="mode === 'view' || more === 'remove'"></b-form-select>
+                <b-form-group :id="'carta-encaminhamento-grupo-' + local.codigo" label="Carta de Encaminhamento:"
+                    :label-for="'carta-encaminhamento-' + local.codigo">
+                    <b-form-select :id="'carta-encaminhamento-' + local.codigo" :value="local.cartaEncaminhamento.codigo"
+                        @input="update('cartaEncaminhamento.codigo', $event)" :options="optionsEncaminhamentosCarta"
+                        name="carta-encaminhamento" :disabled="mode === 'view' || mode === 'remove'"></b-form-select>
                 </b-form-group>
             </b-col>
             <b-col>
-                <b-form-group :id="'data-matricula-grupo' + turma.codigo" label="Data da Matricula:" label-for="data-matricula">
-                    <b-form-input :id="'data-matricula' + turma.codigo" type="date" :readonly="mode === 'view' || mode === 'remove'"
-                        v-model.trim="turma.dataMatricula"></b-form-input>
+                <b-form-group :id="'data-matricula-grupo' + local.codigo" label="Data da Matricula:"
+                    label-for="data-matricula">
+                    <b-form-input :id="'data-matricula' + local.codigo" :value="local.dataHoraMatricula"
+                        @input="update('dataHoraMatricula', $event)" type="date"
+                        :readonly="mode === 'view' || mode === 'remove'"></b-form-input>
                 </b-form-group>
             </b-col>
             <b-col>
-                <b-form-group :id="'data-teste-grupo' + turma.codigo" label="Data do Teste:" label-for="data-teste">
-                    <b-form-input :id="'data-teste' + turma.codigo" type="date" :readonly="mode === 'view' || mode === 'remove'"
-                        v-model.trim="turma.dataTeste"></b-form-input>
+                <b-form-group :id="'data-teste-grupo' + local.codigo" label="Data do Teste:" label-for="data-teste">
+                    <b-form-input :id="'data-teste' + local.codigo" :value="local.dataTeste"
+                        @input="update('dataTeste', $event)" type="date"
+                        :readonly="mode === 'view' || mode === 'remove'"></b-form-input>
                 </b-form-group>
             </b-col>
         </b-form-row>
         <b-form-row>
             <b-col md="12" sm="12">
-                <b-form-group :id="'observacoes-grupo' + turma.codigo" label="Observações:" label-for="observacoes">
-                    <b-form-textarea :id="'observacoes' + turma.codigo" placeholder="Observações Gerais" type="text"
-                        v-model.trim="turma.observacao" :readonly="mode === 'view' || mode === 'remove'"
-                        class="observacoes">
+                <b-form-group :id="'observacoes-grupo' + local.codigo" label="Observações:" label-for="observacoes">
+                    <b-form-textarea :id="'observacoes' + local.codigo" :value="local.observacao"
+                        @input="update('observacao', $event)" placeholder="Observações Gerais" type="text"
+                        :readonly="mode === 'view' || mode === 'remove'" class="observacoes">
                     </b-form-textarea>
                 </b-form-group>
             </b-col>
@@ -72,12 +73,35 @@
 </template>
 
 <script>
-import { CURSO } from '@/enums'
+import { CURSO, CARTA_ENCAMINHAMENTO, TURMA_SITUACAO } from '@/enums'
 import moment from 'moment';
+import { cloneDeep, tap, set } from 'lodash'
 
 export default {
     name: 'AlunoForm',
-    props: ['turma', 'cursos', 'turmas', 'situacoesTurma', 'encaminhamentosCarta', 'mode', 'pessoa'],
+    props: {
+        value: {
+            Type: Object
+        },
+        cursos: {
+            Type: Array
+        },
+        turmas: {
+            Type: Array
+        },
+        situacoesTurma: {
+            Type: Array
+        },
+        encaminhamentosCarta: {
+            Type: Array
+        },
+        mode: {
+            Type: String
+        },
+        pessoa: {
+            Type: Object
+        }
+    },
     data() {
         return {
             optionsEncaminhamentosCarta: [],
@@ -86,11 +110,32 @@ export default {
             optionsSituacoesTurma: [],
         }
     },
+    computed: {
+        local() {
+            let carta = this.encaminhamentosCarta.filter(carta => carta.codigo === CARTA_ENCAMINHAMENTO.PENDENTE)[0]
+            let curso = this.cursos.filter(curso => curso.codigo === CURSO.GEL)[0]
+            let situacao = this.situacoesTurma.filter(situacao => situacao.codigo === TURMA_SITUACAO.EM_ANDAMENTO)[0]
+            return (this.value && Object.keys(this.value).length > 0) ? this.value : {
+                ativo: true,
+                cartaEncaminhamento: carta,
+                codigo: null,
+                curso: curso,
+                dataHoraMatricula: new Date().toISOString().substr(0, 10),
+                dataTeste: null,
+                situacao: situacao
+            };
+        },
+        idadeInicioCurso() {
+            if (this.pessoa.dataNascimento) {
+                return moment(String(this.local.dataInicio))
+                    .diff(this.pessoa.dataNascimento, 'years')
+            }
+        }
+    },
     methods: {
         dateFormat: function (date) {
             return moment(String(date)).format('DD/MM/YYYY');
         },
-
         fillOptionsCursos() {
             this.optionsCursos = []
             this.cursos.forEach(curso => {
@@ -100,7 +145,7 @@ export default {
         },
         fillOptionsTurmas() {
             this.optionsTurmas = []
-            const turmasCurso = this.turmas.filter(turma => turma.codigoCurso == this.turma.curso.codigo)
+            const turmasCurso = this.turmas.filter(turma => turma.codigoCurso == this.local.curso.codigo)
             turmasCurso.forEach(turma => {
                 if (turma.codigoCurso != CURSO.ATUALIZACAO)
                     this.optionsTurmas.push({ value: turma.codigo, text: turma.nome, disabled: !turma.ativo })
@@ -115,30 +160,50 @@ export default {
             this.optionsEncaminhamentosCarta = []
             this.encaminhamentosCarta.forEach(carta => this.optionsEncaminhamentosCarta.push({ value: carta.codigo, text: carta.nome, disabled: !carta.ativo }))
         },
+        update(key, value) {
+            this.$emit("input", tap(cloneDeep(this.local), v => set(v, key, value)))
+        }
     },
     mounted() {
+        console.log("mounted")
         this.fillOptionsCursos()
         this.fillOptionsTurmas()
         this.fillOptionsSituacoesTurma()
         this.fillOptionsEncaminhamentosCarta()
     },
-    computed: {
-        idadeInicioCurso() {
-            if(this.pessoa.dataNascimento) {
-                return moment(String(this.turma.dataInicio))
-                    .diff(this.pessoa.dataNascimento, 'years')
-            }
-        }
-    },
     watch: {
-        'turma.curso.codigo': function (newVal) {
+        'local.curso.codigo': function (newVal) {
+            console.log('watch: local.curso.codigo')
             this.fillOptionsTurmas()
+            let curso = this.cursos.filter(curso => curso.codigo === newVal)[0]
+            this.local.curso.ativo = curso.ativo
+            this.local.curso.cargaHoraria = curso.cargaHoraria
+            this.local.curso.nome = curso.nome
+            this.local.curso.sigla = curso.sigla
+        },
+        'local.codigo': function (newVal) {
+            console.log('watch: local.codigo')
+            let turma = this.turmas.filter(tur => tur.codigo === newVal)[0]
+            this.local.ativo = turma.ativo
+            this.local.nome = turma.nome
+            this.local.dataInicio = turma.dataInicio
+            this.local.dataTermino = turma.dataTermino
+        },
+        'local.situacao.codigo': function (newVal) {
+            console.log('watch: local.situacao.codigo')
+            let situacao = this.situacoesTurma.filter(situacao => situacao.codigo === newVal)[0]
+            this.local.situacao.ativo = situacao.ativo
+            this.local.situacao.nome = situacao.nome
+        },
+        'local.cartaEncaminhamento.codigo': function (newVal) {
+            console.log('watch: local.cartaEncaminhamento.codigo')
+            let carta = this.encaminhamentosCarta.filter(carta => carta.codigo === newVal)[0]
+            this.local.cartaEncaminhamento.ativo = carta.ativo
+            this.local.cartaEncaminhamento.nome = carta.nome
         }
     }
 
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

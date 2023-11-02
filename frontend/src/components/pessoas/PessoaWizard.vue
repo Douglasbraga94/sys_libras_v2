@@ -34,16 +34,14 @@
                                             <b-col md="4" sm="12">
                                                 <b-form-group id="telefone1-grupo" label="Telefone Principal:"
                                                     label-for="telefone1">
-                                                    <b-form-input id="telefone1" type="text"
-                                                        v-model.trim="pessoa.telefone1"
+                                                    <b-form-input id="telefone1" type="text" v-model.trim="pessoa.telefone1"
                                                         :readonly="mode === 'view' || mode === 'remove'"></b-form-input>
                                                 </b-form-group>
                                             </b-col>
                                             <b-col md="4" sm="12">
                                                 <b-form-group id="telefone2-grupo" label="Telefone Secundário:"
                                                     label-for="telefone2">
-                                                    <b-form-input id="telefone2" type="text"
-                                                        v-model.trim="pessoa.telefone2"
+                                                    <b-form-input id="telefone2" type="text" v-model.trim="pessoa.telefone2"
                                                         :readonly="mode === 'view' || mode === 'remove'"></b-form-input>
                                                 </b-form-group>
                                             </b-col>
@@ -58,8 +56,7 @@
                                         </b-form-row>
                                         <b-form-row>
                                             <b-col md="4" sm="12">
-                                                <b-form-group id="batizado-grupo" label="Batizado:"
-                                                    label-for="batizado">
+                                                <b-form-group id="batizado-grupo" label="Batizado:" label-for="batizado">
                                                     <b-form-radio-group id="batizado" name="batizado"
                                                         v-model="pessoa.batizado"
                                                         :disabled="mode === 'view' || mode === 'remove'">
@@ -126,16 +123,16 @@
                                                                     triggers="hover">
                                                                     <strong>{{ localidade.ADM }}</strong>
                                                                     <span v-if="localidade.central"><br>{{
-                                                                            localidade.central
+                                                                        localidade.central
                                                                     }}</span>
                                                                     <span v-if="localidade.endereco"><br>{{
-                                                                            localidade.endereco
+                                                                        localidade.endereco
                                                                     }}</span>
                                                                     <span v-if="localidade.complemento"><br>{{
-                                                                            localidade.complemento
+                                                                        localidade.complemento
                                                                     }}</span>
                                                                     <span v-if="localidade.diasCultosConcatenado"><br>{{
-                                                                            localidade.diasCultosConcatenado
+                                                                        localidade.diasCultosConcatenado
                                                                     }}</span>
                                                                 </b-tooltip>
                                                             </b-col>
@@ -184,11 +181,11 @@
                                         label-class="font-weight-bold pt-0" class="mb-0">
                                         <b-form-row>
                                             <b-col md="12" sm="12">
-                                                <AlunoForm v-for="turma in pessoa.turmas" :key="turma.codigo"
-                                                    :turma="turma" :cursos="cursos" :turmas="turmas"
+                                                <AlunoForm v-for="(turma, i) in pessoa.turmas" :key="turma.codigo"
+                                                    v-model="pessoa.turmas[i]" :cursos="cursos" :turmas="turmas"
                                                     :situacoesTurma="situacoesTurma"
-                                                    :encaminhamentosCarta="encaminhamentosCarta" :mode="mode" 
-                                                    :pessoa = "dadosCadastrais"/>
+                                                    :encaminhamentosCarta="encaminhamentosCarta" :mode="mode"
+                                                    :pessoa="dadosCadastrais" />
                                             </b-col>
                                         </b-form-row>
                                     </b-form-group>
@@ -203,18 +200,10 @@
                                     <b-form-group label="Dados do Colaborador" label-size="lg"
                                         label-class="font-weight-bold pt-0" class="mb-0">
                                         <b-form-row>
-                                            <b-col md="6" sm="12">
-                                                <b-form-group id="colaborador-competencia-grupo" label="Competência:"
-                                                    label-for="colaborador-competencia">
-                                                    <b-form-select id="colaborador-competencia"
-                                                        v-model="pessoa.colaborador.competencia.codigo"
-                                                        :options="optionsCompetenciasColaborador"
-                                                        name="colaborador-competencia-grupo"
-                                                        :disabled="mode === 'view' || mode === 'remove'">
-                                                    </b-form-select>
-                                                </b-form-group>
+                                            <b-col md="12" sm="12">
+                                                <ColaboradorForm v-model="pessoa.colaborador"
+                                                    :competenciasColaborador="competenciasColaborador" :mode="mode" />
                                             </b-col>
-                                            <b-col md="6" sm="12"></b-col>
                                         </b-form-row>
                                     </b-form-group>
                                 </b-card>
@@ -228,39 +217,9 @@
                                     <b-form-group label="Dados do Intérprete" label-size="lg"
                                         label-class="font-weight-bold pt-0" class="mb-0">
                                         <b-form-row>
-                                            <b-col md="6" sm="12">
-                                                <b-form-group id="interprete-situacao-grupo" label="Situação:"
-                                                    label-for="interprete-situacao"
-                                                    v-b-tooltip.hover.top="situacaoInterpreteSelected.descricao">
-                                                    <b-form-select id="interprete-situacao"
-                                                        v-model="pessoa.interprete.situacao.codigo"
-                                                        :options="optionsSituacoesInterprete"
-                                                        name="interprete-situacao-grupo"
-                                                        :disabled="mode === 'view' || mode === 'remove'">
-                                                    </b-form-select>
-                                                </b-form-group>
-                                            </b-col>
-                                            <b-col md="6" sm="12">
-                                                <b-form-group id="data-oficializacao-grupo"
-                                                    label="Data de Oficialização:" label-for="data-oficializacao">
-                                                    <b-form-input id="data-oficializacao" type="date"
-                                                        :readonly="mode === 'view' || mode === 'remove'"
-                                                        v-model.trim="pessoa.interprete.dataOficializacao"></b-form-input>
-                                                </b-form-group>
-                                            </b-col>
-                                        </b-form-row>
-                                        <b-form-row>
                                             <b-col md="12" sm="12">
-                                                <b-form-group v-if="showJustificativa"
-                                                    id="interprete-situacao-justificativa-grupo" label="Justificativa:"
-                                                    label-for="interprete-situacao-justificativa">
-                                                    <b-form-textarea id="interprete-situacao-justificativa"
-                                                        placeholder="Justificativa" type="text"
-                                                        v-model.trim="pessoa.interprete.justificativa"
-                                                        :readonly="mode === 'view' || mode === 'remove'"
-                                                        class="observacoes" required>
-                                                    </b-form-textarea>
-                                                </b-form-group>
+                                                <InterpreteForm v-model="pessoa.interprete"
+                                                    :situacoesInterprete="situacoesInterprete" :mode="mode" />
                                             </b-col>
                                         </b-form-row>
                                     </b-form-group>
@@ -278,7 +237,7 @@
             <hr>
             <div v-show="!isEdit" :class="{ 'tabela_hide': !isMenuVisible, 'tabela': isMenuVisible }">
                 <div class="card-header">
-                    <h3>Pessoas Regional Brasília
+                    <h3>{{ tituloGrid }}
                         <button type="button" @click="isEdit = true" class="btn btn-outline-info btn-lg" v-if="isAdmin">
                             <i class="fa fa-plus-circle"></i>
                         </button>
@@ -287,11 +246,10 @@
                             <i class="fa fa-id-card"></i>
                         </button>
                         <span>&nbsp;</span>
-                        <BotaoDownloadExcel :dados="dadosPlanilha" planilha="Pessoas"
-                            arquivo="Controle de Pessoas de LIBRAS.xlsx" />
+                        <BotaoDownloadExcel :dados="dadosPlanilha" :planilha="nomePlanilha" :arquivo="nomeArquivoExcel" />
                     </h3>
                 </div>
-                <div>
+                <div class="table-responsive">
                     <Cracha ref="cracha" v-on:complete="onCompleteExport"></Cracha>
                     <vue-good-table :pagination-options="{
                         enabled: true,
@@ -310,8 +268,8 @@
                         ofLabel: 'de',
                         pageLabel: 'Página', // for 'pages' mode
                         allLabel: 'Todas',
-                    }" ref="pessoas" @on-selected-rows-change="selectionChanged" :columns="columns" :rows="pessoas"
-                        :select-options="{
+                    }" ref="pessoas" @on-selected-rows-change="selectionChanged" :columns="columns"
+                        :rows="pessoasFiltradas" :select-options="{
                             enabled: true,
                             selectionText: 'Linhas selecionadas',
                             disableSelectInfo: true
@@ -328,8 +286,8 @@
                                     @click="loadPessoa(data.row, 'view')" class="mr-2 botoes">
                                     <i class="fa fa-eye"></i>
                                 </b-button>
-                                <b-button v-b-tooltip.hover title="Editar" variant="warning"
-                                    @click="loadPessoa(data.row)" class="mr-2 botoes" v-if="isAdmin">
+                                <b-button v-b-tooltip.hover title="Editar" variant="warning" @click="loadPessoa(data.row)"
+                                    class="mr-2 botoes" v-if="isAdmin">
                                     <i class="fa fa-pencil"></i>
                                 </b-button>
                                 <b-button v-b-tooltip.hover title="Excluir" variant="danger"
@@ -358,17 +316,24 @@ import { FormWizard, TabContent } from 'vue-form-wizard'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 import { baseApiUrl, showError } from '@/global'
 import axios from 'axios'
-import { PAPEL, INTERPRETE_SITUACAO, CURSO } from '@/enums'
+import { PAPEL } from '@/enums'
 import moment from 'moment';
 import { VueGoodTable } from 'vue-good-table'
 import Cracha from '../template/Cracha.vue'
 import { mapState } from 'vuex'
 import BotaoDownloadExcel from '../exportacao/BotaoDownloadExcel.vue'
 import AlunoForm from './AlunoForm.vue'
+import ColaboradorForm from './ColaboradorForm.vue'
+import InterpreteForm from './InterpreteForm.vue'
 
 export default {
     name: 'PessoaWizard',
-    components: { FormWizard, TabContent, VueGoodTable, Cracha, BotaoDownloadExcel, AlunoForm },
+    components: { FormWizard, TabContent, VueGoodTable, Cracha, BotaoDownloadExcel, AlunoForm, ColaboradorForm, InterpreteForm },
+    props: {
+        filtros: {
+            Type: Object
+        }
+    },
     data() {
         return {
             estados: [],
@@ -388,10 +353,10 @@ export default {
             optionsCidades: [],
             optionsLocalidades: [],
             optionsPapeis: [],
-            optionsSituacoesInterprete: [],
-            optionsCompetenciasColaborador: [],
+            mode: 'save',
             isEdit: false,
             selectionChanged: [],
+            PapelEnum: PAPEL,
             columns: [
                 { label: 'Código', field: 'codigo', },
                 // { label: 'Batizado?', field: 'batizado',},
@@ -406,22 +371,71 @@ export default {
     computed: {
         dadosPlanilha() {
             const dados = []
-            // this.surdos.forEach((obj) => {
-            //     let surdo = {}
-            //     surdo['Id Surdo'] = obj.id;
-            //     surdo['Código'] = obj.codigo
-            //     surdo['Nome'] = obj.nome;
-            //     surdo['Telefone Principal'] = obj.telefone1;
-            //     surdo['Telefone Secundário'] = obj.telefone2;
-            //     surdo['E-mail'] = obj.email;
-            //     surdo['Batizado?'] = obj.batismo;
-            //     surdo['Setor - Comum'] = obj.comum;
-            //     surdo['ADM - Administração'] = obj.administracao;
-            //     surdo['RA - Regional Administrativa'] = obj.regional;
-            //     surdo['Observação'] = obj.observacao;
-            //     dados.push(surdo);
-            // })
+            this.pessoasFiltradas.forEach(pessoa => {
+                let excel = {}
+                let turmaPessoa = this.filtros.turma ? pessoa.turmas.filter(turma => turma.codigo === this.filtros.turma.codigo)[0] : {}
+
+                excel['Codigo'] = pessoa.codigo || ""
+                excel['Nome'] = pessoa.nome || ""
+                excel['Papel Principal'] = pessoa.papel.nome || ""
+                excel['Telefone Principal'] = pessoa.telefone1 || ""
+                excel['Telefone Secundário'] = pessoa.telefone2 || ""
+                excel['E-mail'] = pessoa.email || ""
+                if (this.filtros.turma) {
+                    excel['Turma'] = turmaPessoa.nome
+                    excel['Idade de Inicio do curso'] = this.idadeInicioCurso(pessoa, turmaPessoa) || ""
+                    excel['Carta de Encaminhamento'] = turmaPessoa.cartaEncaminhamento.nome || ""
+                    excel['Status'] = turmaPessoa.situacao.nome || ""
+                    excel['Data da Matrícula'] = this.dateFormat(turmaPessoa.dataHoraMatricula) || ""
+                }
+                excel['Data de Nascimento'] = this.dateFormat(pessoa.dataNascimento) || ""
+                excel['Batizado?'] = pessoa.ehBatizado || ""
+                excel['Data de Batismo'] = this.dateFormat(pessoa.dataBatismo) || ""
+                excel['Comum Congregação'] = pessoa.comum || ""
+                excel['ADM'] = pessoa.localidade.ADM || ""
+                excel['Cidade/UF'] = (pessoa.localidade.cidade + "/" + pessoa.localidade.uf) || ""
+                excel['Localidade'] = pessoa.localidade.nome || ""
+                if(this.filtros.papel) {
+                    switch(this.filtros.papel.codigo) {
+                        case this.PapelEnum.COLABORADOR: 
+                            excel['Competência'] = pessoa.colaborador.competencia.nome || ""
+                            break
+                        case this.PapelEnum.INTERPRETE:
+                            excel['Data de Oficialização'] = this.dateFormat(pessoa.interprete.dataOficializacao) || ""
+                            excel['Situação'] = pessoa.interprete.situacao.nome || ""
+                            excel['Justificativa'] = pessoa.interprete.justificativa || ""
+                            break
+                    }
+                }
+                if(this.filtros.turma) {
+                    excel['Observações do Curso'] = turmaPessoa.observacao || ""
+                } else {
+                    excel['Observações Gerais'] = pessoa.observacao || ""
+                }
+                dados.push(excel)
+            })
             return dados
+        },
+        nomeArquivoExcel() {
+
+            let arquivoExcel = null;
+
+            if(this.filtros.papel) {
+                switch (this.filtros.papel.codigo) {
+                    case this.PapelEnum.ALUNO: 
+                        arquivoExcel = ((this.filtros.turma) ? this.filtros.turma.curso + " - " + this.filtros.turma.nome + " - " + this.filtros.papel.plural  : this.filtros.papel.plural)+ ".xlsx"
+                        break
+                    default:
+                        arquivoExcel = this.filtros.papel.plural + " Regional Brasília.xlsx"
+                }
+            } else {
+                arquivoExcel = "Pessoas Regional Brasília.xlsx"
+            }
+            console.log(arquivoExcel)
+            return arquivoExcel
+        },
+        nomePlanilha() {
+            return (this.filtros.papel) ? this.filtros.papel.plural : "Pessoas"
         },
         codigosPapeisSelected() {
             let codigosPapeisFiltered = []
@@ -431,21 +445,13 @@ export default {
             return codigosPapeisFiltered
         },
         showTabAluno() {
-            return this.codigosPapeisSelected.includes(PAPEL.ALUNO)
+            return this.codigosPapeisSelected.includes(this.PapelEnum.ALUNO)
         },
         showTabColaborador() {
-            return this.codigosPapeisSelected.includes(PAPEL.COLABORADOR)
+            return this.codigosPapeisSelected.includes(this.PapelEnum.COLABORADOR)
         },
         showTabInterprete() {
-            return this.codigosPapeisSelected.includes(PAPEL.INTERPRETE)
-        },
-        situacaoInterpreteSelected() {
-            if (this.pessoa.interprete)
-                return this.situacoesInterprete.filter(situacao => situacao.codigo == this.pessoa.interprete.situacao.codigo)[0]
-        },
-        showJustificativa() {
-            if (this.pessoa.interprete)
-                return this.pessoa.interprete.situacao.codigo == INTERPRETE_SITUACAO.DIVERSOS
+            return this.codigosPapeisSelected.includes(this.PapelEnum.INTERPRETE)
         },
         dadosCadastrais() {
             if (this.pessoa) {
@@ -460,6 +466,38 @@ export default {
             }
 
         },
+        pessoasFiltradas() {
+            if (!this.filtros.papel) {
+                return this.pessoas
+            } else {
+                const pessoas = this.pessoas.filter((pessoa) => {
+                    if (this.filtros.papel && this.filtros.turma) {
+                        return pessoa.papeis.find(papel => papel.codigo === this.filtros.papel.codigo) && pessoa.turmas.find(turma => turma.codigo === this.filtros.turma.codigo)
+                    } else {
+                        return pessoa.papeis.find(papel => papel.codigo === this.filtros.papel.codigo)
+                    }
+                })
+                return pessoas
+            }
+        },
+        tituloGrid() {
+            let titulo = ""
+            if(this.filtros.papel) {
+
+                switch (this.filtros.papel.codigo) {
+                    case this.PapelEnum.ALUNO:
+                        // titulo = this.filtros.turma + " - " + this.filtros.papel
+                        titulo = this.filtros.turma.curso + ' - ' + this.filtros.turma.nome
+                        break
+                    default:
+                        titulo = this.filtros.papel.plural + " Regional Brasília"
+                }
+            }  else {
+                titulo = "Pessoas Regional Brasília"
+            }
+
+            return titulo
+        },
         ...mapState(['isAdmin', 'isMenuVisible'])
     },
     methods: {
@@ -467,6 +505,8 @@ export default {
             this.selected = items
         },
         dateFormat: function (date) {
+            if(date === undefined || date === null || date == '')
+                return ''
             return moment(String(date)).format('DD/MM/YYYY');
         },
         reset() {
@@ -567,14 +607,12 @@ export default {
             const url = `${baseApiUrl}/interpreteSituacao`
             await axios.get(url).then(res => {
                 this.situacoesInterprete = res.data
-                this.fillOptionsSituacoesInterprete()
             })
         },
         async loadCompetenciasColaborador() {
             const url = `${baseApiUrl}/colaboradorCompetencia`
             await axios.get(url).then(res => {
                 this.competenciasColaborador = res.data
-                this.fillOptionsCompetenciasColaborador()
             })
         },
 
@@ -630,28 +668,27 @@ export default {
             this.optionsPapeis = []
             this.papeis.forEach(papel => this.optionsPapeis.push({ value: papel.codigo, text: papel.nome }))
         },
-        fillOptionsSituacoesInterprete() {
-            this.optionssituacoesInterprete = []
-            this.situacoesInterprete.forEach(situacao => this.optionsSituacoesInterprete.push({ value: situacao.codigo, text: situacao.nome, disabled: !situacao.ativo }))
-        },
-        fillOptionsCompetenciasColaborador() {
-            this.optionsCompetenciasColaborador = []
-            this.competenciasColaborador.forEach(competencia => this.optionsCompetenciasColaborador.push({ value: competencia.codigo, text: competencia.nome, disabled: !competencia.ativo }))
-        },
+
         setTabsWizard(codigosPapeis) {
-            this.showTabAluno = codigosPapeis.includes(PAPEL.ALUNO)
-            this.showTabColaborador = codigosPapeis.includes(PAPEL.COLABORADOR)
-            this.showTabInterprete = codigosPapeis.includes(PAPEL.INTERPRETE)
+            this.showTabAluno = codigosPapeis.includes(this.PapelEnum.ALUNO)
+            this.showTabColaborador = codigosPapeis.includes(this.PapelEnum.COLABORADOR)
+            this.showTabInterprete = codigosPapeis.includes(this.PapelEnum.INTERPRETE)
         },
         isBaptized(batizado) {
             return (batizado ? 'Sim' : 'Não')
         },
         setComum(localidade) {
             return localidade.ADM.replace(' - ', '/') + ' - ' + localidade.cidade + '/' + localidade.uf + ' - ' + localidade.nome
-        }
+        },
+        idadeInicioCurso(pessoa, turma) {
+            if (pessoa.dataNascimento && turma) {
+                return moment(String(turma.dataInicio))
+                    .diff(pessoa.dataNascimento, 'years')
+            }
+        },
 
     },
-    async mounted() {
+    async created() {
         await this.loadPessoas()
         await this.loadEstados()
         await this.loadCidades()

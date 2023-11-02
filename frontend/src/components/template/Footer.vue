@@ -1,6 +1,6 @@
 <template>
     <footer class="footer">
-         <span> <strong>CCB</strong> © 2022</span>
+         <span> <strong>CCB</strong> © {{new Date().getFullYear()}}</span>
     </footer>
 </template>
 

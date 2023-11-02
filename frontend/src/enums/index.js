@@ -34,3 +34,9 @@ export const TURMA_SITUACAO = Object.freeze({
     "DESISTENTE" : 3,
     "APROVADO" : 4
 })
+
+export const CARTA_ENCAMINHAMENTO = Object.freeze({
+    "ASSINADA"  : 1, 
+    "PENDENTE" : 2, 
+    "NAO_APLICAVEL" : 3
+})

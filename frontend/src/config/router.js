@@ -29,7 +29,7 @@ const routes = [{
 {
     name: 'pessoas',
     path: '/pessoas',
-    component: PessoaWizard
+    component: Pessoas
 },
 {
     name: 'auth',
