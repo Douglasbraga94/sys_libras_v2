@@ -30,7 +30,7 @@ export default {
     computed: {
         local() {
             const competencia = this.competenciasColaborador.filter(competencia => competencia.codigo === COLABORADOR_COMPETENCIA.ENSINO)[0]
-            return this.value ? this.value : {
+            return this.value && Object.keys(this.value).length > 0 ? this.value : {
                 ativo: true, 
                 competencia: {
                     ativo: competencia.ativo, 
@@ -51,6 +51,7 @@ export default {
     }, 
     mounted() {
         this.fillOptionsCompetenciasColaborador()
+        this.update('competencia.codigo', this.local.competencia.codigo)
     },
     watch: {
         'local.competencia.codigo': function (newVal) {

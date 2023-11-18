@@ -72,8 +72,8 @@
                                                         <b-form-radio-group id="batizado" name="batizado"
                                                             v-model="pessoa.batizado"
                                                             :disabled="mode === 'view' || mode === 'remove'">
-                                                            <b-form-radio value="true">Sim</b-form-radio>
-                                                            <b-form-radio value="false">Não</b-form-radio>
+                                                            <b-form-radio :value="true">Sim</b-form-radio>
+                                                            <b-form-radio :value="false">Não</b-form-radio>
                                                         </b-form-radio-group>
                                                     </b-form-group>
                                                 </b-col>
@@ -91,8 +91,8 @@
                                                         <b-form-radio-group id="curso-externo-libras"
                                                             name="curso-externo-libras" v-model="pessoa.cursoExternoLibras"
                                                             :disabled="mode === 'view' || mode === 'remove'">
-                                                            <b-form-radio value="true">Sim</b-form-radio>
-                                                            <b-form-radio value="false">Não</b-form-radio>
+                                                            <b-form-radio :value="true">Sim</b-form-radio>
+                                                            <b-form-radio :value="false">Não</b-form-radio>
                                                         </b-form-radio-group>
                                                     </b-form-group>
                                                 </b-col>
@@ -107,7 +107,7 @@
                                                                     <b-form-group id="estado-grupo" label="Estado:"
                                                                         label-for="estado">
                                                                         <b-form-select id="estado"
-                                                                            v-model="pessoa.localidade.codigoEstado"
+                                                                            v-model="codigoEstadoSelected"
                                                                             :options="optionsEstados"
                                                                             :disabled="mode === 'view' || mode === 'remove'">
                                                                         </b-form-select>
@@ -117,7 +117,7 @@
                                                                     <b-form-group id="cidade-grupo" label="Cidade:"
                                                                         label-for="cidade">
                                                                         <b-form-select id="cidade"
-                                                                            v-model="pessoa.localidade.codigoCidade"
+                                                                            v-model="codigoCidadeSelected"
                                                                             :options="optionsCidades"
                                                                             :disabled="mode === 'view' || mode === 'remove'">
                                                                         </b-form-select>
@@ -127,12 +127,12 @@
                                                                     <b-form-group id="localidade-grupo" label="Localidade:"
                                                                         label-for="localidade">
                                                                         <b-form-select id="localidade"
-                                                                            v-model="pessoa.localidade.codigo"
+                                                                            v-model="codigoLocalidadeSelected"
                                                                             :options="optionsLocalidades"
                                                                             :disabled="mode === 'view' || mode === 'remove'"></b-form-select>
                                                                     </b-form-group>
                                                                     <b-tooltip target="localidade-grupo" placement="top"
-                                                                        triggers="hover">
+                                                                        triggers="hover" v-if="showComum">
                                                                         <strong>{{ localidade.ADM }}</strong>
                                                                         <span v-if="localidade.central"><br>{{
                                                                             localidade.central
@@ -276,6 +276,8 @@
                 </div>
                 <b-row>
                     <b-col xs="12">
+                        <b-button variant="primary" v-if="mode === 'save'" @click="save">Salvar</b-button>
+                        <b-button variant="danger" v-if="mode === 'remove'" @click="remove">Excluir</b-button>
                         <b-button class="ml-2" @click="reset">Cancelar</b-button>
                     </b-col>
                 </b-row>
@@ -284,7 +286,7 @@
             <div v-show="!isEdit" :class="{ 'tabela_hide': !isMenuVisible, 'tabela': isMenuVisible }">
                 <div class="card-header">
                     <h3>{{ tituloGrid }}
-                        <button type="button" @click="isEdit = true" class="btn btn-outline-info btn-lg" v-if="isAdmin">
+                        <button type="button" @click="isEdit = true" class="btn btn-outline-info btn-lg" v-if="canEdit">
                             <i class="fa fa-plus-circle"></i>
                         </button>
                         <span>&nbsp;</span>
@@ -322,6 +324,10 @@
                         }" :search-options="{ enabled: true, placeholder: 'Procurar...', }"
                         styleClass="vgt-table striped hover">
 
+                        <div slot="emptystate" class="semdados">
+                            Não há dados a serem exibidos.
+                        </div>
+
                         <template slot="table-row" slot-scope="data">
                             <span v-if="data.column.field == 'actions'">
                                 <b-button v-b-tooltip.hover title="Imprimir Crachá" variant="primary"
@@ -333,11 +339,11 @@
                                     <i class="fa fa-eye"></i>
                                 </b-button>
                                 <b-button v-b-tooltip.hover title="Editar" variant="warning" @click="loadPessoa(data.row)"
-                                    class="mr-2 botoes" v-if="isAdmin">
+                                    class="mr-2 botoes" v-if="canEdit">
                                     <i class="fa fa-pencil"></i>
                                 </b-button>
                                 <b-button v-b-tooltip.hover title="Excluir" variant="danger"
-                                    @click="loadPessoa(data.row, 'remove')" class="mr-2 botoes" v-if="isAdmin">
+                                    @click="loadPessoa(data.row, 'remove')" class="mr-2 botoes" v-if="canEdit">
                                     <i class="fa fa-trash"></i>
                                 </b-button>
                             </span>
@@ -360,7 +366,7 @@
 <script>
 import { baseApiUrl, showError } from '@/global'
 import axios from 'axios'
-import { PAPEL, COLABORADOR_COMPETENCIA } from '@/enums'
+import { PAPEL, COLABORADOR_COMPETENCIA, PERFIL } from '@/enums'
 import moment from 'moment';
 import { VueGoodTable } from 'vue-good-table'
 import Cracha from '../template/Cracha.vue'
@@ -387,6 +393,9 @@ export default {
             papeis: [],
             pessoas: [],
             pessoa: {},
+            turmasAluno: [],
+            colaborador: {},
+            interprete: {},
             cursos: [],
             turmas: [],
             situacoesTurma: [],
@@ -396,12 +405,14 @@ export default {
             optionsEstados: [],
             optionsCidades: [],
             optionsLocalidades: [],
+            codigoEstadoSelected: null,
+            codigoCidadeSelected: null,
+            codigoLocalidadeSelected: null,
             optionsPapeis: [],
             codigosPapeisSelected: [],
             mode: 'save',
             isEdit: false,
             selectionChanged: [],
-            PapelEnum: PAPEL,
             columns: [
                 { label: 'Código', field: 'codigo', },
                 // { label: 'Batizado?', field: 'batizado',},
@@ -437,18 +448,18 @@ export default {
                 excel['Batizado?'] = pessoa.ehBatizado || ""
                 excel['Data de Batismo'] = this.dateFormat(pessoa.dataBatismo) || ""
                 excel['Comum Congregação'] = pessoa.comum || ""
-                excel['ADM'] = pessoa.localidade.ADM || ""
-                excel['Cidade/UF'] = (pessoa.localidade.cidade + "/" + pessoa.localidade.uf) || ""
-                excel['Localidade'] = pessoa.localidade.nome || ""
+                excel['ADM'] = (pessoa.localidade) ? pessoa.localidade.ADM : ""
+                excel['Cidade/UF'] = (pessoa.localidade) ? (pessoa.localidade.cidade + "/" + pessoa.localidade.uf) : ""
+                excel['Localidade'] = (pessoa.localidade) ? pessoa.localidade.nome : ""
                 if (this.filtros.papel) {
                     switch (this.filtros.papel.codigo) {
                         case PAPEL.COLABORADOR:
-                            excel['Competência'] = pessoa.colaborador.competencia.nome || ""
+                            excel['Competência'] = (pessoa.colaborador) ? pessoa.colaborador.competencia.nome : ""
                             break
                         case PAPEL.INTERPRETE:
-                            excel['Data de Oficialização'] = this.dateFormat(pessoa.interprete.dataOficializacao) || ""
-                            excel['Situação'] = pessoa.interprete.situacao.nome || ""
-                            excel['Justificativa'] = pessoa.interprete.justificativa || ""
+                            excel['Data de Oficialização'] = (pessoa.interprete) ? this.dateFormat(pessoa.interprete.dataOficializacao) : ""
+                            excel['Situação'] = (pessoa.interprete) ? pessoa.interprete.situacao.nome : ""
+                            excel['Justificativa'] = (pessoa.interprete) ? pessoa.interprete.justificativa : ""
                             break
                     }
                 }
@@ -516,8 +527,12 @@ export default {
             } else {
                 const pessoas = this.pessoas.filter((pessoa) => {
                     if (this.filtros.papel && this.filtros.turma) {
+                        if (!pessoa.papeis || !pessoa.turmas)
+                            return false
                         return pessoa.papeis.find(papel => papel.codigo === this.filtros.papel.codigo) && pessoa.turmas.find(turma => turma.codigo === this.filtros.turma.codigo)
                     } else {
+                        if (!pessoa.papeis)
+                            return false
                         return pessoa.papeis.find(papel => papel.codigo === this.filtros.papel.codigo)
                     }
                 })
@@ -545,7 +560,13 @@ export default {
 
             return titulo
         },
-        ...mapState(['isAdmin', 'isMenuVisible'])
+        showComum() {
+            return (this.localidade) ? true : false
+        },
+        canEdit() {
+            return (this.user.admin || this.user.codigoPerfil === PERFIL.COLABORADOR) ? true : false
+        },
+        ...mapState(['isAdmin', 'user', 'isMenuVisible'])
     },
     methods: {
         onRowSelected(items) {
@@ -560,7 +581,32 @@ export default {
             this.isEdit = false
             this.mode = 'save'
             this.pessoa = {}
+            this.codigosPapeisSelected = []
+            this.codigoEstadoSelected = null
+            this.codigoCidadeSelected = null
+            this.codigoLocalidadeSelected = null
+            this.colaborador = null
+            this.interprete = null
+            this.turmasAluno = null
             this.loadPessoas()
+        },
+        save() {
+            const method = (this.pessoa.codigo) ? 'put' : 'post'
+            const id = (this.pessoa.codigo) ? `/${this.pessoa.codigo}` : ''
+            axios[method](`${baseApiUrl}/pessoa${id}`, this.pessoa)
+                .then(() => {
+                    this.$toasted.global.defaultSuccess()
+                    this.reset()
+                })
+                .catch(showError)
+        },
+        remove() {
+            axios.delete(`${baseApiUrl}/pessoa/${this.pessoa.codigo}`)
+                .then(() => {
+                    this.$toasted.global.defaultSuccess()
+                    this.reset()
+                })
+                .catch(showError)
         },
         exportID(item, event) {
             this.$loadingService.start();
@@ -607,10 +653,14 @@ export default {
         loadPessoa(pessoa, mode = 'save') {
             this.mode = mode
             this.pessoa = { ...pessoa }
+            this.codigoEstadoSelected = pessoa.localidade.codigoEstado
+            this.codigoCidadeSelected = pessoa.localidade.codigoCidade
+            this.codigoLocalidadeSelected = pessoa.localidade.codigo
+            this.turmasAluno = pessoa.turmas;
+            this.colaborador = pessoa.colaborador;
+            this.interprete = pessoa.interprete;
             this.isEdit = true
             this.setPapeisPessoa()
-
-
         },
 
         async loadPessoas() {
@@ -692,6 +742,7 @@ export default {
 
         },
         fillOptionsEstados() {
+            console.log('fillOptionsEstados')
             if (this.estados.length > 0) {
                 this.optionsEstados = []
                 this.estados.forEach(estado => {
@@ -700,14 +751,15 @@ export default {
             }
         },
         fillOptionsCidades(codigoEstado) {
+            console.log('fillOptionsCidades - estado: ' + codigoEstado)
             if (codigoEstado) {
                 this.optionsCidades = []
-                this.optionsLocalidades = []
                 const cidadesEstado = this.cidades.filter(cidade => cidade.codigoEstado == codigoEstado)
                 cidadesEstado.forEach(cidade => this.optionsCidades.push({ value: cidade.codigo, text: cidade.nome }))
             }
         },
         fillOptionsLocalidades(codigoCidade) {
+            console.log('fillOptionsLocalidades - cidade: ' + codigoCidade)
             if (codigoCidade) {
                 this.optionsLocalidades = []
                 const localidadesCidade = this.localidades.filter(localidade => localidade.codigoCidade == codigoCidade)
@@ -720,51 +772,88 @@ export default {
         },
 
         setCollapseForm(codigosPapeis) {
-            console.log(codigosPapeis)
+            console.log('setCollapseForm(' + codigosPapeis + ')')
             const papeis = []
 
             this.$set(this.pessoa, 'papeis', null)
+            this.$set(this.pessoa, 'papel', null)
 
-            if (codigosPapeis.length > 0) {
-                codigosPapeis.forEach(codigoPapel => {
-                    let papel = this.papeis.filter(papel => papel.codigo === codigoPapel)
-                    papeis.push(papel)
-
-                    switch (codigoPapel) {
-                        case PAPEL.ALUNO:
-                            if (!this.pessoa.turmas) {
-                                this.$set(this.pessoa, 'turmas', [{}])
-                            }
-                            break
-                        case PAPEL.COLABORADOR:
-                            break
-                        case PAPEL.INTERPRETE:
-                            break
-                    }
-                })
-
-                this.$set(this.pessoa, 'papeis', papeis)
-            }
-
-
+            // Se o papel ALUNO não estiver selecionado, remove os dados de turmas
             if (!codigosPapeis.includes(PAPEL.ALUNO) && this.pessoa.turmas) {
                 this.$set(this.pessoa, 'turmas', null)
             }
 
-            // if (!codigosPapeis.includes(PAPEL.COLABORADOR)) {
-            //     if (this.pessoa.colaborador)
-            //         this.$set(this.pessoa, 'colaborador', null)
-            // }
-            // if (!codigosPapeis.includes(PAPEL.INTERPRETE)) {
-            //     if (this.pessoa.interprete)
-            //         this.$set(this.pessoa, 'interprete', null)
-            // }
+            // Se o papel COLABORADOR não etiver selecionado, remove os dados de colaborador
+            if (!codigosPapeis.includes(PAPEL.COLABORADOR) && this.pessoa.colaborador) {
+                this.$set(this.pessoa, 'colaborador', null)
+            }
+
+            // Se o papel INTÉRPRETE não estiver selecionado, remove os dados de intérprete
+            if (!codigosPapeis.includes(PAPEL.INTERPRETE) && this.pessoa.interprete) {
+                this.$set(this.pessoa, 'interprete', null)
+            }
+
+            // Percorre os papéis selecionados
+            if (codigosPapeis.length > 0) {
+                codigosPapeis.forEach(codigoPapel => {
+                    let papel = this.papeis.filter(papel => papel.codigo === codigoPapel)[0]
+                    papeis.push(papel)
+                    console.log(codigoPapel + ' typeof ' + typeof (codigoPapel))
+
+                    switch (codigoPapel) {
+                        case PAPEL.ALUNO:
+                            if (!this.pessoa.turmas) {
+                                // Reparoveita as turmas ativas previamente cadastradas
+                                if (this.turmasAluno) {
+                                    console.log("aqui 1")
+                                    this.$set(this.pessoa, 'turmas', this.turmasAluno)
+                                } else {
+                                    console.log('aqui 2')
+                                    // Cria um array de objetos vazio
+                                    this.$set(this.pessoa, 'turmas', [{}])
+                                }
+                            }
+                            break
+                        case PAPEL.COLABORADOR:
+                            if (!this.pessoa.colaborador) {
+                                // Reaproveita os dados do colaborador previamente cadastrados
+                                if (this.colaborador) {
+                                    this.$set(this.pessoa, 'colaborador', this.colaborador)
+                                } else {
+                                    this.$set(this.pessoa, 'colaborador', null)
+                                }
+                            }
+                            break
+                        case PAPEL.INTERPRETE:
+                            console.log('aqui')
+                            if (!this.pessoa.interprete) {
+                                // Reaproveita os dados do intérprete previamente cadastrados
+                                if (this.interprete) {
+                                    this.$set(this.pessoa, 'interprete', this.interprete)
+                                } else {
+                                    this.$set(this.pessoa, 'interprete', null)
+                                }
+                            }
+                            break
+                    }
+                })
+
+                let papelPrincipal = papeis.reduce((papelAnterior, papelAtual) => papelAnterior.prioridade < papelAtual.prioridade ? papelAnterior : papelAtual)
+
+                this.$set(this.pessoa, 'papeis', papeis)
+                this.$set(this.pessoa, 'papel', papelPrincipal)
+
+            }
+
         },
         isBaptized(batizado) {
             return (batizado ? 'Sim' : 'Não')
         },
         setComum(localidade) {
-            return localidade.ADM.replace(' - ', '/') + ' - ' + localidade.cidade + '/' + localidade.uf + ' - ' + localidade.nome
+            console.log('setComum')
+            if (localidade) {
+                return localidade.ADM.replace(' - ', '/') + ' - ' + localidade.cidade + '/' + localidade.uf + ' - ' + localidade.nome
+            }
         },
         idadeInicioCurso(pessoa, turma) {
             if (pessoa.dataNascimento && turma) {
@@ -773,25 +862,26 @@ export default {
             }
         },
         onUpdateAluno(aluno) {
-            console.log(aluno);
+            console.log("onUpdateAluno: " + aluno);
             this.pessoa.turmas.pop()
             this.pessoa.turmas.push(aluno)
             // this.$set(this.pessoa,'turmas[0]', aluno)
         },
         onUpdateInterprete(interprete) {
-            console.log(interprete)
+            console.log("onUpdateInterprete: " + interprete)
             this.$set(this.pessoa, 'interprete', interprete)
         },
         onUpdateColaborador(colaborador) {
-            console.log(colaborador)
+            console.log("onUpdateColaborador: " + colaborador)
             this.$set(this.pessoa, 'colaborador', colaborador)
             if (this.pessoa.colaborador.competencia.codigo === COLABORADOR_COMPETENCIA.MINISTERIO
                 && !this.codigosPapeisSelected.includes(PAPEL.MINISTERIO)) {
-                    this.codigosPapeisSelected.push(PAPEL.MINISTERIO)
+                this.codigosPapeisSelected.push(PAPEL.MINISTERIO)
             }
         },
         setPapeisPessoa() {
             this.codigosPapeisSelected = []
+            console.log('papeis: ' + this.pessoa.papeis)
             if (this.pessoa.papeis) {
                 this.pessoa.papeis.forEach(papel => this.codigosPapeisSelected.push(papel.codigo))
             }
@@ -812,30 +902,48 @@ export default {
         await this.loadCompetenciasColaborador()
     },
     watch: {
-        'pessoa.localidade.codigoEstado': function (newVal, oldVal) {
-            console.log('codigoEstado: ' + newVal)
-            this.fillOptionsCidades(newVal)
-        },
-        'pessoa.localidade.codigoCidade': function (newVal, oldVal) {
-            console.log('codigoCidade:' + newVal)
-            if (oldVal && newVal !== oldVal) {
-                if (this.pessoa.localidade) {
-                    this.pessoa.localidade.codigo = null
+        'codigoEstadoSelected': function (newVal, oldVal) {
+            console.log('watch: codigoEstado alterado')
+            console.log('watch: estado antigo: ' + oldVal)
+            console.log('watch: estado novo: ' + newVal)
+
+            if (newVal) {
+                this.fillOptionsCidades(newVal)
+
+                if (oldVal && newVal != oldVal) {
+                    this.codigoCidadeSelected = null
+                    this.codigoLocalidadeSelected = null
+                    this.$set(this, 'localidade', null)
+                    this.$set(this.pessoa, 'localidade', null)
+                    this.$set(this.pessoa, 'comum', null)
+                    this.optionsLocalidades = []
                 }
-                console.log('codigoCidade: alterado')
-                console.log('cidade antigo: ' + oldVal)
-                console.log('cidade novo: ' + newVal)
             }
-            this.fillOptionsLocalidades(newVal)
+
         },
-        'pessoa.localidade.codigo': function (newVal, oldVal) {
-            console.log('codigoLocalidade: ' + newVal)
-            if (this.pessoa.localidade) {
-                const localidade = this.localidades.filter(localidade => localidade.codigo == this.pessoa.localidade.codigo)[0]
+        'codigoCidadeSelected': function (newVal, oldVal) {
+            console.log('watch: codigoCidade: alterado')
+            console.log('watch: cidade antigo: ' + oldVal)
+            console.log('watch: cidade novo: ' + newVal)
+
+            if (newVal) {
+                this.fillOptionsLocalidades(newVal)
+
+                if (oldVal && newVal != oldVal) {
+                    this.codigoLocalidadeSelected = null
+                    this.$set(this, 'localidade', null)
+                    this.$set(this.pessoa, 'localidade', null)
+                    this.$set(this.pessoa, 'comum', null)
+                }
+            }
+        },
+        'codigoLocalidadeSelected': function (newVal, oldVal) {
+            console.log('watch: codigoLocalidade: ' + newVal)
+            if (newVal) {
+                const localidade = this.localidades.filter(localidade => localidade.codigo == newVal)[0]
                 this.$set(this, 'localidade', localidade)
                 this.$set(this.pessoa, 'localidade', localidade)
-            } else {
-                this.localidade = {}
+                this.$set(this.pessoa, 'comum', this.setComum(localidade))
             }
         }
     }
@@ -863,6 +971,13 @@ input[type=number]::-webkit-inner-spin-button {
 
 .observacoes {
     height: 15vw !important;
+}
+
+.semdados {
+    margin: auto;
+    width: 50%;
+    padding: 5px;
+    text-align: center;
 }
 </style>
 

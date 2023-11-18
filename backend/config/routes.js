@@ -29,11 +29,14 @@ module.exports = app =>{
 
     app.route('/pessoa')
         .all(app.config.passport.authenticate())
+        .post(app.api.pessoa.save)
         .get(app.api.pessoa.get)
 
     app.route('/pessoa/:codigo')
         .all(app.config.passport.authenticate())
+        .put(app.api.pessoa.save)
         .get(app.api.pessoa.getById)
+        .delete(app.api.pessoa.remove)
 
     app.route('/cidade')
         .all(app.config.passport.authenticate())

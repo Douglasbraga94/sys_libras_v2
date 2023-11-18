@@ -46,14 +46,14 @@
             <b-col>
                 <b-form-group :id="'data-matricula-grupo' + local.codigo" label="Data da Matricula:"
                     label-for="data-matricula">
-                    <b-form-input :id="'data-matricula' + local.codigo" :value="local.dataHoraMatricula"
+                    <b-form-input :id="'data-matricula' + local.codigo" :value="dateFormat(local.dataHoraMatricula)"
                         @input="update('dataHoraMatricula', $event)" type="date"
                         :readonly="mode === 'view' || mode === 'remove'"></b-form-input>
                 </b-form-group>
             </b-col>
             <b-col>
                 <b-form-group :id="'data-teste-grupo' + local.codigo" label="Data do Teste:" label-for="data-teste">
-                    <b-form-input :id="'data-teste' + local.codigo" :value="local.dataTeste"
+                    <b-form-input :id="'data-teste' + local.codigo" :value="dateFormat(local.dataTeste)"
                         @input="update('dataTeste', $event)" type="date"
                         :readonly="mode === 'view' || mode === 'remove'"></b-form-input>
                 </b-form-group>
@@ -129,12 +129,16 @@ export default {
             if (this.pessoa.dataNascimento) {
                 return moment(String(this.local.dataInicio))
                     .diff(this.pessoa.dataNascimento, 'years')
+            } else {
+                return ''
             }
         }
     },
     methods: {
         dateFormat: function (date) {
-            return moment(String(date)).format('DD/MM/YYYY');
+            if (date === undefined || date === null || date == '')
+                return ''
+            return moment(String(date)).format('YYYY-MM-DD');
         },
         fillOptionsCursos() {
             this.optionsCursos = []
@@ -161,6 +165,7 @@ export default {
             this.encaminhamentosCarta.forEach(carta => this.optionsEncaminhamentosCarta.push({ value: carta.codigo, text: carta.nome, disabled: !carta.ativo }))
         },
         update(key, value) {
+            console.log("update aluno: " + key + ":" + value)
             this.$emit("input", tap(cloneDeep(this.local), v => set(v, key, value)))
         }
     },
@@ -170,6 +175,7 @@ export default {
         this.fillOptionsTurmas()
         this.fillOptionsSituacoesTurma()
         this.fillOptionsEncaminhamentosCarta()
+        this.update('curso.codigo', this.local.curso.codigo)
     },
     watch: {
         'local.curso.codigo': function (newVal) {

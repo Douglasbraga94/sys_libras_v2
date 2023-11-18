@@ -46,7 +46,7 @@ export default {
     computed: {
         local() {
             const situacao = this.situacoesInterprete.filter(situacao => situacao.codigo === INTERPRETE_SITUACAO.HABILITADO)[0]
-            return this.value ? this.value : {
+            return this.value && Object.keys(this.value).length > 0 ? this.value : {
                 ativo: true,
                 dataOficializacao: null,
                 justificativa: null,
@@ -74,6 +74,7 @@ export default {
     },
     mounted() {
         this.fillOptionsSituacoesInterprete()
+        this.update('situacao.codigo', this.local.situacao.codigo)
     },
     watch: {
         'local.situacao.codigo': function (newVal) {
