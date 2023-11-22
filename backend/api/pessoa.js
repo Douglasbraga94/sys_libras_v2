@@ -103,8 +103,8 @@ module.exports = (app) => {
         codigoLocalidade: (body.localidade) ? body.localidade.codigo : null,
         dataNascimento: (body.dataNascimento) ? body.dataNascimento : null,
         dataBatismo: (body.dataBatismo) ? body.dataBatismo : null,
-        batizado: (body.batizado) ? body.batizado : false,
-        cursoExternoLibras: (body.cursoExternoLibras) ? body.cursoExternoLibras : false,
+        batizado: (typeof body.batizado === 'boolean') ? body.batizado : false,
+        cursoExternoLibras: (typeof body.cursoExternoLibras === 'boolean') ? body.cursoExternoLibras : false,
         ativo: (body.ativo) ? body.ativo : true,
         observacao: (body.observacao) ? body.observacao : null
       };

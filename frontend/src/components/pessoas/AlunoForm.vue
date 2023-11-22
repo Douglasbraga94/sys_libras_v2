@@ -137,7 +137,7 @@ export default {
     methods: {
         dateFormat: function (date) {
             if (date === undefined || date === null || date == '')
-                return ''
+                return
             return moment(String(date)).format('YYYY-MM-DD');
         },
         fillOptionsCursos() {
@@ -169,13 +169,16 @@ export default {
             this.$emit("input", tap(cloneDeep(this.local), v => set(v, key, value)))
         }
     },
+    created() {
+        console.log("created")
+        this.update('curso.codigo', this.local.curso.codigo)
+    },
     mounted() {
         console.log("mounted")
         this.fillOptionsCursos()
         this.fillOptionsTurmas()
         this.fillOptionsSituacoesTurma()
-        this.fillOptionsEncaminhamentosCarta()
-        this.update('curso.codigo', this.local.curso.codigo)
+        this.fillOptionsEncaminhamentosCarta()        
     },
     watch: {
         'local.curso.codigo': function (newVal) {

@@ -561,7 +561,7 @@ export default {
             return titulo
         },
         showComum() {
-            return (this.localidade) ? true : false
+            return (this.localidade && Object.keys(this.localidade).length > 0) ? true : false
         },
         canEdit() {
             return (this.user.admin || this.user.codigoPerfil === PERFIL.COLABORADOR) ? true : false
@@ -804,11 +804,9 @@ export default {
                         case PAPEL.ALUNO:
                             if (!this.pessoa.turmas) {
                                 // Reparoveita as turmas ativas previamente cadastradas
-                                if (this.turmasAluno) {
-                                    console.log("aqui 1")
+                                if (this.turmasAluno && Object.keys(this.turmasAluno).length > 0) {
                                     this.$set(this.pessoa, 'turmas', this.turmasAluno)
                                 } else {
-                                    console.log('aqui 2')
                                     // Cria um array de objetos vazio
                                     this.$set(this.pessoa, 'turmas', [{}])
                                 }
@@ -817,7 +815,7 @@ export default {
                         case PAPEL.COLABORADOR:
                             if (!this.pessoa.colaborador) {
                                 // Reaproveita os dados do colaborador previamente cadastrados
-                                if (this.colaborador) {
+                                if (this.colaborador && Object.keys(this.colaborador).length > 0) {
                                     this.$set(this.pessoa, 'colaborador', this.colaborador)
                                 } else {
                                     this.$set(this.pessoa, 'colaborador', null)
@@ -826,7 +824,7 @@ export default {
                             break
                         case PAPEL.INTERPRETE:
                             console.log('aqui')
-                            if (!this.pessoa.interprete) {
+                            if (!this.pessoa.interprete && Object.keys(this.interprete).length > 0) {
                                 // Reaproveita os dados do intérprete previamente cadastrados
                                 if (this.interprete) {
                                     this.$set(this.pessoa, 'interprete', this.interprete)

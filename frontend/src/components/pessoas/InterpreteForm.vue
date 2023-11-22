@@ -72,9 +72,13 @@ export default {
             this.$emit('input', tap(cloneDeep(this.local), v => set(v, key, value)))
         }
     },
-    mounted() {
-        this.fillOptionsSituacoesInterprete()
+    created() {
+        console.log("created")
         this.update('situacao.codigo', this.local.situacao.codigo)
+    },
+    mounted() {
+        console.log("mounted")
+        this.fillOptionsSituacoesInterprete()
     },
     watch: {
         'local.situacao.codigo': function (newVal) {

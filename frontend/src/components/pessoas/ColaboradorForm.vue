@@ -49,9 +49,13 @@ export default {
             this.$emit('input', tap(cloneDeep(this.local), v => set(v, key, value)))
         }
     }, 
-    mounted() {
-        this.fillOptionsCompetenciasColaborador()
+    created() {
+        console.log("created")
         this.update('competencia.codigo', this.local.competencia.codigo)
+    },
+    mounted() {
+        console.log("mounted")
+        this.fillOptionsCompetenciasColaborador()
     },
     watch: {
         'local.competencia.codigo': function (newVal) {
