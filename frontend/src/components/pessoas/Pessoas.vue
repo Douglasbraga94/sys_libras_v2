@@ -18,7 +18,7 @@
 			<button type="button" @click="openComponent('home')" class="btn btn-secondary btn-sm m-1">
 				<i class="fa fa-chevron-circle-left"> Voltar</i>
 			</button>
-			<div v-if="component === 'Aluno' && !carregarWizard">
+			<div v-if="component === 'Aluno' && !carregarCadastro">
 				<div class="row">
 					<div v-for="turma in turmas" :key="'turma-' + turma.codigo" class="card2"
 						:class="getCardStyleByCourse(turma.codigoCurso)" @click="setClassFilter(turma.codigo)">
@@ -29,7 +29,7 @@
 			</div>
 
 			<div v-else>
-				<PessoaCadastro :filtros="filtros" v-show="carregarWizard" />
+				<pessoa-cadastro :filtros="filtros" v-show="carregarCadastro" />
 			</div>
 
 		</div>
@@ -39,7 +39,6 @@
 
 <script>
 import PageTitle from "../template/PageTitle.vue";
-import PessoaWizard from "./PessoaWizard.vue";
 import PessoaCadastro from './PessoaCadastro.vue'
 import { baseApiUrl, showError } from '@/global'
 import axios from 'axios'
@@ -48,40 +47,40 @@ import { mapState } from 'vuex'
 
 export default {
 	name: "Pessoas",
-	components: { PageTitle, PessoaWizard, PessoaCadastro },
+	components: { PageTitle, PessoaCadastro },
 	data() {
 		return {
 			component: "home",
-			filtros: {},
 			voltar: true,
 			papeis: [],
 			turmas: [],
-			carregarWizard: false
+			filtros: {},
+			carregarCadastro: false
 		};
 	},
 	computed: mapState(['isMenuVisible']),
 	methods: {
 		openComponent(component) {
-			let carregarWizard = false
+			let carregarCadastro = false
 
 			if (this.papeis.some(papel => papel.nome === component)) {
 				this.$set(this.filtros, 'papel', this.getRoleByName(component))
 				this.$delete(this.filtros, 'turma')
-				carregarWizard = (this.filtros.papel.codigo !== PAPEL.ALUNO) ? true : false
+				carregarCadastro = (this.filtros.papel.codigo !== PAPEL.ALUNO) ? true : false
 
 			} else {
 				this.$delete(this.filtros, "papel")
 				this.$delete(this.filtros, "turma")
-				carregarWizard = (component === 'Pessoa') ? true : false
+				carregarCadastro = (component === 'Pessoa') ? true : false
 			}
 
 			this.component = component;
-			this.carregarWizard = carregarWizard
+			this.$set(this, 'carregarCadastro', carregarCadastro)
 
 		},
 		setClassFilter(codigoTurma) {
 			this.$set(this.filtros, 'turma', this.getClass(codigoTurma))
-			this.carregarWizard = true
+			this.$set(this, 'carregarCadastro', true)
 		},
 		async loadPapeis() {
 			const url = `${baseApiUrl}/papel`

@@ -1,8 +1,8 @@
 <template>
     <b-card bg-variant="default" border-variant="default" :title="local.nome">
         <b-card-header v-if="pessoa.dataNascimento || pessoa.batizado">
-            <b-badge pill variant="info" v-if="pessoa.dataNascimento">
-                {{ idadeInicioCurso }} ANOS
+            <b-badge pill variant="info" v-if="idadeInicioCurso">
+                {{ (idadeInicioCurso) ? idadeInicioCurso + ' ANOS' : '' }}
             </b-badge>&nbsp;
             <b-badge pill variant="info" v-if="pessoa.batizado">
                 BATIZADO
@@ -116,21 +116,26 @@ export default {
             let curso = this.cursos.filter(curso => curso.codigo === CURSO.GEL)[0]
             let situacao = this.situacoesTurma.filter(situacao => situacao.codigo === TURMA_SITUACAO.EM_ANDAMENTO)[0]
             return (this.value && Object.keys(this.value).length > 0) ? this.value : {
-                ativo: true,
-                cartaEncaminhamento: carta,
                 codigo: null,
+                nome: null,
                 curso: curso,
-                dataHoraMatricula: new Date().toISOString().substr(0, 10),
+                localidade: null,
+                dataInicio: null,
+                dataTermino: null,
+                ativo: true,
+                situacao: situacao,
+                cartaEncaminhamento: carta,
                 dataTeste: null,
-                situacao: situacao
+                dataHoraMatricula: new Date().toISOString().substr(0, 10),
+                observacao: null,
             };
         },
         idadeInicioCurso() {
-            if (this.pessoa.dataNascimento) {
+            if (this.pessoa.dataNascimento && this.local.dataInicio) {
                 return moment(String(this.local.dataInicio))
                     .diff(this.pessoa.dataNascimento, 'years')
             } else {
-                return ''
+                return false
             }
         }
     },
@@ -178,25 +183,26 @@ export default {
         this.fillOptionsCursos()
         this.fillOptionsTurmas()
         this.fillOptionsSituacoesTurma()
-        this.fillOptionsEncaminhamentosCarta()        
+        this.fillOptionsEncaminhamentosCarta()
     },
     watch: {
         'local.curso.codigo': function (newVal) {
             console.log('watch: local.curso.codigo')
             this.fillOptionsTurmas()
             let curso = this.cursos.filter(curso => curso.codigo === newVal)[0]
-            this.local.curso.ativo = curso.ativo
-            this.local.curso.cargaHoraria = curso.cargaHoraria
-            this.local.curso.nome = curso.nome
-            this.local.curso.sigla = curso.sigla
+            this.update('curso.ativo', curso.ativo)
+            this.update('curso.cargaHoraria', curso.cargaHoraria)
+            this.update('curso.nome', curso.nome)
+            this.update('curso.sigla', curso.sigla)
         },
         'local.codigo': function (newVal) {
             console.log('watch: local.codigo')
             let turma = this.turmas.filter(tur => tur.codigo === newVal)[0]
-            this.local.ativo = turma.ativo
-            this.local.nome = turma.nome
-            this.local.dataInicio = turma.dataInicio
-            this.local.dataTermino = turma.dataTermino
+            console.log('turma: ' + JSON.stringify(turma, null, 2))
+            // this.update('ativo', turma.ativo)
+            this.update('nome', turma.nome)
+            this.update('dataInicio', turma.dataInicio)
+            this.update('dataTermino', turma.dataTermino)
         },
         'local.situacao.codigo': function (newVal) {
             console.log('watch: local.situacao.codigo')

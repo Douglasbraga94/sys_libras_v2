@@ -209,7 +209,7 @@
                                             <b-form-row>
                                                 <b-col md="12" sm="12">
                                                     <div>
-                                                        <AlunoForm v-for="(turma, i) in pessoa.turmas" :key="turma.codigo"
+                                                        <aluno-form v-for="(turma, i) in pessoa.turmas" :key="turma.codigo"
                                                             v-model="pessoa.turmas[i]" :cursos="cursos" :turmas="turmas"
                                                             :situacoesTurma="situacoesTurma"
                                                             :encaminhamentosCarta="encaminhamentosCarta" :mode="mode"
@@ -237,7 +237,7 @@
                                             label-class="font-weight-bold pt-0" class="mb-0">
                                             <b-form-row>
                                                 <b-col md="12" sm="12">
-                                                    <ColaboradorForm v-model="pessoa.colaborador"
+                                                    <colaborador-form v-model="pessoa.colaborador"
                                                         :competenciasColaborador="competenciasColaborador" :mode="mode"
                                                         @input="onUpdateColaborador" />
                                                 </b-col>
@@ -262,7 +262,7 @@
                                             label-class="font-weight-bold pt-0" class="mb-0">
                                             <b-form-row>
                                                 <b-col md="12" sm="12">
-                                                    <InterpreteForm v-model="pessoa.interprete"
+                                                    <interprete-form v-model="pessoa.interprete"
                                                         :situacoesInterprete="situacoesInterprete" :mode="mode"
                                                         @input="onUpdateInterprete" />
                                                 </b-col>
@@ -294,7 +294,7 @@
                             <i class="fa fa-id-card"></i>
                         </button>
                         <span>&nbsp;</span>
-                        <BotaoDownloadExcel :dados="dadosPlanilha" :planilha="nomePlanilha" :arquivo="nomeArquivoExcel" />
+                        <botao-download-excel :dados="dadosPlanilha" :planilha="nomePlanilha" :arquivo="nomeArquivoExcel" />
                     </h3>
                 </div>
                 <div class="">
@@ -366,7 +366,7 @@
 <script>
 import { baseApiUrl, showError } from '@/global'
 import axios from 'axios'
-import { PAPEL, COLABORADOR_COMPETENCIA, PERFIL } from '@/enums'
+import { PAPEL, COLABORADOR_COMPETENCIA, PERFIL, CARTA_ENCAMINHAMENTO, TURMA_SITUACAO, INTERPRETE_SITUACAO } from '@/enums'
 import moment from 'moment';
 import { VueGoodTable } from 'vue-good-table'
 import Cracha from '../template/Cracha.vue'
@@ -447,6 +447,7 @@ export default {
                 excel['Data de Nascimento'] = this.dateFormat(pessoa.dataNascimento) || ""
                 excel['Batizado?'] = pessoa.ehBatizado || ""
                 excel['Data de Batismo'] = this.dateFormat(pessoa.dataBatismo) || ""
+                excel['Curso Externo?'] = pessoa.temCursoExternoLibras || ""
                 excel['Comum Congregação'] = pessoa.comum || ""
                 excel['ADM'] = (pessoa.localidade) ? pessoa.localidade.ADM : ""
                 excel['Cidade/UF'] = (pessoa.localidade) ? (pessoa.localidade.cidade + "/" + pessoa.localidade.uf) : ""
@@ -473,32 +474,12 @@ export default {
             return dados
         },
         nomeArquivoExcel() {
-
-            let arquivoExcel = null;
-
-            if (this.filtros.papel) {
-                switch (this.filtros.papel.codigo) {
-                    case PAPEL.ALUNO:
-                        arquivoExcel = ((this.filtros.turma) ? this.filtros.turma.curso + " - " + this.filtros.turma.nome + " - " + this.filtros.papel.plural : this.filtros.papel.plural) + ".xlsx"
-                        break
-                    default:
-                        arquivoExcel = this.filtros.papel.plural + " Regional Brasília.xlsx"
-                }
-            } else {
-                arquivoExcel = "Pessoas Regional Brasília.xlsx"
-            }
+            let arquivoExcel = this.tituloGrid + ".xlsx";
             return arquivoExcel
         },
         nomePlanilha() {
             return (this.filtros.papel) ? this.filtros.papel.plural : "Pessoas"
         },
-        // codigosPapeisSelected() {
-        //     let codigosPapeisFiltered = []
-        //     if (this.pessoa.papeis) {
-        //         this.pessoa.papeis.forEach(papel => codigosPapeisFiltered.push(papel.codigo))
-        //     }
-        //     return codigosPapeisFiltered
-        // },
         showAccordionAluno() {
             return this.codigosPapeisSelected.includes(PAPEL.ALUNO)
         },
@@ -522,19 +503,12 @@ export default {
 
         },
         pessoasFiltradas() {
-            if (!this.filtros.papel) {
+            if (!this.filtros.papel || Object.keys(this.filtros.papel).length === 0) {
                 return this.pessoas
             } else {
+                const regrasFiltro = this.setFilterRules(this.filtros)
                 const pessoas = this.pessoas.filter((pessoa) => {
-                    if (this.filtros.papel && this.filtros.turma) {
-                        if (!pessoa.papeis || !pessoa.turmas)
-                            return false
-                        return pessoa.papeis.find(papel => papel.codigo === this.filtros.papel.codigo) && pessoa.turmas.find(turma => turma.codigo === this.filtros.turma.codigo)
-                    } else {
-                        if (!pessoa.papeis)
-                            return false
-                        return pessoa.papeis.find(papel => papel.codigo === this.filtros.papel.codigo)
-                    }
+                    return regrasFiltro.reduce((regraAnterior, regraAtual) => regraAnterior && regraAtual.filtro(pessoa), true)
                 })
                 return pessoas
             }
@@ -543,16 +517,54 @@ export default {
             return (this.pessoa.turmas) ? true : false
         },
         tituloGrid() {
-            let titulo = ""
-            if (this.filtros.papel) {
+            var titulo = ""
+            var papel = ""
+            var dadosAdicionais = ""
+            var prefixo = ""
+            var sufixo = ""
+
+            if (this.filtros.papel && Object.keys(this.filtros.papel).length > 0) {
+
+                // Dados cadastrais gerais para todas as pessoas
+                if (this.filtros.dadosCadastrais && Object.keys(this.filtros.dadosCadastrais).length > 0) {
+                    if (typeof this.filtros.dadosCadastrais.batizado === "boolean") {
+                        dadosAdicionais = (this.filtros.dadosCadastrais.batizado) ? " Batizados" : " Não Batizados"
+                    } else if (typeof this.filtros.dadosCadastrais.cursoExternoLibras === "boolean") {
+                        dadosAdicionais = (this.filtros.dadosCadastrais.cursoExternoLibras) ? " Com Curso Externo de Libras" : " Sem Curso Externo de Libras"
+                    }
+                }
+
+                papel = this.filtros.papel.plural
 
                 switch (this.filtros.papel.codigo) {
+                    case PAPEL.INTERPRETE:
+                        if (this.filtros.interprete && Object.keys(this.filtros.interprete).length > 0) {
+                            dadosAdicionais = " " + this.getInterpreterSituationTitleByCode(this.filtros.interprete.situacao.codigo)
+                        }
+
+                        prefixo = papel + dadosAdicionais
+                        sufixo = " Regional Brasília"
+                        titulo = prefixo + sufixo
+                        break
                     case PAPEL.ALUNO:
-                        // titulo = this.filtros.turma + " - " + this.filtros.papel
-                        titulo = this.filtros.turma.curso + ' - ' + this.filtros.turma.nome
+                        if (this.filtros.turma && Object.keys(this.filtros.turma).length > 0) {
+                            prefixo = this.filtros.turma.curso + ' - ' + this.filtros.turma.nome
+
+                            if (this.filtros.aluno && Object.keys(this.filtros.aluno).length > 0) {
+                                if (this.filtros.aluno.situacao && Object.keys(this.filtros.aluno.situacao).length > 0) {
+                                    dadosAdicionais = " " + this.getStudentSituationTitleByCode(this.filtros.aluno.situacao.codigo)
+
+                                } else if (this.filtros.aluno.cartaEncaminhamento && Object.keys(this.filtros.aluno.cartaEncaminhamento).length > 0) {
+                                    dadosAdicionais = " " + this.getForwardingLetterTitleByCode(this.filtros.aluno.cartaEncaminhamento.codigo)
+                                }
+                            }
+
+                            sufixo = " - " + papel + dadosAdicionais
+                            titulo = prefixo + sufixo
+                        }
                         break
                     default:
-                        titulo = this.filtros.papel.plural + " Regional Brasília"
+                        titulo = papel + dadosAdicionais + " Regional Brasília"
                 }
             } else {
                 titulo = "Pessoas Regional Brasília"
@@ -669,6 +681,7 @@ export default {
                 this.pessoas = res.data
                 this.pessoas.forEach(pessoa => {
                     pessoa.ehBatizado = this.isBaptized(pessoa.batizado)
+                    pessoa.temCursoExternoLibras = this.hasExternalLibrasCourse(pessoa.cursoExternoLibras)
                     pessoa.comum = this.setComum(pessoa.localidade)
                     pessoa.codigoExibicao = pessoa.codigo.toString().padStart(6, '0')
                 })
@@ -798,7 +811,6 @@ export default {
                 codigosPapeis.forEach(codigoPapel => {
                     let papel = this.papeis.filter(papel => papel.codigo === codigoPapel)[0]
                     papeis.push(papel)
-                    console.log(codigoPapel + ' typeof ' + typeof (codigoPapel))
 
                     switch (codigoPapel) {
                         case PAPEL.ALUNO:
@@ -847,6 +859,9 @@ export default {
         isBaptized(batizado) {
             return (batizado ? 'Sim' : 'Não')
         },
+        hasExternalLibrasCourse(cursoExternoLibras) {
+            return (cursoExternoLibras ? 'Sim' : 'Não')
+        },
         setComum(localidade) {
             console.log('setComum')
             if (localidade) {
@@ -860,17 +875,18 @@ export default {
             }
         },
         onUpdateAluno(aluno) {
-            console.log("onUpdateAluno: " + aluno);
-            this.pessoa.turmas.pop()
-            this.pessoa.turmas.push(aluno)
+            console.log("onUpdateAluno: " + JSON.stringify(aluno, null, 2));
+            // this.pessoa.turmas.pop()
+            // this.pessoa.turmas.push(aluno)
             // this.$set(this.pessoa,'turmas[0]', aluno)
+            this.pessoa.turmas.splice(0,1,aluno)
         },
         onUpdateInterprete(interprete) {
-            console.log("onUpdateInterprete: " + interprete)
+            console.log("onUpdateInterprete: " + JSON.stringify(interprete, null, 2))
             this.$set(this.pessoa, 'interprete', interprete)
         },
         onUpdateColaborador(colaborador) {
-            console.log("onUpdateColaborador: " + colaborador)
+            console.log("onUpdateColaborador: " + JSON.stringify(colaborador, null, 2))
             this.$set(this.pessoa, 'colaborador', colaborador)
             if (this.pessoa.colaborador.competencia.codigo === COLABORADOR_COMPETENCIA.MINISTERIO
                 && !this.codigosPapeisSelected.includes(PAPEL.MINISTERIO)) {
@@ -883,8 +899,121 @@ export default {
             if (this.pessoa.papeis) {
                 this.pessoa.papeis.forEach(papel => this.codigosPapeisSelected.push(papel.codigo))
             }
-        }
+        },
+        setFilterRules(filtros) {
+            var regrasFiltro = []
 
+            // Cria as regras específicas que filtram a pessoa
+
+            const fnFiltraPapel = (pessoa) => {
+                if (!pessoa.papeis)
+                    return false
+                return pessoa.papeis.some(papel => papel.codigo === filtros.papel.codigo)
+            }
+
+            const fnFiltraPessoaBatismo = (pessoa) => pessoa.batizado === this.filtros.dadosCadastrais.batizado
+            const fnFiltraPessoaCursoExternoLibras = (pessoa) => pessoa.cursoExternoLibras === filtros.dadosCadastrais.cursoExternoLibras
+            const fnFiltraSituacaoInterprete = (pessoa) => {
+                if (!pessoa.interprete || Object.keys(pessoa.interprete).length === 0
+                    || !pessoa.interprete.situacao || Object.keys(pessoa.interprete.situacao).length === 0)
+                    return false
+                return pessoa.interprete.situacao.codigo === filtros.interprete.situacao.codigo
+            }
+            const fnFiltraTurma = (pessoa) => {
+                if (!pessoa.turmas || pessoa.turmas.length === 0)
+                    return false
+                return pessoa.turmas.some(turma => turma.codigo === filtros.turma.codigo)
+            }
+            const fnFiltraSituacaoAluno = (pessoa) => {
+                if (!pessoa.turmas || pessoa.turmas.length === 0)
+                    return false
+                return pessoa.turmas.some((turma) => turma.codigo === filtros.turma.codigo
+                    && turma.situacao && Object.keys(turma.situacao).length > 0
+                    && turma.situacao.codigo === filtros.aluno.situacao.codigo)
+            }
+            const fnFiltraCartaEncaminhamentoAluno = (pessoa) => {
+                if (!pessoa.turmas || pessoa.turmas.length === 0)
+                    return false
+                return pessoa.turmas.some((turma) => turma.codigo === filtros.turma.codigo
+                    && turma.cartaEncaminhamento && Object.keys(turma.cartaEncaminhamento).length > 0
+                    && turma.cartaEncaminhamento.codigo === filtros.aluno.cartaEncaminhamento.codigo)
+            }
+
+            // Seleciona quais regras deverão ser consideradas, de acordo com o filtro informado
+            if (filtros.papel && Object.keys(filtros.papel).length > 0)
+                regrasFiltro.push({ filtro: fnFiltraPapel })
+
+            if (filtros.dadosCadastrais && Object.keys(filtros.dadosCadastrais).length > 0) {
+                if (filtros.dadosCadastrais.hasOwnProperty("batizado"))
+                    regrasFiltro.push({ filtro: fnFiltraPessoaBatismo })
+                if (filtros.dadosCadastrais.hasOwnProperty("cursoExternoLibras"))
+                    regrasFiltro.push({ filtro: fnFiltraPessoaCursoExternoLibras })
+            }
+
+            if (filtros.interprete && Object.keys(filtros.interprete).length > 0) {
+                if (filtros.interprete.situacao && Object.keys(filtros.interprete.situacao).length > 0)
+                    regrasFiltro.push({ filtro: fnFiltraSituacaoInterprete })
+            }
+
+            if (filtros.turma) {
+                regrasFiltro.push({ filtro: fnFiltraTurma })
+                if (filtros.aluno && Object.keys(filtros.aluno).length > 0) {
+                    if (filtros.aluno && Object.keys(filtros.aluno).length > 0) {
+                        if (filtros.aluno.situacao && Object.keys(filtros.aluno.situacao).length > 0)
+                            regrasFiltro.push({ filtro: fnFiltraSituacaoAluno })
+                        if (filtros.aluno.cartaEncaminhamento && Object.keys(filtros.aluno.cartaEncaminhamento).length > 0)
+                            regrasFiltro.push({ filtro: fnFiltraCartaEncaminhamentoAluno })
+                    }
+                }
+            }
+
+            return regrasFiltro
+        },
+        getStudentSituationTitleByCode(situationCode) {
+
+            switch (situationCode) {
+                case TURMA_SITUACAO.EM_ANDAMENTO:
+                    return "Em Andamento"
+                case TURMA_SITUACAO.RETESTE:
+                    return "Reteste"
+                case TURMA_SITUACAO.DESISTENTE:
+                    return "Desistentes"
+                case TURMA_SITUACAO.APROVADO:
+                    return "Aprovados"
+                default:
+                    return ""
+            }
+
+        },
+        getForwardingLetterTitleByCode(forwardingLetterCode) {
+
+            switch (forwardingLetterCode) {
+                case CARTA_ENCAMINHAMENTO.ASSINADA:
+                    return "Com Carta Assinada"
+                case CARTA_ENCAMINHAMENTO.PENDENTE:
+                    return "Com Carta Pendente"
+                case CARTA_ENCAMINHAMENTO.NAO_APLICAVEL:
+                    return "Sem Carta - N/A"
+                default:
+                    return ""
+            }
+
+        }, 
+        getInterpreterSituationTitleByCode(situationCode) {
+
+            switch (situationCode) {
+                case INTERPRETE_SITUACAO.HABILITADO:
+                    return "Habilitados"
+                case INTERPRETE_SITUACAO.NAO_HABILITADO:
+                    return "Não Habilitados"
+                case INTERPRETE_SITUACAO.DIVERSOS:
+                    return "Diversos"
+                default:
+                    return ""
+            }
+
+        }
+ 
     },
     async created() {
         await this.loadPessoas()

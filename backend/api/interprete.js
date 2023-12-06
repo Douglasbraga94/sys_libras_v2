@@ -35,12 +35,11 @@ module.exports = app => {
      }
 
      const get = (req, res) => {
-        app.db('interpretes')
-            .select('id', 'nome', 'codigo', 'status', 'telefone1', 
-            'telefone2', 'email', 'oficializacao', 'statusJustificativa', 'idcomum', 'idadministracao')
-            //.whereNull('deletedAt')
-            .then(interprete => res.json(interprete))
-            .catch(err => res.status(500).send(err.message))
+        app
+          .db("vw_interprete")
+          .select()
+          .then((interprete) => res.json(interprete))
+          .catch((err) => res.status(500).send(err.message));
     }
 
     const getInterpretesWhithComum = (req, res) => {
