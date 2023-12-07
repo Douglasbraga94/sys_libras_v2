@@ -74,15 +74,15 @@ module.exports = (app) => {
         }
 
         if (codigosPapeisSelecionados.includes(app.enums.PAPEL.ALUNO)) {
-          body.turmas.forEach((turma) => {
-            existsOrError(turma, "Informe os dados do(a) aluno(a).");
-            existsOrError(turma.codigo, "Informe os dados da turma.");
+          body.turmas.forEach((turmaPessoa) => {
+            existsOrError(turmaPessoa, "Informe os dados do(a) aluno(a).");
+            existsOrError(turmaPessoa.turma.codigo, "Informe os dados da turma.");
             existsOrError(
-              turma.situacao,
+              turmaPessoa.situacao,
               "Informe a situação do(a) aluno(a) ma turma."
             );
             existsOrError(
-              turma.cartaEncaminhamento,
+              turmaPessoa.cartaEncaminhamento,
               "Informe os dados da carta de encaminhamento do(a) aluno(a)."
             );
           });
@@ -312,11 +312,11 @@ module.exports = (app) => {
             if (codigosPapeisSelecionados.includes(app.enums.PAPEL.ALUNO)) {
               // Recupera os códigos de turma selecionados
               const codigosTurmaSelecionados = body.turmas.map(
-                (tp) => tp.codigo
+                (tp) => tp.turma.codigo
               );
 
               // Separa as turmas existentes que deverão ser atualizadas e verifica se serão ativadas ou desativadas
-              // Se o código da turma selecionado corresponder ao existente, atualiza os dados da turma existente e ativa.
+              // Se o código da turma selecionado correspon der ao existente, atualiza os dados da turma existente e ativa.
               // Caso contrário, mantém os dados existentes e desativa a turma existente.
               const turmasPessoaAtualizar = turmasPessoaExistente.map(
                 (turmaPessoa) => {
@@ -327,14 +327,17 @@ module.exports = (app) => {
                       turmaPessoa.codigoTurma
                     )
                       ? body.turmas
-                          .filter((tp) => tp.codigo === turmaPessoa.codigoTurma)
+                          .filter(
+                            (tp) => tp.turma.codigo === turmaPessoa.codigoTurma
+                          )
                           .map((tp) => tp.situacao.codigo)[0]
                       : turmaPessoa.codigoSituacao,
                     codigoCartaEncaminhamento:
                       codigosTurmaSelecionados.includes(turmaPessoa.codigoTurma)
                         ? body.turmas
                             .filter(
-                              (tp) => tp.codigo === turmaPessoa.codigoTurma
+                              (tp) =>
+                                tp.turma.codigo === turmaPessoa.codigoTurma
                             )
                             .map((tp) => tp.cartaEncaminhamento.codigo)[0]
                         : turmaPessoa.codigoCartaEncaminhamento,
@@ -342,26 +345,32 @@ module.exports = (app) => {
                       turmaPessoa.codigoTurma
                     )
                       ? body.turmas
-                          .filter((tp) => tp.codigo === turmaPessoa.codigoTurma)
+                          .filter(
+                            (tp) => tp.turma.codigo === turmaPessoa.codigoTurma
+                          )
                           .map((tp) => tp.dataTeste)[0]
                       : turmaPessoa.dataTeste,
                     observacao: codigosTurmaSelecionados.includes(
                       turmaPessoa.codigoTurma
                     )
                       ? body.turmas
-                          .filter((tp) => tp.codigo === turmaPessoa.codigoTurma)
+                          .filter(
+                            (tp) => tp.turma.codigo === turmaPessoa.codigoTurma
+                          )
                           .map((tp) => tp.observacao)[0]
                       : turmaPessoa.observacao,
                     ativo: codigosTurmaSelecionados.includes(
                       turmaPessoa.codigoTurma
-                    ),
+                    ), // Ativa se o código da turma existente corresponder ao selecionado. Caso contrário, desativa.
                     dataHoraMatricula: codigosTurmaSelecionados.includes(
                       turmaPessoa.codigoTurma
                     )
                       ? body.turmas
-                          .filter((tp) => tp.codigo === turmaPessoa.codigoTurma)
+                          .filter(
+                            (tp) => tp.turma.codigo === turmaPessoa.codigoTurma
+                          )
                           .map((tp) => tp.dataHoraMatricula)[0]
-                      : turmaPessoa.dataHoraMatricula, // Ativa se o código da turma existente corresponder ao selecionado. Caso contrário, desativa.
+                      : turmaPessoa.dataHoraMatricula,
                   };
                 }
               );
@@ -370,15 +379,14 @@ module.exports = (app) => {
               const turmasPessoaIncluir = body.turmas
                 .filter(
                   (turmaPessoa) =>
-                    !codigosTurmasPessoaAtualizar.includes(turmaPessoa.codigo)
+                    !codigosTurmasPessoaAtualizar.includes(turmaPessoa.turma.codigo)
                 )
                 .map((turmaPessoa) => {
                   return {
-                    codigoTurma: turmaPessoa.codigo,
+                    codigoTurma: turmaPessoa.turma.codigo,
                     codigoPessoa: codigoPessoa,
                     codigoSituacao: turmaPessoa.situacao.codigo,
-                    codigoCartaEncaminhamento:
-                      turmaPessoa.cartaEncaminhamento.codigo,
+                    codigoCartaEncaminhamento: turmaPessoa.cartaEncaminhamento.codigo,
                     dataTeste: turmaPessoa.dataTeste,
                     observacao: turmaPessoa.observacao,
                     ativo: turmaPessoa.ativo,
@@ -513,7 +521,7 @@ module.exports = (app) => {
               // Separa as turmas novas que deverão ser incluídas e ativadas
               const turmasPessoaIncluir = body.turmas.map((turmaPessoa) => {
                 return {
-                  codigoTurma: turmaPessoa.codigo,
+                  codigoTurma: turmaPessoa.turma.codigo,
                   codigoPessoa: codigoPessoa,
                   codigoSituacao: turmaPessoa.situacao.codigo,
                   codigoCartaEncaminhamento:

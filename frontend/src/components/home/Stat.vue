@@ -124,31 +124,31 @@ export default {
             if (!this.pessoas || !this.turma || !classCode)
                 return 0
 
-            return this.pessoas.filter(pessoa => pessoa.papeis.some(papel => papel.codigo == PAPEL.ALUNO) && pessoa.turmas.some(turma => turma.codigo == classCode) && pessoa.ativo == true).length
+            return this.pessoas.filter(pessoa => pessoa.papeis.some(papel => papel.codigo == PAPEL.ALUNO) && pessoa.turmas.some(turmaPessoa => turmaPessoa.turma.codigo == classCode) && pessoa.ativo == true).length
         },
         getTotalNumberOfStudentsBySituation(classCode, situationCode) {
             if (!this.pessoas || !this.turma || !classCode || !situationCode)
                 return 0
 
-            return this.pessoas.filter(pessoa => pessoa.papeis.some(papel => papel.codigo == PAPEL.ALUNO) && pessoa.turmas.some(turma => turma.codigo == classCode && turma.situacao.codigo == situationCode) && pessoa.ativo == true).length
+            return this.pessoas.filter(pessoa => pessoa.papeis.some(papel => papel.codigo == PAPEL.ALUNO) && pessoa.turmas.some(turmaPessoa => turmaPessoa.turma.codigo == classCode && turmaPessoa.situacao.codigo == situationCode) && pessoa.ativo == true).length
         },
         getTotalNumberOfStudentsBaptizedOrNot(classCode, isBaptized = true) {
             if (!this.papeis || !this.turma)
                 return 0
 
-            return this.pessoas.filter(pessoa => (pessoa.papeis.some(papel => papel.codigo == PAPEL.ALUNO) && pessoa.turmas.some(turma => turma.codigo == classCode) && pessoa.batizado == isBaptized) && pessoa.ativo == true).length
+            return this.pessoas.filter(pessoa => (pessoa.papeis.some(papel => papel.codigo == PAPEL.ALUNO) && pessoa.turmas.some(turmaPessoa => turmaPessoa.turma.codigo == classCode) && pessoa.batizado == isBaptized) && pessoa.ativo == true).length
         },
         getTotalNumberOfStudentsWithExternalCourseOrNot(classCode, hasExternalCourse = true) {
             if (!this.papeis || !this.turma)
                 return 0
 
-            return this.pessoas.filter(pessoa => (pessoa.papeis.some(papel => papel.codigo == PAPEL.ALUNO) && pessoa.turmas.some(turma => turma.codigo == classCode) && pessoa.cursoExternoLibras == hasExternalCourse) && pessoa.ativo == true).length
+            return this.pessoas.filter(pessoa => (pessoa.papeis.some(papel => papel.codigo == PAPEL.ALUNO) && pessoa.turmas.some(turmaPessoa => turmaPessoa.turma.codigo == classCode) && pessoa.cursoExternoLibras == hasExternalCourse) && pessoa.ativo == true).length
         },
         getTotalNumberOfStudentsByForwardingLetter(classCode, forwardingLetterCode) {
             if (!this.pessoas || !this.turma || !classCode || !forwardingLetterCode)
                 return 0
 
-            return this.pessoas.filter(pessoa => pessoa.papeis.some(papel => papel.codigo == PAPEL.ALUNO) && pessoa.turmas.some(turma => turma.codigo == classCode && turma.cartaEncaminhamento.codigo == forwardingLetterCode) && pessoa.ativo == true).length
+            return this.pessoas.filter(pessoa => pessoa.papeis.some(papel => papel.codigo == PAPEL.ALUNO) && pessoa.turmas.some(turmaPessoa => turmaPessoa.turma.codigo == classCode && turmaPessoa.cartaEncaminhamento.codigo == forwardingLetterCode) && pessoa.ativo == true).length
         },
         setFilter(component, item) {
             let filter = {}
@@ -206,9 +206,6 @@ export default {
             // Turma
             if (this.turma)
                 filter.turma = this.turma
-
-
-            // console.log('filter: ' + JSON.stringify(filter, null, 2))
 
             return filter
         },

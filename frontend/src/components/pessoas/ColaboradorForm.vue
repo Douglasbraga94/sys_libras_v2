@@ -31,12 +31,12 @@ export default {
         local() {
             const competencia = this.competenciasColaborador.filter(competencia => competencia.codigo === COLABORADOR_COMPETENCIA.ENSINO)[0]
             return this.value && Object.keys(this.value).length > 0 ? this.value : {
-                ativo: true, 
                 competencia: {
-                    ativo: competencia.ativo, 
                     codigo: competencia.codigo, 
-                    nome: competencia.nome
-                }
+                    nome: competencia.nome,
+                    ativo: competencia.ativo
+                },
+                ativo: true
             }
         }
     },
@@ -60,8 +60,7 @@ export default {
     watch: {
         'local.competencia.codigo': function (newVal) {
             const competencia = this.competenciasColaborador.filter(competencia => competencia.codigo === newVal)[0]
-            this.local.competencia.ativo = competencia.ativo
-            this.local.competencia.nome = competencia.nome
+            this.update('competencia', competencia)
         }
     }
 }

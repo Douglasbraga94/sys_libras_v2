@@ -83,9 +83,7 @@ export default {
     watch: {
         'local.situacao.codigo': function (newVal) {
             const situacao = this.situacoesInterprete.filter(situacao => situacao.codigo === newVal)[0]
-            this.local.situacao.ativo = situacao.ativo;
-            this.local.situacao.descricao = situacao.descricao;
-            this.local.situacao.nome = situacao.nome;
+            this.update('situacao', situacao)
         },
     },
 }

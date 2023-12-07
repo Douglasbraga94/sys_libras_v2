@@ -213,7 +213,8 @@
                                                             v-model="pessoa.turmas[i]" :cursos="cursos" :turmas="turmas"
                                                             :situacoesTurma="situacoesTurma"
                                                             :encaminhamentosCarta="encaminhamentosCarta" :mode="mode"
-                                                            :pessoa="dadosCadastrais" @input="onUpdateAluno" />
+                                                            :pessoa="dadosCadastrais" :localidades="localidades"
+                                                            @input="onUpdateAluno" />
                                                     </div>
                                                 </b-col>
                                             </b-form-row>
@@ -429,7 +430,7 @@ export default {
             const dados = []
             this.pessoasFiltradas.forEach(pessoa => {
                 let excel = {}
-                let turmaPessoa = this.filtros.turma ? pessoa.turmas.filter(turma => turma.codigo === this.filtros.turma.codigo)[0] : {}
+                let turmaPessoa = this.filtros.turma ? pessoa.turmas.filter(turmaPessoa => turmaPessoa.turma.codigo === this.filtros.turma.codigo)[0] : {}
 
                 excel['Codigo'] = pessoa.codigo || ""
                 excel['Nome'] = pessoa.nome || ""
@@ -438,8 +439,8 @@ export default {
                 excel['Telefone Secundário'] = pessoa.telefone2 || ""
                 excel['E-mail'] = pessoa.email || ""
                 if (this.filtros.turma) {
-                    excel['Turma'] = turmaPessoa.nome
-                    excel['Idade de Inicio do curso'] = this.idadeInicioCurso(pessoa, turmaPessoa) || ""
+                    excel['Turma'] = turmaPessoa.turma.nome
+                    excel['Idade de Inicio do curso'] = this.idadeInicioCurso(pessoa, turmaPessoa.turma) || ""
                     excel['Carta de Encaminhamento'] = turmaPessoa.cartaEncaminhamento.nome || ""
                     excel['Status'] = turmaPessoa.situacao.nome || ""
                     excel['Data da Matrícula'] = this.dateFormat(turmaPessoa.dataHoraMatricula) || ""
@@ -876,9 +877,6 @@ export default {
         },
         onUpdateAluno(aluno) {
             console.log("onUpdateAluno: " + JSON.stringify(aluno, null, 2));
-            // this.pessoa.turmas.pop()
-            // this.pessoa.turmas.push(aluno)
-            // this.$set(this.pessoa,'turmas[0]', aluno)
             this.pessoa.turmas.splice(0,1,aluno)
         },
         onUpdateInterprete(interprete) {
@@ -903,7 +901,7 @@ export default {
         setFilterRules(filtros) {
             var regrasFiltro = []
 
-            // Cria as regras específicas que filtram a pessoa
+            // Cria as regras específicas que filtram as pessoas
 
             const fnFiltraPapel = (pessoa) => {
                 if (!pessoa.papeis)
@@ -922,21 +920,21 @@ export default {
             const fnFiltraTurma = (pessoa) => {
                 if (!pessoa.turmas || pessoa.turmas.length === 0)
                     return false
-                return pessoa.turmas.some(turma => turma.codigo === filtros.turma.codigo)
+                return pessoa.turmas.some(turmaPessoa => turmaPessoa.turma.codigo === filtros.turma.codigo)
             }
             const fnFiltraSituacaoAluno = (pessoa) => {
                 if (!pessoa.turmas || pessoa.turmas.length === 0)
                     return false
-                return pessoa.turmas.some((turma) => turma.codigo === filtros.turma.codigo
-                    && turma.situacao && Object.keys(turma.situacao).length > 0
-                    && turma.situacao.codigo === filtros.aluno.situacao.codigo)
+                return pessoa.turmas.some((turmaPessoa) => turmaPessoa.turma.codigo === filtros.turma.codigo
+                    && turmaPessoa.situacao && Object.keys(turmaPessoa.situacao).length > 0
+                    && turmaPessoa.situacao.codigo === filtros.aluno.situacao.codigo)
             }
             const fnFiltraCartaEncaminhamentoAluno = (pessoa) => {
                 if (!pessoa.turmas || pessoa.turmas.length === 0)
                     return false
-                return pessoa.turmas.some((turma) => turma.codigo === filtros.turma.codigo
-                    && turma.cartaEncaminhamento && Object.keys(turma.cartaEncaminhamento).length > 0
-                    && turma.cartaEncaminhamento.codigo === filtros.aluno.cartaEncaminhamento.codigo)
+                return pessoa.turmas.some((turmaPessoa) => turmaPessoa.turma.codigo === filtros.turma.codigo
+                    && turmaPessoa.cartaEncaminhamento && Object.keys(turmaPessoa.cartaEncaminhamento).length > 0
+                    && turmaPessoa.cartaEncaminhamento.codigo === filtros.aluno.cartaEncaminhamento.codigo)
             }
 
             // Seleciona quais regras deverão ser consideradas, de acordo com o filtro informado
