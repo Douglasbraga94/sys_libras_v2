@@ -20,11 +20,11 @@ const routes = [{
     path: '/admin',
     component: Admin
 },
-{
-    name: 'regionais',
-    path: '/regionais',
-    component: Regionais
-},
+// {
+//     name: 'regionais',
+//     path: '/regionais',
+//     component: Regionais
+// },
 {
     name: 'pessoas',
     path: '/pessoas',

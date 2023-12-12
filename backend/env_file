@@ -6,6 +6,6 @@ module.exports = {
         database: '',
         user: '',
         password: ''
-    },
-    searchPath: ['public', 'relatorio', 'pgcrypto']
+    }, 
+    searchPath: ['public','relatorio','pgcrypto']
 }

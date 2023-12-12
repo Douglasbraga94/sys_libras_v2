@@ -16,6 +16,7 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 Vue.use(VueSweetalert2);
 Vue.config.productionTip = false;
 Vue.prototype.$loadingService = new LoadingService();
+Vue.config.devtools = true
 
 new Vue({
   store,

@@ -61,6 +61,13 @@ module.exports = app => {
             .catch(err => res.status(500).send(err.message))
     }
 
+    const getCompetence = (req, res) => {
+        app.db('vw_colaborador_competencia')
+            .select('codigo', 'nome', 'ativo')
+            .then(competencia => res.json(competencia))
+            .catch(err => res.status(500).send(err.message))
+    }
+
     const remove = async (req, res) => {
         try {
             existsOrError(req.params.id, 'Informe o código do colaborador.')
@@ -78,5 +85,5 @@ module.exports = app => {
         }
     }
 
-     return {save, get, getById, remove, getColaboradorWhithComum}
+     return {save, get, getById, remove, getColaboradorWhithComum, getCompetence}
 }

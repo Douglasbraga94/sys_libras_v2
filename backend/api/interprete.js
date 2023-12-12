@@ -35,12 +35,11 @@ module.exports = app => {
      }
 
      const get = (req, res) => {
-        app.db('interpretes')
-            .select('id', 'nome', 'codigo', 'status', 'telefone1', 
-            'telefone2', 'email', 'oficializacao', 'statusJustificativa', 'idcomum', 'idadministracao')
-            //.whereNull('deletedAt')
-            .then(interprete => res.json(interprete))
-            .catch(err => res.status(500).send(err.message))
+        app
+          .db("vw_interprete")
+          .select()
+          .then((interprete) => res.json(interprete))
+          .catch((err) => res.status(500).send(err.message));
     }
 
     const getInterpretesWhithComum = (req, res) => {
@@ -86,5 +85,12 @@ module.exports = app => {
         }
     }
 
-     return {save, get, getById, remove, getInterpretesWhithComum}
+    const getState = async (req, res) => {
+        app.db('vw_interprete_situacao')
+            .select('codigo', 'nome', 'descricao','ativo')
+            .then(situacao => res.json(situacao))
+            .catch(err => res.status(500).send(err.message))
+    }
+
+     return {save, get, getById, remove, getInterpretesWhithComum, getState}
 }

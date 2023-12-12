@@ -4,9 +4,9 @@
         <div> <img src="../../assets/libras2.png" alt="" style="height: 150px; margin:25px" v-show="isMenuVisible"></div>
         <div style="height: 150px; margin:25px" v-show="!isMenuVisible"></div>
         <div class="links"><span style="width:100%; display:inline-flex" :class="{'toEnd': !isMenuVisible}"> <router-link to="/"><i class="fa fa-bar-chart" ></i>  <span v-show="isMenuVisible"> <b> Dashboard</b></span><hr></router-link></span></div>
-        <div class="links"><span style="width:100%; display:inline-flex" :class="{'toEnd': !isMenuVisible}"> <router-link to="/regionais"><i class="fa fa-university"></i>  <span v-show="isMenuVisible"> <b> Regionais</b></span><hr></router-link></span></div>
+        <!-- <div class="links"><span style="width:100%; display:inline-flex" :class="{'toEnd': !isMenuVisible}"> <router-link to="/regionais"><i class="fa fa-university"></i>  <span v-show="isMenuVisible"> <b> Regionais</b></span><hr></router-link></span></div> -->
         <div class="links"><span style="width:100%; display:inline-flex" :class="{'toEnd': !isMenuVisible}"> <router-link to="/pessoas"><i class="fa fa-users"></i>  <span v-show="isMenuVisible"> <b> Pessoas</b></span><hr></router-link></span></div>
-        <div class="links"><span style="width:100%; display:inline-flex" :class="{'toEnd': !isMenuVisible}"> <router-link to=""><i class="fa fa-users"></i>  <span v-show="isMenuVisible"> <b> Eventos</b></span><hr></router-link></span></div>
+        <!-- <div class="links"><span style="width:100%; display:inline-flex" :class="{'toEnd': !isMenuVisible}"> <router-link to=""><i class="fa fa-users"></i>  <span v-show="isMenuVisible"> <b> Eventos</b></span><hr></router-link></span></div> -->
         </aside>
 </template>
 

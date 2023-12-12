@@ -10,10 +10,12 @@
         Congregação Cristã no Brasil
       </p>
       <p class="nome">{{ item.nome }}</p>
-      <p class="comum">{{ item.comum }}</p>
+      <p class="comum">{{ item.comum.ADM }}</p>
+      <p class="comum">{{ item.comum.cidade + '/' + item.comum.uf }}</p>
+      <p class="comum">{{ item.comum.nome }}</p>
       <p class="codigo">{{ item.codigo }}</p>
       <p class="barras">*{{ item.codigo }}*</p>
-      <p class="tipo" v-if="item.tipo !== 'surdo'"></p>
+      <p class="tipo" v-if="item.tipo !== 'surdo'">{{ item.tipo.toUpperCase() }}</p>
       <p class="tipoSurdo" v-else></p>
     </div>
   </div>
@@ -141,28 +143,50 @@ export default {
 }
 
 .cracha .nome {
-  margin-top: 100px;
+  margin-top: 85px;
   font-size: 24px;
+  font-weight:bold;
+}
+
+.cracha .comum {
+  margin-top:5px;
 }
 
 .cracha .codigo {
-  margin-top: 70px;
+  position:absolute;
+  bottom:175px;
+  left:0;
+  right:0;
+  margin-left: auto;
+  margin-right: auto;
   font-size: 12px;
 }
 
 .cracha .barras {
+  position:absolute;
+  bottom:95px;
+  left:0;
+  right:0;
+  margin-left: auto;
+  margin-right: auto;  
   font-family: "Barcode39";
   font-size: 70px;
 }
 
 .cracha .tipo {
-  margin-top: 70px;
+  position: absolute;
+  bottom: 35px;
+  left:0;
+  right:0;
+  margin-left: auto;
+  margin-right:auto;
   font-weight: bold;
   font-size: 22px;
   color: #043b5c;
+  text-align: center;
 }
 
-.cracha.interprete .tipo:before {
+/* .cracha.interprete .tipo:before {
   content: "INTÉRPRETE";
 }
 .cracha.colaborador .tipo:before {
@@ -170,7 +194,8 @@ export default {
 }
 .cracha.aluno .tipo:before {
   content: "ALUNO";
-}
+} */
+
 .cracha.surdo .tipoSurdo {
   background: url("../../assets/logo_surdo.png") no-repeat center;
   background-size: 112px 85px;

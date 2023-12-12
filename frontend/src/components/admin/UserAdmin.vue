@@ -1,7 +1,7 @@
 <template>
     <div class="user-admin" >
         <b-form v-if="isEdit">
-            <input id="user-id" type="hidden" v-model="user.id" />
+            <input id="user-codigo" type="hidden" v-model="user.codigo" />
             <b-row>
                 <b-col md="6" sm="12">
                     <b-form-group label="Nome:" label-for="user-name">
@@ -20,10 +20,6 @@
                     </b-form-group>
                 </b-col>
             </b-row>
-            <b-form-checkbox id="user-admin" v-show="mode === 'save'"
-                v-model="user.admin" class="mt-3 mb-3">
-                Administrador?
-            </b-form-checkbox>
             <b-row v-show="mode === 'save'">
                 <b-col md="6" sm="12">
                     <b-form-group label="Senha:" label-for="user-password">
@@ -40,6 +36,14 @@
                             placeholder="Ministério do Usuário..." />
                     </b-form-group>
                 </b-col>
+            </b-row>
+            <b-row v-show="mode === 'save'">
+                <b-col md="6" sm="12">
+                    <b-form-group label="Perfil:" label-for="user-profile">
+                        <b-form-select id="user-profile" v-model="user.codigoPerfil" :readonly="!isEdit" :options="profilesOptions"></b-form-select>
+                    </b-form-group>
+                </b-col>
+                <b-col md="6" sm="12"></b-col>
             </b-row>
             <b-row>
                 <b-col xs="12">
@@ -88,31 +92,32 @@ export default {
             users: [],
             isEdit: false,
             fields: [
-                { key: 'id', label: 'Código', sortable: true },
+                { key: 'codigo', label: 'Código', sortable: true },
                 { key: 'nome', label: 'Nome', sortable: true },
                 { key: 'email', label: 'E-mail', sortable: true },
-                { key: 'admin', label: 'Administrador', sortable: true,
-                    formatter: value => value ? 'Sim' : 'Não' },
+                { key: 'perfil', label: 'Perfil', sortable: true },
                 { key: 'actions', label: 'Ações' }
-            ]
+            ],
+            profiles: [],
+            profilesOptions: []
         }
     },
     methods: {
-        loadUsers() {
+        async loadUsers() {
             const url = `${baseApiUrl}/usuario`
-            axios.get(url).then(res => {
+            await axios.get(url).then(res => {
                 this.users = res.data
             })
         },
-        reset() {
+        async reset() {
             this.isEdit = false
             this.mode = 'save'
             this.user = {}
-            this.loadUsers()
+            await this.loadUsers()
         },
         save() {
-            const method = this.user.id ? 'put' : 'post'
-            const id = this.user.id ? `/${this.user.id}` : ''
+            const method = this.user.codigo ? 'put' : 'post'
+            const id = this.user.codigo ? `/${this.user.codigo}` : ''
             axios[method](`${baseApiUrl}/usuario${id}`, this.user)
                 .then(() => {
                     this.$toasted.global.defaultSuccess()
@@ -121,8 +126,8 @@ export default {
                 .catch(showError)
         },
         remove() {
-            const id = this.user.id
-            axios.delete(`${baseApiUrl}/usuario/${id}`)
+            const codigo = this.user.codigo
+            axios.delete(`${baseApiUrl}/usuario/${codigo}`)
                 .then(() => {
                     this.$toasted.global.defaultSuccess()
                     this.reset()
@@ -133,10 +138,34 @@ export default {
             this.mode = mode
             this.user = { ...user }
             this.isEdit = true
+        },
+        async loadProfiles() {
+            await axios.get(`${baseApiUrl}/perfil`)
+                .then((res) => {
+                    this.profiles = res.data;
+                })
+        },
+        setProfilesOptions() {
+            this.profiles.forEach(profile => {
+                const option = {
+                    value: profile.codigo,
+                    text: profile.nome,
+                    disabled: !profile.ativo
+                }
+                this.profilesOptions.push(option);
+            })
         }
     },
-    mounted() {
-        this.loadUsers()
+    watch: {
+        'user.codigoPerfil'(newValue) {
+            if(newValue)
+                this.user.perfil = this.profiles.find(profile => profile.codigo === newValue ).nome
+        }
+    },    
+    async mounted() {
+        await this.loadUsers()
+        await this.loadProfiles()
+        this.setProfilesOptions()
     }
 }
 </script>
