@@ -189,9 +189,6 @@ export default {
     created() {
         console.log("created")
         this.update('turma.curso.codigo', this.local.turma.curso.codigo)
-    },
-    mounted() {
-        console.log("mounted")
         this.fillOptionsCursos()
         this.fillOptionsTurmas()
         this.fillOptionsSituacoesTurma()

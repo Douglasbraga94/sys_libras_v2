@@ -75,9 +75,6 @@ export default {
     created() {
         console.log("created")
         this.update('situacao.codigo', this.local.situacao.codigo)
-    },
-    mounted() {
-        console.log("mounted")
         this.fillOptionsSituacoesInterprete()
     },
     watch: {

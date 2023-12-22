@@ -52,9 +52,6 @@ export default {
     created() {
         console.log("created")
         this.update('competencia.codigo', this.local.competencia.codigo)
-    },
-    mounted() {
-        console.log("mounted")
         this.fillOptionsCompetenciasColaborador()
     },
     watch: {

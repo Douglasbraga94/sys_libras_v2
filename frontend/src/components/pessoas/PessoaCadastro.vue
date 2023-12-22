@@ -836,10 +836,9 @@ export default {
                             }
                             break
                         case PAPEL.INTERPRETE:
-                            console.log('aqui')
-                            if (!this.pessoa.interprete && Object.keys(this.interprete).length > 0) {
+                            if (!this.pessoa.interprete) {
                                 // Reaproveita os dados do intérprete previamente cadastrados
-                                if (this.interprete) {
+                                if (this.interprete  && Object.keys(this.interprete).length > 0) {
                                     this.$set(this.pessoa, 'interprete', this.interprete)
                                 } else {
                                     this.$set(this.pessoa, 'interprete', null)
