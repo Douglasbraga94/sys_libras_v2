@@ -119,11 +119,11 @@ export default {
     },
     computed: {
         local() {
-            let carta = this.encaminhamentosCarta.filter(carta => carta.codigo === CARTA_ENCAMINHAMENTO.PENDENTE)[0]
-            let curso = this.cursos.filter(curso => curso.codigo === CURSO.GEL)[0]
-            let turma = this.turmas.find(turma => turma.codigoCurso === curso.codigo && turma.ativo === true)
-            let localidade = this.localidades.filter(localidade => localidade.codigo === turma.codigoLocalidade)[0]
-            let situacao = this.situacoesTurma.filter(situacao => situacao.codigo === TURMA_SITUACAO.EM_ANDAMENTO)[0]
+            const carta = this.encaminhamentosCarta.filter(carta => carta.codigo === CARTA_ENCAMINHAMENTO.PENDENTE)[0]
+            const curso = this.cursos.filter(curso => curso.codigo === CURSO.GEL)[0]
+            const turma = this.turmas.filter(turma => turma.codigoCurso === curso.codigo && turma.ativo === true)[0]
+            const localidade = this.localidades.filter(localidade => localidade.codigo === turma.codigoLocalidade)[0]
+            const situacao = this.situacoesTurma.filter(situacao => situacao.codigo === TURMA_SITUACAO.EM_ANDAMENTO)[0]
             return (this.value && Object.keys(this.value).length > 0) ? this.value : {
                 turma: {
                     codigo: turma.codigo,
@@ -211,8 +211,11 @@ export default {
         'local.turma.codigo': function (newVal, oldVal) {
             console.log('watch: local.turma.codigo')
             let turma = this.turmas.filter(turma => turma.codigo === newVal)[0]
+            console.log("turma: " + JSON.stringify(turma, null, 2))
             let localidade = this.localidades.filter(localidade => localidade.codigo === turma.codigoLocalidade)[0]
+            console.log("localidade: " + JSON.stringify(localidade, null, 2))
             let curso = this.cursos.filter(curso => curso.codigo === turma.codigoCurso)[0]
+            console.log("curso: " + JSON.stringify(curso, null, 2))
             const dadosAtualizados = {
                 codigo: turma.codigo,
                 nome: turma.nome,

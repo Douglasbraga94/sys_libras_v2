@@ -665,13 +665,14 @@ export default {
 
         loadPessoa(pessoa, mode = 'save') {
             this.mode = mode
-            this.pessoa = { ...pessoa }
-            this.codigoEstadoSelected = pessoa.localidade.codigoEstado
-            this.codigoCidadeSelected = pessoa.localidade.codigoCidade
-            this.codigoLocalidadeSelected = pessoa.localidade.codigo
-            this.turmasAluno = pessoa.turmas;
-            this.colaborador = pessoa.colaborador;
-            this.interprete = pessoa.interprete;
+            console.log("pessoa: " + JSON.stringify(pessoa, null, 2))
+            this.$set(this, "pessoa", pessoa);
+            this.codigoEstadoSelected = (this.pessoa.localidade) ? this.pessoa.localidade.codigoEstado : null
+            this.codigoCidadeSelected = (this.pessoa.localidade) ? this.pessoa.localidade.codigoCidade : null
+            this.codigoLocalidadeSelected = (this.pessoa.localidade) ? this.pessoa.localidade.codigo : null
+            this.$set(this, "turmasAluno", pessoa.turmas);
+            this.$set(this, "colaborador", pessoa.colaborador);
+            this.$set(this, "interprete", pessoa.interprete);
             this.isEdit = true
             this.setPapeisPessoa()
         },
@@ -1012,18 +1013,18 @@ export default {
         }
  
     },
-    async created() {
-        await this.loadPessoas()
-        await this.loadEstados()
-        await this.loadCidades()
-        await this.loadLocalidades()
-        await this.loadPapeis()
-        await this.loadCursos()
-        await this.loadTurmas()
-        await this.loadSituacoesTurma()
-        await this.loadEncaminhamentosCarta()
-        await this.loadSituacoesInterprete()
-        await this.loadCompetenciasColaborador()
+    created() {
+        this.loadPessoas()
+        this.loadEstados()
+        this.loadCidades()
+        this.loadLocalidades()
+        this.loadPapeis()
+        this.loadCursos()
+        this.loadTurmas()
+        this.loadSituacoesTurma()
+        this.loadEncaminhamentosCarta()
+        this.loadSituacoesInterprete()
+        this.loadCompetenciasColaborador()
     },
     watch: {
         'codigoEstadoSelected': function (newVal, oldVal) {

@@ -9,6 +9,15 @@
 		"isBackground": true,
 		"problemMatcher": [],
 		"detail": "vue-cli-service serve"
+	},
+	{
+		"type": "npm",
+		"script": "build",
+		"path": "frontend",
+		"group": "build",
+		"problemMatcher": [],
+		"label": "npm: build - frontend",
+		"detail": "vue-cli-service build"
 	}
 ]
 }
