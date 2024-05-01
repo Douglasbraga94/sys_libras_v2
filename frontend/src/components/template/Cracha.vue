@@ -6,17 +6,17 @@
         :class="item.tipo"
         id="cracha">
       <p class="titulo">
-        Grupo de Estudo em LIBRAS <br/>
-        Congregação Cristã no Brasil
+        &nbsp; <br/>
+        &nbsp;
       </p>
       <p class="nome">{{ item.nome }}</p>
-      <p class="comum">{{ item.comum.ADM }}</p>
+      <p class="comum"></p>
       <p class="comum">{{ item.comum.cidade + '/' + item.comum.uf }}</p>
       <p class="comum">{{ item.comum.nome }}</p>
       <p class="codigo">{{ item.codigo }}</p>
       <p class="barras">*{{ item.codigo }}*</p>
-      <p class="tipo" v-if="item.tipo !== 'surdo'">{{ item.tipo.toUpperCase() }}</p>
-      <p class="tipoSurdo" v-else></p>
+      <!-- <p class="tipo" v-if="item.tipo !== 'surdo'"></p> -->
+      <p class="tipoSurdo" v-if="item.tipo === 'surdo'"></p>
     </div>
   </div>
 </template>
@@ -143,13 +143,14 @@ export default {
 }
 
 .cracha .nome {
-  margin-top: 85px;
-  font-size: 24px;
+  margin-top: 105px;
+  font-size: 30px;
   font-weight:bold;
 }
 
 .cracha .comum {
   margin-top:5px;
+  font-size: 18px;
 }
 
 .cracha .codigo {
@@ -196,12 +197,12 @@ export default {
   content: "ALUNO";
 } */
 
-.cracha.surdo .tipoSurdo {
+.cracha .tipoSurdo {
   background: url("../../assets/logo_surdo.png") no-repeat center;
-  background-size: 112px 85px;
+  background-size: 82px 55px;
   position: absolute;
-  left: 0;
-  bottom: 8px;
+  left: 0px;
+  bottom: 8px;  
   width: 100%;
   height: 85px;
   z-index: 1000;
