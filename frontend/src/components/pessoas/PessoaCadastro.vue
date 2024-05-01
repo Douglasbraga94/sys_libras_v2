@@ -87,9 +87,11 @@
                                                 </b-col>
                                                 <b-col md="4" sm="12">
                                                     <b-form-group id="curso-externo-libras-grupo"
-                                                        label="Curso Externo de Libras:" label-for="curso-externo-libras">
+                                                        label="Curso Externo de Libras:"
+                                                        label-for="curso-externo-libras">
                                                         <b-form-radio-group id="curso-externo-libras"
-                                                            name="curso-externo-libras" v-model="pessoa.cursoExternoLibras"
+                                                            name="curso-externo-libras"
+                                                            v-model="pessoa.cursoExternoLibras"
                                                             :disabled="mode === 'view' || mode === 'remove'">
                                                             <b-form-radio :value="true">Sim</b-form-radio>
                                                             <b-form-radio :value="false">Não</b-form-radio>
@@ -124,8 +126,8 @@
                                                                     </b-form-group>
                                                                 </b-col>
                                                                 <b-col>
-                                                                    <b-form-group id="localidade-grupo" label="Localidade:"
-                                                                        label-for="localidade">
+                                                                    <b-form-group id="localidade-grupo"
+                                                                        label="Localidade:" label-for="localidade">
                                                                         <b-form-select id="localidade"
                                                                             v-model="codigoLocalidadeSelected"
                                                                             :options="optionsLocalidades"
@@ -136,16 +138,17 @@
                                                                         <strong>{{ localidade.ADM }}</strong>
                                                                         <span v-if="localidade.central"><br>{{
                                                                             localidade.central
-                                                                        }}</span>
+                                                                            }}</span>
                                                                         <span v-if="localidade.endereco"><br>{{
                                                                             localidade.endereco
-                                                                        }}</span>
+                                                                            }}</span>
                                                                         <span v-if="localidade.complemento"><br>{{
                                                                             localidade.complemento
-                                                                        }}</span>
-                                                                        <span v-if="localidade.diasCultosConcatenado"><br>{{
-                                                                            localidade.diasCultosConcatenado
-                                                                        }}</span>
+                                                                            }}</span>
+                                                                        <span
+                                                                            v-if="localidade.diasCultosConcatenado"><br>{{
+                                                                                localidade.diasCultosConcatenado
+                                                                            }}</span>
                                                                     </b-tooltip>
                                                                 </b-col>
                                                             </b-form-row>
@@ -157,8 +160,9 @@
                                                 <b-col md="12" sm="12">
                                                     <b-form-group id="observacoes-grupo" label="Observações:"
                                                         label-for="observacoes">
-                                                        <b-form-textarea id="observacoes" placeholder="Observações Gerais"
-                                                            type="text" v-model.trim="pessoa.observacao"
+                                                        <b-form-textarea id="observacoes"
+                                                            placeholder="Observações Gerais" type="text"
+                                                            v-model.trim="pessoa.observacao"
                                                             :readonly="mode === 'view' || mode === 'remove'"
                                                             class="observacoes">
                                                         </b-form-textarea>
@@ -209,8 +213,9 @@
                                             <b-form-row>
                                                 <b-col md="12" sm="12">
                                                     <div>
-                                                        <aluno-form v-for="(turma, i) in pessoa.turmas" :key="turma.codigo"
-                                                            v-model="pessoa.turmas[i]" :cursos="cursos" :turmas="turmas"
+                                                        <aluno-form v-for="(turma, i) in pessoa.turmas"
+                                                            :key="turma.codigo" v-model="pessoa.turmas[i]"
+                                                            :cursos="cursos" :turmas="turmas"
                                                             :situacoesTurma="situacoesTurma"
                                                             :encaminhamentosCarta="encaminhamentosCarta" :mode="mode"
                                                             :pessoa="dadosCadastrais" :localidades="localidades"
@@ -295,7 +300,8 @@
                             <i class="fa fa-id-card"></i>
                         </button>
                         <span>&nbsp;</span>
-                        <botao-download-excel :dados="dadosPlanilha" :planilha="nomePlanilha" :arquivo="nomeArquivoExcel" />
+                        <botao-download-excel :dados="dadosPlanilha" :planilha="nomePlanilha"
+                            :arquivo="nomeArquivoExcel" />
                     </h3>
                 </div>
                 <div class="">
@@ -339,8 +345,8 @@
                                     @click="loadPessoa(data.row, 'view')" class="mr-2 botoes">
                                     <i class="fa fa-eye"></i>
                                 </b-button>
-                                <b-button v-b-tooltip.hover title="Editar" variant="warning" @click="loadPessoa(data.row)"
-                                    class="mr-2 botoes" v-if="canEdit">
+                                <b-button v-b-tooltip.hover title="Editar" variant="warning"
+                                    @click="loadPessoa(data.row)" class="mr-2 botoes" v-if="canEdit">
                                     <i class="fa fa-pencil"></i>
                                 </b-button>
                                 <b-button v-b-tooltip.hover title="Excluir" variant="danger"
@@ -626,7 +632,7 @@ export default {
 
             event.stopPropagation();
             this.$refs['cracha'].setItens([{
-                nome: item.nome,
+                nome: item.nomeExibicao,
                 codigo: item.codigoExibicao,
                 comum: item.localidade,
                 tipo: item.papel.nome.toLowerCase()
@@ -642,7 +648,7 @@ export default {
             this.$loadingService.start();
             this.$refs['cracha'].setItens(this.$refs['pessoas'].selectedRows.map(item => {
                 return {
-                    nome: item.nome,
+                    nome: item.nomeExibicao,
                     codigo: item.codigoExibicao,
                     comum: item.localidade,
                     tipo: item.papel.nome.toLowerCase()
@@ -686,6 +692,7 @@ export default {
                     pessoa.temCursoExternoLibras = this.hasExternalLibrasCourse(pessoa.cursoExternoLibras)
                     pessoa.comum = this.setComum(pessoa.localidade)
                     pessoa.codigoExibicao = pessoa.codigo.toString().padStart(6, '0')
+                    pessoa.nomeExibicao = this.formatarNomeExibicao(pessoa.nome)
                 })
             })
         },
@@ -839,7 +846,7 @@ export default {
                         case PAPEL.INTERPRETE:
                             if (!this.pessoa.interprete) {
                                 // Reaproveita os dados do intérprete previamente cadastrados
-                                if (this.interprete  && Object.keys(this.interprete).length > 0) {
+                                if (this.interprete && Object.keys(this.interprete).length > 0) {
                                     this.$set(this.pessoa, 'interprete', this.interprete)
                                 } else {
                                     this.$set(this.pessoa, 'interprete', null)
@@ -877,7 +884,7 @@ export default {
         },
         onUpdateAluno(aluno) {
             console.log("onUpdateAluno: " + JSON.stringify(aluno, null, 2));
-            this.pessoa.turmas.splice(0,1,aluno)
+            this.pessoa.turmas.splice(0, 1, aluno)
         },
         onUpdateInterprete(interprete) {
             console.log("onUpdateInterprete: " + JSON.stringify(interprete, null, 2))
@@ -996,7 +1003,7 @@ export default {
                     return ""
             }
 
-        }, 
+        },
         getInterpreterSituationTitleByCode(situationCode) {
 
             switch (situationCode) {
@@ -1010,8 +1017,28 @@ export default {
                     return ""
             }
 
+        },
+        formatarNomeExibicao(nomeCompleto) {
+            // Remove espaços em branco extras e divide o nome completo em partes
+            const partesDoNome = nomeCompleto.trim().split(/\s+/);
+
+            // Se houver mais de uma parte, é um nome composto
+            if (partesDoNome.length > 1) {
+                // Verifica se o segundo nome contém uma preposição
+                const preposicoes = ['de', 'da', 'do', 'dos', 'das', 'e', 'em', 'no', 'na', 'nos', 'nas'];
+                if (preposicoes.includes(partesDoNome[1].toLowerCase())) {
+                    // Retorna até o terceiro sobrenome
+                    return partesDoNome.slice(0, 3).join(' ');
+                } else {
+                    // Retorna o primeiro e o segundo nome
+                    return partesDoNome.slice(0, 2).join(' ');
+                }
+            } else {
+                // Retorna apenas o primeiro nome
+                return partesDoNome[0];
+            }
         }
- 
+
     },
     created() {
         this.loadPessoas()
@@ -1105,4 +1132,3 @@ input[type=number]::-webkit-inner-spin-button {
     text-align: center;
 }
 </style>
-
