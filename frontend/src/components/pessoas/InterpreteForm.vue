@@ -34,10 +34,11 @@
 <script>
 import { INTERPRETE_SITUACAO } from '@/enums'
 import { cloneDeep, tap, set } from 'lodash'
+import { mapState } from 'vuex'
 
 export default {
     name: 'InterpreteForm',
-    props: ['value','situacoesInterprete', 'mode'],
+    props: ['value', 'situacoesInterprete', 'mode'],
     data() {
         return {
             optionsSituacoesInterprete: [],
@@ -60,8 +61,10 @@ export default {
         },
         showJustificativa() {
             if (this.local)
-                return this.local.situacao.codigo === INTERPRETE_SITUACAO.DIVERSOS
+                return this.local.situacao.codigo === INTERPRETE_SITUACAO.DIVERSOS &&
+                       this.isAdmin
         },
+        ...mapState(['isAdmin', 'user']), 
     },
     methods: {
         fillOptionsSituacoesInterprete() {
