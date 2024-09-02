@@ -66,7 +66,7 @@
             </div>
             <b-table hover striped :items="users" :fields="fields">
 
-                <template slot="actions" slot-scope="data">
+                <template #cell(actions)="data">
                     <b-button variant="warning" @click="loadUser(data.item)" class="mr-2">
                         <i class="fa fa-pencil"></i>
                     </b-button>
@@ -144,6 +144,7 @@ export default {
                 .then((res) => {
                     this.profiles = res.data;
                 })
+            this.setProfilesOptions()
         },
         setProfilesOptions() {
             this.profiles.forEach(profile => {
@@ -161,11 +162,10 @@ export default {
             if(newValue)
                 this.user.perfil = this.profiles.find(profile => profile.codigo === newValue ).nome
         }
-    },    
-    async mounted() {
-        await this.loadUsers()
-        await this.loadProfiles()
-        this.setProfilesOptions()
+    },
+    created() {
+        this.loadUsers()
+        this.loadProfiles()
     }
 }
 </script>
