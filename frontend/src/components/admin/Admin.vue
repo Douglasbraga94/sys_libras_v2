@@ -121,6 +121,7 @@ export default {
                 .then((res) => {
                     this.profiles = res.data;
                 })
+            this.setProfilesOptions()
         }, 
         setProfilesOptions() {
             this.profiles.forEach(profile => {
@@ -140,10 +141,9 @@ export default {
                 this.user.perfil = this.profiles.find(profile => profile.codigo === newValue ).nome
         }
     },
-    async mounted() {
-        await this.loadProfiles()
-        this.setProfilesOptions()
-    }
+    created() {
+        this.loadProfiles()
+    }    
 
 }
 </script>
