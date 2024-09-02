@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { INTERPRETE_SITUACAO } from '@/enums'
+import { INTERPRETE_SITUACAO, PERFIL } from '@/enums'
 import { cloneDeep, tap, set } from 'lodash'
 import { mapState } from 'vuex'
 
@@ -62,7 +62,7 @@ export default {
         showJustificativa() {
             if (this.local)
                 return this.local.situacao.codigo === INTERPRETE_SITUACAO.DIVERSOS &&
-                       this.isAdmin
+                       (this.user.codigoPerfil === PERFIL.MINISTERIO || this.isAdmin)
         },
         ...mapState(['isAdmin', 'user']), 
     },

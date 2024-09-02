@@ -43,5 +43,6 @@ export const CARTA_ENCAMINHAMENTO = Object.freeze({
 
 export const PERFIL = Object.freeze({
         "ADMINISTRADOR": 1,
-        "COLABORADOR" : 2
+        "COLABORADOR" : 2, 
+        "MINISTERIO" : 3
     })

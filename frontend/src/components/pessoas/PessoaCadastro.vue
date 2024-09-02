@@ -467,7 +467,9 @@ export default {
                         case PAPEL.INTERPRETE:
                             excel['Data de Oficialização'] = (pessoa.interprete) ? this.dateFormat(pessoa.interprete.dataOficializacao) : ""
                             excel['Situação'] = (pessoa.interprete) ? pessoa.interprete.situacao.nome : ""
-                            excel['Justificativa'] = (pessoa.interprete) ? pessoa.interprete.justificativa : ""
+                            if (this.user.codigoPerfil === PERFIL.MINISTERIO || this.isAdmin) {
+                                excel['Justificativa'] = (pessoa.interprete) ? pessoa.interprete.justificativa : ""
+                            }
                             break
                     }
                 }
@@ -583,7 +585,7 @@ export default {
             return (this.localidade && Object.keys(this.localidade).length > 0) ? true : false
         },
         canEdit() {
-            return (this.user.admin || this.user.codigoPerfil === PERFIL.COLABORADOR) ? true : false
+            return (this.user.admin || this.user.codigoPerfil === PERFIL.COLABORADOR || this.user.codigoPerfil === PERFIL.MINISTERIO) ? true : false
         },
         ...mapState(['isAdmin', 'user', 'isMenuVisible'])
     },
